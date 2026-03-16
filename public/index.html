@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 网站元信息 -->
+    <title>Sunshine's Blog | 记录技术思考、项目经验和学习成长</title>
+    <meta name="description" content="记录技术思考、项目经验和学习成长">
+    <meta name="author" content="Mingshuo_S">
+    <meta name="keywords" content="南大软工, 个人博客, 技术博客, 开源项目, 学习笔记, Sunshine, 阳光">
+    
+    <!-- Open Graph 社交分享 -->
+    <meta property="og:title" content="Sunshine's Blog">
+    <meta property="og:description" content="记录技术思考、项目经验和学习成长">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mingshuo-s.github.io">
+    <meta property="og:image" content="https://mingshuo-s.github.io/assets/images/avatar.jpg">
+    
+    <!-- 样式 -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 图标 -->
+    <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    
+    <!-- 主题颜色 -->
+    <meta name="theme-color" content="#4a6cf7">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="nav-brand">
+                <span class="brand-text">Sunshine's Blog</span>
+            </a>
+            
+            <div class="nav-menu">
+                <a href="/" class="nav-link active">
+                    <i class="fas fa-home"></i> 首页
+                </a>
+                <a href="/writings" class="nav-link">
+                    <i class="fas fa-pen"></i> 文章
+                </a>
+                <a href="/projects" class="nav-link">
+                    <i class="fas fa-rocket"></i> 项目
+                </a>
+                <a href="/about" class="nav-link">
+                    <i class="fas fa-user"></i> 关于
+                </a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        <!-- 英雄区域 -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="avatar-container">
+                        <img src="/assets/images/avatar.jpg" alt="Mingshuo_S" class="avatar" width="200" height="200">
+                    </div>
+                    
+                    <h1 class="hero-title">Sunshine's Blog</h1>
+                    <p class="hero-subtitle">记录技术思考、项目经验和学习成长</p>
+                    
+                    <div class="hero-badges">
+                        <span class="badge">🏫 南大软工 25级</span>
+                        <span class="badge">💻 AI重度使用患者</span>
+                        <span class="badge">🚀 RemUp 作者</span>
+                        <span class="badge">🖌️ 不会画画</span>
+                    </div>
+                    
+                    <div class="hero-actions">
+                        <a href="#writings" class="btn btn-primary">
+                            <i class="fas fa-book-open"></i> 阅读文章
+                        </a>
+                        <a href="#projects" class="btn btn-secondary">
+                            <i class="fas fa-code"></i> 查看项目
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于我 -->
+        <section class="about-section">
+            <div class="container">
+                <h2 class="section-title">关于我</h2>
+                <div class="about-content">
+                    <p>你好！我是 Mingshuo_S，南京大学软件工程 2025 级本科生。</p>
+                    <p>这里是我的个人博客，记录我的技术思考、项目经验和学习笔记。</p>
+                    <p>兴趣广泛，喜欢使用代码实现想法。目前正在开发笔记语言Remup。持续学习中...</p>
+                    
+                    <div class="social-links">
+                        <a href="https://github.com/MingShuo-S" target="_blank" rel="noopener" class="social-link">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                        <a href="mailto:Sunshine_Mings@outloook.com" class="social-link">
+                            <i class="fas fa-envelope"></i> Email
+                        </a>
+                        <a href="https://space.bilibili.com/361518274" target="_blank" rel="noopener" class="social-link">
+                            <i class="fab fa-bilibili"></i> B站
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 最新文章 -->
+        <!-- 最新文章部分应该保持这样，构建脚本会自动替换 -->
+        <section class="writings-section" id="writings">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">最新文章</h2>
+                    <a href="/writings" class="section-more">查看全部 →</a>
+                </div>
+                
+                <div class="articles-grid" id="articlesGrid">
+
+                <article class="article-card">
+                    <div class="card-header">
+                        <div class="card-category">技术实践</div>
+                        <h3 class="card-title">
+                            <a href="/posts//">从零搭建静态博客：现代前端工程化实践与思考</a>
+                        </h3>
+                        <p class="card-excerpt">记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，包含模块化、构建系统和部署策略的完整实践。</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-date">2025年1月28日</div>
+                        <div class="card-tags">
+                            <span class="tag">前端工程</span><span class="tag">静态站点</span><span class="tag">JavaScript</span>
+                        </div>
+                    </div>
+                </article>
+            
+</div>
+            </div>
+        </section>
+
+        <!-- 精选项目 -->
+        <section class="projects-section" id="projects">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">精选项目</h2>
+                    <a href="/projects" class="section-more">查看全部 →</a>
+                </div>
+                
+                <div class="projects-grid" id="projectsGrid">
+                    <!-- 项目列表会由 JavaScript 动态加载 -->
+                    <div class="loading">加载项目中...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 数据统计 -->
+        <section class="stats-section">
+            <div class="container">
+                <h2 class="section-title">博客数据</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalArticles">1</div>
+                        <div class="stat-label">文章总数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalProjects">0</div>
+                        <div class="stat-label">项目总数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalWords">1043</div>
+                        <div class="stat-label">累计字数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="siteDays">440</div>
+                        <div class="stat-label">运行天数</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>Sunshine's Blog</h3>
+                    <p>记录技术思考、项目经验和学习成长</p>
+                    <p class="footer-copyright">© 2024-2025 Mingshuo_S. 保留所有权利。</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>探索</h4>
+                        <a href="/writings">所有文章</a>
+                        <a href="/projects">所有项目</a>
+                        <a href="/tags">标签分类</a>
+                        <a href="/archive">文章归档</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>链接</h4>
+                        <a href="/about">关于我</a>
+                        <a href="/friends">友情链接</a>
+                        <a href="/rss.xml">RSS订阅</a>
+                        <a href="/sitemap.xml">站点地图</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>联系</h4>
+                        <a href="mailto:Sunshine_Mings@outloook.com">发送邮件</a>
+                        <a href="https://github.com/MingShuo-S">GitHub</a>
+                        <a href="https://space.bilibili.com/361518274">Bilibili</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>本博客由 <a href="https://github.com/MingShuo-S/MingShuo-S.github.io" target="_blank" rel="noopener">MingShuo-S.github.io</a> 驱动</p>
+                <p>最后更新于 <span id="lastUpdated">今天</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/assets/js/main.js"></script>
+</body>
+</html>

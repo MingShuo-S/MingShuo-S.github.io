@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>所有文章 | Sunshine's Blog</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        .articles-list-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .articles-header { margin-bottom: 3rem; }
+        .articles-count { color: #666; font-size: 1.1rem; }
+        .no-articles { text-align: center; padding: 3rem; color: #888; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="nav-brand">Sunshine's Blog</a>
+            <div class="nav-menu">
+                <a href="/" class="nav-link">首页</a>
+                <a href="/writings" class="nav-link active">文章</a>
+                <a href="/projects" class="nav-link">项目</a>
+                <a href="/about" class="nav-link">关于</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="articles-list-container">
+        <header class="articles-header">
+            <h1>所有文章</h1>
+            <p class="articles-count">共 1 篇文章</p>
+        </header>
+        <div class="articles-grid">
+            
+                <article class="article-card">
+                    <div class="card-header">
+                        <div class="card-category">技术实践</div>
+                        <h3 class="card-title">
+                            <a href="/posts//">从零搭建静态博客：现代前端工程化实践与思考</a>
+                        </h3>
+                        <p class="card-excerpt">记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，包含模块化、构建系统和部署策略的完整实践。</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-date">2025年1月28日</div>
+                        <div class="card-tags">
+                            <span class="tag">前端工程</span><span class="tag">静态站点</span><span class="tag">JavaScript</span>
+                        </div>
+                    </div>
+                </article>
+            
+        </div>
+        <div style="margin-top: 3rem; text-align: center;">
+            <a href="/" class="btn">返回首页</a>
+        </div>
+    </div>
+</body>
+</html>

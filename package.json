@@ -1,0 +1,23 @@
+{
+  "name": "wait",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "fs-extra": "^11.3.4",
+    "graceful-fs": "^4.2.11",
+    "gray-matter": "^4.0.3",
+    "jsonfile": "^6.2.0",
+    "marked": "^17.0.4",
+    "universalify": "^2.0.1"
+  },
+  "scripts": {
+    "build": "node scripts/builder.js",
+    "dev": "node scripts/builder.js && npx live-server public --port=3000",
+    "deploy": "npm run build && gh-pages -d public"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
