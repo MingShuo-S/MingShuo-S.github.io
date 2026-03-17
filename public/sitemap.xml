@@ -2,18 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://mingshuo-s.github.io</loc>
-        <lastmod>2026-03-16</lastmod>
+        <lastmod>2026-03-17</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
         <loc>https://mingshuo-s.github.io/writings/</loc>
-        <lastmod>2026-03-16</lastmod>
+        <lastmod>2026-03-17</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://mingshuo-s.github.io/posts//</loc>
+        <loc>https://mingshuo-s.github.io/posts/building-personal-blog-from-scratch/</loc>
         <lastmod>Tue Jan 28 2025 08:00:00 GMT+0800 (中国标准时间)</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>

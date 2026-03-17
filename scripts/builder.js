@@ -7,12 +7,14 @@ class SafeSiteBuilder {
     constructor() {
         // 源码目录
         this.sourceDir = path.join(__dirname, '..', 'src');
-        // 最终输出目录
+        // 最终输出目录（用于文章页面、资源等）
         this.finalOutputDir = path.join(__dirname, '..', 'public');
         // 临时构建目录
         this.tempOutputDir = path.join(__dirname, '..', '.temp_public');
         // 当前使用的输出目录
         this.outputDir = this.tempOutputDir;
+        // 主页输出目录（项目根目录）
+        this.rootOutputDir = path.join(__dirname, '..');
 
         this.templateDir = path.join(this.sourceDir, 'templates');
         this.dataDir = path.join(this.sourceDir, 'data');
@@ -41,7 +43,7 @@ class SafeSiteBuilder {
 
             // 5. 生成主页（包含最新文章列表）
             await this.generateHomePage(articles, siteConfig);
-
+            
             // 6. 生成文章列表页
             await this.generateArticlesIndex(articles, siteConfig);
 
@@ -79,6 +81,15 @@ class SafeSiteBuilder {
     }
 
     async replaceFinalOutput() {
+        // 保存根目录的 index.html（如果存在）
+        const rootIndexPath = path.join(this.rootOutputDir, 'index.html');
+        let savedRootIndex = null;
+        
+        if (await fs.pathExists(rootIndexPath)) {
+            savedRootIndex = await fs.readFile(rootIndexPath, 'utf-8');
+            console.log('💾 已保存根目录的 index.html');
+        }
+        
         if (await fs.pathExists(this.finalOutputDir)) {
             try {
                 await fs.remove(this.finalOutputDir);
@@ -87,12 +98,18 @@ class SafeSiteBuilder {
                 const timestamp = new Date().getTime();
                 const backupDir = `${this.finalOutputDir}_backup_${timestamp}`;
                 await fs.move(this.finalOutputDir, backupDir);
-                console.log(`📦 旧目录已备份至: ${backupDir}`);
+                console.log(`📦 旧目录已备份至：${backupDir}`);
             }
         }
 
         await fs.move(this.tempOutputDir, this.finalOutputDir);
         console.log('🔄 已更新最终输出目录');
+        
+        // 恢复根目录的 index.html
+        if (savedRootIndex !== null) {
+            await fs.writeFile(rootIndexPath, savedRootIndex, 'utf-8');
+            console.log('📄 已恢复根目录的 index.html');
+        }
     }
 
     async cleanupTempDir() {
@@ -384,12 +401,15 @@ class SafeSiteBuilder {
         html = html.replace(/id="totalWords">[^<]*</, `id="totalWords">${totalWords}<`);
         html = html.replace(/id="siteDays">[^<]*</, `id="siteDays">${siteDays}<`);
 
-        // 确保输出目录存在
+        // 确保输出目录存在（临时目录用于其他资源）
         await fs.ensureDir(this.outputDir);
+        
+        // 确保根目录输出路径存在
+        await fs.ensureDir(this.rootOutputDir);
 
-        // 写入主页
-        await fs.writeFile(path.join(this.outputDir, 'index.html'), html);
-        console.log('🏠 已生成主页 index.html（包含最新文章）');
+        // 写入主页到项目根目录
+        await fs.writeFile(path.join(this.rootOutputDir, 'index.html'), html);
+        console.log('🏠 已生成主页 index.html 到项目根目录（包含最新文章）');
     }
 
     async generateArticlesIndex(articles, siteConfig) {
@@ -578,13 +598,29 @@ class SafeSiteBuilder {
 
     generateSlug(filename, title) {
         if (title) {
-            return title
-                .toLowerCase()
-                .replace(/[^\w\s-]/g, '')
-                .replace(/\s+/g, '-')
-                .replace(/-+/g, '-')
-                .trim();
+            // 对于中文标题，使用文件名作为基础（移除日期前缀）
+            const slugFromFilename = filename
+                .replace('.md', '')
+                .replace(/^\d{4}-\d{2}-\d{2}-/, '')
+                .toLowerCase();
+            
+            // 如果标题是中文，使用文件名生成的 slug
+            // 如果标题是英文，使用标题生成的 slug
+            const isChinese = /[\u4e00-\u9fa5]/.test(title);
+            
+            if (isChinese) {
+                return slugFromFilename;
+            } else {
+                return title
+                    .toLowerCase()
+                    .replace(/[^\w\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .trim();
+            }
         }
+        
+        // 如果没有标题，使用文件名
         return filename
             .replace('.md', '')
             .replace(/^\d{4}-\d{2}-\d{2}-/, '')
