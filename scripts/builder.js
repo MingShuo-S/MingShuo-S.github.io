@@ -278,6 +278,18 @@ class SafeSiteBuilder {
 
         // 最后替换实际的文章内容
         html = html.replace(contentPlaceholder, article.content || '');
+        
+        // 对于文章页面（在 /posts/{slug}/ 目录下，深度为 3 层），需要将资源路径调整为相对路径
+        // 将 /assets/ 转换为 ../../assets/
+        // 将 /writings 改为 ../../writings
+        // 将 /projects 改为 ../../projects
+        // 将 /about 改为 ../../about
+        // 将 / 改为 ../../
+        html = html.replace(/(href|src)="\/assets\//g, '$1="../../assets/');
+        html = html.replace(/href="\/writings"/g, 'href="../../writings"');
+        html = html.replace(/href="\/projects"/g, 'href="../../projects"');
+        html = html.replace(/href="\/about"/g, 'href="../../about"');
+        html = html.replace(/href="\//g, 'href="../../');
 
         // 创建文章输出目录
         const articleDir = path.join(this.outputDir, 'posts', article.slug);
@@ -400,6 +412,13 @@ class SafeSiteBuilder {
         html = html.replace(/id="totalArticles">[^<]*</, `id="totalArticles">${articles.length}<`);
         html = html.replace(/id="totalWords">[^<]*</, `id="totalWords">${totalWords}<`);
         html = html.replace(/id="siteDays">[^<]*</, `id="siteDays">${siteDays}<`);
+        
+        // 为根目录的 index.html 添加 /public 前缀到所有内部链接
+        // 替换 href 属性中的链接（排除外部链接、锚点链接、mailto:、tel: 等特殊协议）
+        // 注意：保留根路径 / 不变（首页链接）
+        html = html.replace(/href="(?!https?:\/\/)(?!#)(?!mailto:)(?!tel:)(?!\/")([^"]+)"/g, 'href="/public$1"');
+        // 替换 src 属性中的链接（排除外部链接）
+        html = html.replace(/src="(?!https?:\/\/)([^"]+)"/g, 'src="/public$1"');
 
         // 确保输出目录存在（临时目录用于其他资源）
         await fs.ensureDir(this.outputDir);
@@ -424,7 +443,7 @@ class SafeSiteBuilder {
                     <div class="card-header">
                         <div class="card-category">${article.category || '未分类'}</div>
                         <h3 class="card-title">
-                            <a href="/posts/${article.slug}/">${article.title}</a>
+                            <a href="../posts/${article.slug}/">${article.title}</a>
                         </h3>
                         <p class="card-excerpt">${article.summary || '暂无摘要'}</p>
                     </div>
@@ -448,7 +467,7 @@ class SafeSiteBuilder {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>所有文章 | ${siteConfig.site.title}</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
     <style>
         .articles-list-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         .articles-header { margin-bottom: 3rem; }
@@ -459,12 +478,12 @@ class SafeSiteBuilder {
 <body>
     <nav class="navbar">
         <div class="container">
-            <a href="/" class="nav-brand">${siteConfig.site.title}</a>
+            <a href="../../" class="nav-brand">${siteConfig.site.title}</a>
             <div class="nav-menu">
-                <a href="/" class="nav-link">首页</a>
-                <a href="/writings" class="nav-link active">文章</a>
-                <a href="/projects" class="nav-link">项目</a>
-                <a href="/about" class="nav-link">关于</a>
+                <a href="../../" class="nav-link">首页</a>
+                <a href="../writings" class="nav-link active">文章</a>
+                <a href="../projects" class="nav-link">项目</a>
+                <a href="../about" class="nav-link">关于</a>
             </div>
         </div>
     </nav>
@@ -478,7 +497,7 @@ class SafeSiteBuilder {
             ${articlesListHtml}
         </div>
         <div style="margin-top: 3rem; text-align: center;">
-            <a href="/" class="btn">返回首页</a>
+            <a href="../../" class="btn">返回首页</a>
         </div>
     </div>
 </body>
@@ -515,13 +534,13 @@ class SafeSiteBuilder {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${page.title} | Sunshine's Blog</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
     <div style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem; text-align: center;">
         <h1>🚧 ${page.title}</h1>
         <p>此页面正在建设中，敬请期待...</p>
-        <a href="/" style="display: inline-block; margin-top: 2rem; padding: 0.75rem 1.5rem; background: #4a6cf7; color: white; border-radius: 8px; text-decoration: none;">
+        <a href="../../" style="display: inline-block; margin-top: 2rem; padding: 0.75rem 1.5rem; background: #4a6cf7; color: white; border-radius: 8px; text-decoration: none;">
             返回首页
         </a>
     </div>
