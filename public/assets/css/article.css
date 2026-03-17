@@ -159,38 +159,19 @@
     width: 280px;
 }
 
-/* 目录收起状态 */
-.article-toc.collapsed {
-    width: 50px;
-}
-
-.article-toc.collapsed .toc-header h3 {
-    display: none;
-}
-
-.article-toc.collapsed .toc-content {
-    display: none;
-}
-
-/* 修改 .toc-toggle 样式，增强旋转动画 */
-.toc-toggle {
-    background: none;
-    border: none;
-    color: var(--text-light);
-    cursor: pointer;
-    padding: 0.25rem;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* 使用更平滑的缓动函数 */
-    transform: rotate(0deg);
+/* 目录标题 */
+.toc-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
 }
 
-/* 为旋转后的状态（目录收起时）定义样式 */
-.article-toc.collapsed .toc-toggle {
-    transform: rotate(180deg); /* 箭头旋转180度，指向右侧，暗示可展开 */
+.toc-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
 }
 
 .toc-header {
@@ -215,7 +196,6 @@
     cursor: pointer;
     padding: 0.25rem;
     transition: var(--transition);
-    transform: rotate(0deg);
 }
 
 .toc-content {

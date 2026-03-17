@@ -3,9 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== 目录生成 =====
     generateTableOfContents();
     
-    // ===== 目录折叠/展开 =====
-    setupTocToggle();
-    
     // ===== 目录跟随高亮 =====
     setupTocHighlight();
     
@@ -128,32 +125,6 @@ function generateTableOfContents() {
     });
 }
 
-// 设置目录折叠/展开
-function setupTocToggle() {
-    const tocToggle = document.getElementById('tocToggle');
-    const tocContent = document.getElementById('tocContent');
-    
-    if (!tocToggle || !tocContent) return;
-    
-    // 检查是否已保存折叠状态
-    const isCollapsed = localStorage.getItem('tocCollapsed') === 'true';
-    
-    if (isCollapsed) {
-        tocContent.classList.add('collapsed');
-        tocToggle.classList.add('collapsed');
-    }
-    
-    tocToggle.addEventListener('click', toggleToc);
-    
-    function toggleToc() {
-        tocContent.classList.toggle('collapsed');
-        tocToggle.classList.toggle('collapsed');
-        
-        // 保存状态
-        localStorage.setItem('tocCollapsed', tocContent.classList.contains('collapsed'));
-    }
-}
-
 // 设置目录跟随高亮
 function setupTocHighlight() {
     const tocLinks = document.querySelectorAll('.toc-content a');
@@ -187,9 +158,9 @@ function setupTocHighlight() {
                 if (activeLink) {
                     activeLink.classList.add('active');
                     
-                    // 滚动到可见区域
+                    // 滚动到可见区域 - 仅在桌面端（>1024px）启用，避免窄窗口下页面跳动
                     const tocContent = document.getElementById('tocContent');
-                    if (tocContent && !tocContent.classList.contains('collapsed')) {
+                    if (tocContent && window.innerWidth > 1024) {
                         activeLink.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
                     }
                 }
