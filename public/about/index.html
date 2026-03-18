@@ -1,19 +1,325 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 网站元信息 -->
     <title>关于我 | Sunshine's Blog</title>
+    <meta name="description" content="Sunshine - 南大软工 25 级，AI 重度使用患者，RemUp 作者，技术博客博主">
+    <meta name="author" content="Mingshuo_S">
+    <meta name="keywords" content="南大软工，个人博客，技术博客，RemUp,AI,关于我">
+    
+    <!-- Open Graph 社交分享 -->
+    <meta property="og:title" content="关于我 | Sunshine's Blog">
+    <meta property="og:description" content="Sunshine - 南大软工 25 级，AI 重度使用患者，RemUp 作者">
+    <meta property="og:type" content="profile">
+    <meta property="og:url" content="https://mingshuo-s.github.io/about/">
+    
+    <!-- 样式 -->
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/about.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 图标 -->
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- 主题颜色 -->
+    <meta name="theme-color" content="#4a6cf7">
 </head>
 <body>
-    <div style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem; text-align: center;">
-        <h1>🚧 关于我</h1>
-        <p>此页面正在建设中，敬请期待...</p>
-        <a href="../../" style="display: inline-block; margin-top: 2rem; padding: 0.75rem 1.5rem; background: #4a6cf7; color: white; border-radius: 8px; text-decoration: none;">
-            返回首页
-        </a>
-    </div>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="../../index.html" class="nav-brand">
+                <span class="brand-text">Sunshine's Blog</span>
+            </a>
+            
+            <div class="nav-menu">
+                <a href="../../index.html" class="nav-link">
+                    <i class="fas fa-home"></i> 首页
+                </a>
+                <a href="../writings" class="nav-link">
+                    <i class="fas fa-pen"></i> 文章
+                </a>
+                <a href="../projects" class="nav-link">
+                    <i class="fas fa-rocket"></i> 项目
+                </a>
+                <a href="../about" class="nav-link active">
+                    <i class="fas fa-user"></i> 关于
+                </a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="about-page">
+        <!-- 头部区域 -->
+        <header class="about-header">
+            <img src="../assets/images/avatar.jpg" alt="Mingshuo_S" class="about-avatar">
+            <h1 class="about-name">Sunshine</h1>
+            <p class="about-title">南大软工 25 级 | 技术博客博主 | RemUp 作者</p>
+            <div class="about-badges">
+                
+                <span class="badge">🏫 南京大学软件工程</span>
+                
+                <span class="badge">💻 AI 重度使用患者</span>
+                
+                <span class="badge">🚀 RemUp 作者</span>
+                
+                <span class="badge">🖌️ 不会画画</span>
+                
+                <span class="badge">📝 持续学习中</span>
+                
+                <span class="badge">☀️ 身份证上写的是网名</span>
+                
+            </div>
+        </header>
+
+        <!-- 关于我 -->
+        <section class="about-section">
+            <h2 class="section-heading">👋 关于我</h2>
+            <div class="about-text">
+                <p>你好！我是 <strong>阳光</strong>（Mingshuo_S），目前就读于<strong>南京大学软件工程专业 2025 级</strong>。</p><p>我是一个热爱技术的开发者，喜欢用代码实现想法，享受从无到有的创造过程。这里是我的个人博客，记录我的技术思考、项目经验和学习笔记。</p><p><strong>我的特点：</strong></p><ul class="intro-list"><li>🤖 <span class="intro-list-strong">AI 重度使用者</span>：善于利用 AI 工具提升开发效率，探索人机协作的新模式</li><li>📚 <span class="intro-list-strong">终身学习者</span>：保持好奇心，持续学习新技术和知识</li><li>💡 <span class="intro-list-strong">实践派</span>：相信实践出真知，喜欢动手做项目</li><li>🎯 <span class="intro-list-strong">细节控</span>：追求代码质量和用户体验的完美</li></ul><p>在这个数字花园里，你会找到：</p><ul class="intro-list"><li>📝 技术文章的深度解析</li><li>🛠️ 有趣的项目实践记录</li><li>📖 学习笔记和知识总结</li><li>🌟 对技术和行业的思考</li></ul>
+            </div>
+        </section>
+
+        <!-- 技能栈 -->
+        <section class="about-section">
+            <h2 class="section-heading">🛠️ 技能栈</h2>
+            <div class="skills-grid">
+                
+                <div class="skill-card">
+                    <div class="skill-icon">🌐</div>
+                    <div class="skill-name">前端开发</div>
+                    <div class="skill-level">HTML / CSS / JavaScript</div>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon">⚛️</div>
+                    <div class="skill-name">React</div>
+                    <div class="skill-level">现代前端框架</div>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon">🟢</div>
+                    <div class="skill-name">Node.js</div>
+                    <div class="skill-level">后端开发</div>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon">🐍</div>
+                    <div class="skill-name">Python</div>
+                    <div class="skill-level">数据处理 / AI Agent基础开发</div>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon">🔵</div>
+                    <div class="skill-name">C Language</div>
+                    <div class="skill-level">C 语言基础</div>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon">📝</div>
+                    <div class="skill-name">RemUp</div>
+                    <div class="skill-level">笔记语言设计</div>
+                </div>
+                
+                <div class="skill-card">
+                    <div class="skill-icon">🤖</div>
+                    <div class="skill-name">AI Tools</div>
+                    <div class="skill-level">AI 应用开发</div>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- 学习经历 -->
+        <section class="about-section">
+            <h2 class="section-heading">📖 学习经历</h2>
+            <div class="timeline">
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2025 - 至今</div>
+                    <h3 class="timeline-title">南京大学 - 软件工程</h3>
+                    <p class="timeline-description">本科在读，主修软件工程专业。系统学习计算机科学基础、软件工程方法论、商业需求工程等课程。</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">持续学习中</div>
+                    <h3 class="timeline-title">自学路线</h3>
+                    <p class="timeline-description">通过在线课程、技术文档、开源项目等方式自学前端开发、Node.js、AI 应用开发等技术栈。</p>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- 项目经验 -->
+        <section class="about-section">
+            <h2 class="section-heading">🚀 项目经验</h2>
+            <div class="timeline">
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2025 - 至今</div>
+                    <h3 class="timeline-title">RemUp - 笔记语言</h3>
+                    <p class="timeline-description">设计和开发一款全新的笔记语言 RemUp，旨在提供更高效、更灵活的知识记录和管理方式。涉及语法设计、解析器开发、编辑器实现等多个方面。</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2026 - 至今</div>
+                    <h3 class="timeline-title">个人博客系统</h3>
+                    <p class="timeline-description">从零搭建的静态博客系统，基于 Node.js 实现构建流程，支持 Markdown 渲染、主题切换、响应式设计等功能。配合vibe coding自主开发，深入理解前端工程化和静态站点生成原理。</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">持续进行</div>
+                    <h3 class="timeline-title">开源贡献</h3>
+                    <p class="timeline-description">积极参与开源社区，贡献代码和文档。通过开源项目学习最佳实践，提升工程能力。</p>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- 兴趣爱好 -->
+        <section class="about-section">
+            <h2 class="section-heading">✨ 兴趣爱好</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💻</div>
+                    <div style="font-weight: 600; color: #333;">编程开发</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">享受创造的乐趣</div>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📚</div>
+                    <div style="font-weight: 600; color: #333;">阅读学习</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">探索未知领域</div>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎵</div>
+                    <div style="font-weight: 600; color: #333;">音乐欣赏 & 音游</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">放松身心，什么都听，音游库很不传统</div>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎬</div>
+                    <div style="font-weight: 600; color: #333;">影视观赏 & 做视频</div>
+                    <div style="font-size: 0.85rem; color: #666; margin-top: 0.25rem;">欣赏不同角度的世界，展示个人视角</div>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- 联系方式 -->
+        <section class="about-section">
+            <h2 class="section-heading">📬 联系我</h2>
+            <p class="about-text">
+                如果你有任何问题、合作意向或者只是想聊聊天，欢迎通过以下方式联系我：
+            </p>
+            
+            <div class="contact-grid">
+                
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div>
+                        <div class="contact-label">邮箱</div>
+                        <div class="contact-value">Sunshine_Mings@outlook.com</div>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">🌐</div>
+                    <div>
+                        <div class="contact-label">GitHub</div>
+                        <div class="contact-value">@MingShuo-S</div>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">📺</div>
+                    <div>
+                        <div class="contact-label">Bilibili</div>
+                        <div class="contact-value">明朔还在咕</div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="social-links">
+                
+            </div>
+        </section>
+
+        <!-- 致谢 -->
+        <section class="about-section thanks-section">
+            <h2>🙏 感谢访问</h2>
+            <p>
+                {感谢你花时间阅读我的个人介绍！<br>这个博客是我学习和成长的记录，也是与志同道合的朋友交流的平台。<br>如果你喜欢这里的内容，欢迎常来逛逛，也期待与你建立联系！}
+            </p>
+            <div style="margin-top: 2rem;">
+                <a href="../../index.html" class="return-btn">
+                    <i class="fas fa-home"></i> 返回首页
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>Sunshine's Blog</h3>
+                    <p>记录技术思考、项目经验和学习成长</p>
+                    <p class="footer-copyright">© 2024-{{site.year}} Mingshuo_S. 保留所有权利。</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>探索</h4>
+                        <a href="../writings">所有文章</a>
+                        <a href="../projects">所有项目</a>
+                        <a href="../tags">标签分类</a>
+                        <a href="../archive">文章归档</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>链接</h4>
+                        <a href="../about">关于我</a>
+                        <a href="../friends">友情链接</a>
+                        <a href="../rss.xml">RSS 订阅</a>
+                        <a href="../sitemap.xml">站点地图</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>联系</h4>
+                        <a href="mailto:{{site.email}}">发送邮件</a>
+                        <a href="https://github.com/{{site.social.github}}">GitHub</a>
+                        <a href="{{site.social.bilibili}}">Bilibili</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>本博客由 <a href="https://github.com/MingShuo-S/MingShuo-S.github.io" target="_blank" rel="noopener">MingShuo-S.github.io</a> 驱动</p>
+                <p>最后更新于 <span id="lastUpdated">今天</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/about.js"></script>
 </body>
 </html>

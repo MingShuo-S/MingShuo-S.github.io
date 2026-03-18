@@ -50,8 +50,9 @@ class SafeSiteBuilder {
             // 7. 复制静态资源
             await this.copyAssets();
 
-            // 8. 创建其他功能页面的占位符
-            await this.createPlaceholderPages();
+            // 8. 生成功能页面
+            await this.generateProjectsPage(siteConfig);
+            await this.generateAboutPage(siteConfig);
 
             // 9. 生成站点地图
             await this.generateSitemap(articles, siteConfig);
@@ -511,38 +512,34 @@ class SafeSiteBuilder {
         console.log('📚 已生成文章列表页 /writings/');
     }
 
-    async copyAssets() {
-        if (await fs.pathExists(this.assetsDir)) {
-            const destAssetsDir = path.join(this.outputDir, 'assets');
-            await fs.copy(this.assetsDir, destAssetsDir);
-            console.log('📁 已复制静态资源');
-        } else {
-            console.log('⚠️  未找到静态资源目录');
-        }
-    }
+    async generateProjectsPage(siteConfig) {
+        const pageDir = path.join(this.outputDir, 'projects');
+        await fs.ensureDir(pageDir);
 
-    async createPlaceholderPages() {
-        const pages = [
-            { name: 'projects', title: '项目展示' },
-            { name: 'about', title: '关于我' }
-        ];
-
-        for (const page of pages) {
-            const pageDir = path.join(this.outputDir, page.name);
-            await fs.ensureDir(pageDir);
-
-            const html = `
+        const html = `
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${page.title} | Sunshine's Blog</title>
+    <title>项目展示 | ${siteConfig.site.title}</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="../../" class="nav-brand">${siteConfig.site.title}</a>
+            <div class="nav-menu">
+                <a href="../../" class="nav-link">首页</a>
+                <a href="../writings" class="nav-link">文章</a>
+                <a href="../projects" class="nav-link active">项目</a>
+                <a href="../about" class="nav-link">关于</a>
+            </div>
+        </div>
+    </nav>
+    
     <div style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem; text-align: center;">
-        <h1>🚧 ${page.title}</h1>
+        <h1>🚧 项目展示</h1>
         <p>此页面正在建设中，敬请期待...</p>
         <a href="../../" style="display: inline-block; margin-top: 2rem; padding: 0.75rem 1.5rem; background: #4a6cf7; color: white; border-radius: 8px; text-decoration: none;">
             返回首页
@@ -551,10 +548,111 @@ class SafeSiteBuilder {
 </body>
 </html>`;
 
-            await fs.writeFile(path.join(pageDir, 'index.html'), html);
+        await fs.writeFile(path.join(pageDir, 'index.html'), html);
+        console.log('📄 已生成项目页面 /projects/');
+    }
+
+    async generateAboutPage(siteConfig) {
+        const templateFile = path.join(this.templateDir, 'about.html');
+        const dataFile = path.join(this.dataDir, 'about.json');
+
+        if (!await fs.pathExists(templateFile)) {
+            console.log('⚠️  未找到 about 模板，跳过 about 页面生成');
+            return;
         }
 
-        console.log('📄 已创建功能页面占位符');
+        if (!await fs.pathExists(dataFile)) {
+            console.log('⚠️  未找到 about 数据文件，跳过 about 页面生成');
+            return;
+        }
+
+        // 读取模板和数据
+        let html = await fs.readFile(templateFile, 'utf-8');
+        const aboutData = await fs.readJson(dataFile);
+
+        // 合并数据
+        const data = {
+            ...aboutData,
+            site: siteConfig.site,
+            social: siteConfig.social
+        };
+
+        // 替换变量
+        html = this.replaceTemplateVariables(html, data);
+
+        // 路径转换（about 页面在根目录下，深度为 2 层）
+        // 将 /assets/ 转换为 ../assets/
+        html = html.replace(/(href|src)="\/assets\//g, '$1="../assets/"');
+        
+        // 创建 about 输出目录
+        const pageDir = path.join(this.outputDir, 'about');
+        await fs.ensureDir(pageDir);
+
+        // 写入 about 页面
+        await fs.writeFile(path.join(pageDir, 'index.html'), html);
+        console.log('📄 已生成 about 页面 /about/');
+    }
+
+    replaceTemplateVariables(html, data) {
+        let result = html;
+        
+        // 处理简单变量 {{variable}}
+        for (const [key, value] of Object.entries(data)) {
+            if (typeof value === 'string') {
+                const regex = new RegExp(`\\{\\{${key}\\}\\}`, 'g');
+                result = result.replace(regex, value);
+            }
+        }
+        
+        // 处理嵌套对象变量 {{object.key}}
+        const self = this;
+        function processNested(obj, prefix = '') {
+            for (const [key, value] of Object.entries(obj)) {
+                const fullKey = prefix ? `${prefix}.${key}` : key;
+                if (typeof value === 'string') {
+                    const regex = new RegExp(`\\{\\{${fullKey}\\}\\}`, 'g');
+                    result = result.replace(regex, value);
+                } else if (typeof value === 'object' && !Array.isArray(value)) {
+                    processNested(value, fullKey);
+                }
+            }
+        }
+        processNested(data);
+        
+        // 处理 each 循环 {{#each array}}...{{/each}}
+        const eachRegex = /\{\{#each\s+([\w.]+)\}\}([\s\S]*?)\{\{\/each\}\}/g;
+        result = result.replace(eachRegex, (match, arrayName, template) => {
+            const array = self.getNestedValue(data, arrayName);
+            if (!Array.isArray(array)) {
+                return '';
+            }
+            
+            return array.map(item => {
+                let itemHtml = template;
+                if (typeof item === 'object') {
+                    for (const [key, value] of Object.entries(item)) {
+                        const regex = new RegExp(`\\{\\{${key}\\}\\}`, 'g');
+                        itemHtml = itemHtml.replace(regex, value || '');
+                    }
+                } else if (typeof item === 'string') {
+                    // 处理字符串类型的数组项（如 badges）
+                    itemHtml = itemHtml.replace(/\{\{this\}\}/g, item);
+                }
+                return itemHtml;
+            }).join('');
+        });
+        
+        return result;
+    }
+
+    async copyAssets() {
+        if (await fs.pathExists(this.assetsDir)) {
+            const destAssetsDir = path.join(this.outputDir, 'assets');
+            await fs.copy(this.assetsDir, destAssetsDir);
+            console.log('📁 已复制静态资源');
+        } else {
+            console.log('⚠️  未找到静态资源目录');
+        }
     }
 
     async generateSitemap(articles, siteConfig) {
@@ -593,6 +691,14 @@ class SafeSiteBuilder {
     }
 
     // ========== 工具函数 ==========
+    
+    /**
+     * 获取嵌套对象的值
+     */
+    getNestedValue(obj, path) {
+        return path.split('.').reduce((current, key) => current && current[key], obj);
+    }
+    
     formatDate(dateString) {
         try {
             const date = new Date(dateString);
