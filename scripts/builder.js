@@ -289,7 +289,11 @@ class SafeSiteBuilder {
         html = html.replace(/href="\/writings"/g, 'href="../../writings"');
         html = html.replace(/href="\/projects"/g, 'href="../../projects"');
         html = html.replace(/href="\/about"/g, 'href="../../about"');
-        html = html.replace(/href="\//g, 'href="../../');
+        // 注意：根路径 "/" 的替换需要排除 href="/" 的情况，避免影响非相对路径的链接
+        const pathPattern = /(href|src)="(?!\/")(\/[^"]+)"/g;
+        html = html.replace(pathPattern, function(match, attr, path) {
+            return attr + '="../../' + path.substring(1) + '"';
+        });
 
         // 创建文章输出目录
         const articleDir = path.join(this.outputDir, 'posts', article.slug);

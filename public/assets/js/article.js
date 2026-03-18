@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== 目录生成 =====
     generateTableOfContents();
     
+    // ===== 目录切换功能 =====
+    setupTocToggle();
+    
     // ===== 目录跟随高亮 =====
     setupTocHighlight();
     
@@ -62,7 +65,8 @@ function generateTableOfContents() {
             case 2:
                 tocHTML += `
                     <li>
-                        <a href="#${id}" data-level="h2">${text}</a>`;
+                        <a href="#${id}" data-level="h2">${text}</a>
+                    </li>`;
                 currentH2 = id;
                 break;
                 
@@ -79,10 +83,6 @@ function generateTableOfContents() {
                 }
                 break;
         }
-        
-        if (level === 2) {
-            tocHTML += '</li>';
-        }
     });
     
     tocHTML += '</ul>';
@@ -96,15 +96,17 @@ function generateTableOfContents() {
             const targetElement = document.getElementById(targetId);
             
             if (targetElement) {
-                // 计算偏移量（考虑固定导航栏）
-                const navHeight = document.querySelector('.navbar')?.offsetHeight || 0;
-                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
-                const offsetPosition = targetPosition - navHeight - 20;
-                
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
+                // 仅在桌面端（>1024px）启用平滑滚动，避免移动端强制滚动影响用户体验
+                if (window.innerWidth > 1024) {
+                    const navHeight = document.querySelector('.navbar')?.offsetHeight || 0;
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = targetPosition - navHeight - 20;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
                 
                 // 添加高亮效果
                 targetElement.classList.add('highlight');
@@ -114,14 +116,101 @@ function generateTableOfContents() {
                 
                 // 如果是移动端，点击后收起目录
                 if (window.innerWidth < 1024) {
-                    const tocToggle = document.getElementById('tocToggle');
+                    const tocContainer = document.querySelector('.article-toc');
                     const tocContent = document.getElementById('tocContent');
-                    if (tocContent && !tocContent.classList.contains('collapsed')) {
-                        toggleToc();
+                    // 检查目录当前是否为展开状态（未包含'collapsed'类），若是则调用收起操作
+                    if (tocContainer && !tocContainer.classList.contains('collapsed')) {
+                        tocContainer.classList.add('collapsed');
+                        if (tocContent) {
+                            tocContent.style.display = 'none';
+                        }
                     }
                 }
             }
         });
+    });
+}
+
+// 设置目录切换功能
+function setupTocToggle() {
+    const tocToggle = document.getElementById('tocToggle');
+    const tocContainer = document.querySelector('.article-toc');
+    const tocContent = document.getElementById('tocContent');
+    
+    if (!tocToggle || !tocContainer || !tocContent) return;
+    
+    // ✅ 性能优化：使用防抖处理 resize 事件
+    let resizeTimer;
+    
+    // 点击按钮切换
+    tocToggle.addEventListener('click', function(e) {
+        e.stopPropagation(); // 阻止事件冒泡
+        toggleToc();
+    });
+    
+    // 桌面端：点击整个收起的目录区域也可以展开
+    tocContainer.addEventListener('click', function(e) {
+        if (window.innerWidth > 1024 && this.classList.contains('collapsed')) {
+            e.stopPropagation();
+            toggleToc();
+        }
+    });
+    
+    // 切换函数
+    function toggleToc() {
+        // 切换收起状态
+        tocContainer.classList.toggle('collapsed');
+        
+        // 更新按钮状态
+        const isCollapsed = tocContainer.classList.contains('collapsed');
+        tocToggle.setAttribute('aria-expanded', !isCollapsed);
+        
+        // 更新图标 - 使用类名切换实现平滑旋转
+        const icon = tocToggle.querySelector('i');
+        if (icon) {
+            if (window.innerWidth > 1024) {
+                // 桌面端：收起时图标向右，展开时图标向左
+                // 通过移除旧类名、添加新类名实现切换
+                icon.classList.remove('fa-chevron-left', 'fa-chevron-right');
+                icon.classList.add(isCollapsed ? 'fa-chevron-right' : 'fa-chevron-left');
+            } else {
+                // 移动端：收起时图标向下，展开时图标向上
+                icon.classList.remove('fa-chevron-up', 'fa-chevron-down');
+                icon.classList.add(isCollapsed ? 'fa-chevron-down' : 'fa-chevron-up');
+            }
+        }
+        
+        // 桌面端不需要手动控制 display，由 CSS 处理
+        // 移动端才需要手动控制 display
+        if (window.innerWidth <= 1024) {
+            if (isCollapsed) {
+                tocContent.style.display = 'none';
+            } else {
+                tocContent.style.display = 'block';
+            }
+        }
+    }
+    
+    // 监听窗口大小变化，调整图标方向和显示逻辑
+    window.addEventListener('resize', function() {
+        // ✅ 防抖处理：延迟执行，避免频繁触发
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            const icon = tocToggle.querySelector('i');
+            const isCollapsed = tocContainer.classList.contains('collapsed');
+            
+            if (icon && isCollapsed) {
+                if (window.innerWidth > 1024) {
+                    icon.className = 'fas fa-chevron-right';
+                    // 桌面端：移除 display 限制，让 CSS 处理
+                    tocContent.style.display = '';
+                } else {
+                    icon.className = 'fas fa-chevron-down';
+                    // 移动端：保持 display 控制
+                    tocContent.style.display = 'none';
+                }
+            }
+        }, 150); // 150ms 防抖延迟
     });
 }
 
@@ -159,6 +248,7 @@ function setupTocHighlight() {
                     activeLink.classList.add('active');
                     
                     // 滚动到可见区域 - 仅在桌面端（>1024px）启用，避免窄窗口下页面跳动
+                    // 移动端禁用自动滚动，防止干扰用户正常浏览体验
                     const tocContent = document.getElementById('tocContent');
                     if (tocContent && window.innerWidth > 1024) {
                         activeLink.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
@@ -176,6 +266,7 @@ function setupTocHighlight() {
 // 设置分享按钮
 function setupShareButtons() {
     const shareButtons = document.querySelectorAll('.share-btn');
+    if (shareButtons.length === 0) return; // 添加元素存在性检查
     
     shareButtons.forEach(button => {
         button.addEventListener('click', function() {
@@ -277,7 +368,10 @@ function setupReadingProgress() {
 
 // 代码块复制按钮
 function setupCodeCopyButtons() {
-    document.querySelectorAll('pre').forEach(pre => {
+    const pres = document.querySelectorAll('pre');
+    if (pres.length === 0) return; // 添加元素存在性检查
+    
+    pres.forEach(pre => {
         // 检查是否已经有复制按钮
         if (pre.querySelector('.copy-code-btn')) return;
         
@@ -310,7 +404,10 @@ function setupCodeCopyButtons() {
         });
         
         copyButton.addEventListener('click', function() {
-            const code = pre.querySelector('code').textContent;
+            const codeElement = pre.querySelector('code');
+            if (!codeElement) return; // 添加 code 元素存在性检查
+            
+            const code = codeElement.textContent;
             copyToClipboard(code);
             
             // 显示复制成功反馈
@@ -331,7 +428,10 @@ function setupCodeCopyButtons() {
 
 // 图片灯箱
 function setupImageLightbox() {
-    document.querySelectorAll('.article-content img').forEach(img => {
+    const images = document.querySelectorAll('.article-content img');
+    if (images.length === 0) return; // 添加元素存在性检查
+    
+    images.forEach(img => {
         if (img.closest('pre') || img.closest('.mermaid')) return;
         
         img.style.cursor = 'zoom-in';
@@ -372,7 +472,7 @@ function setupImageLightbox() {
                 }
             });
             
-            // ESC键关闭
+            // ESC 键关闭
             document.addEventListener('keydown', function closeOnEsc(e) {
                 if (e.key === 'Escape') {
                     lightbox.remove();

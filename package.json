@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "node scripts/builder.js",
-    "dev": "node scripts/builder.js && npx live-server public --port=3000",
+    "dev": "node scripts/builder.js && npx live-server --port=3000",
     "deploy": "npm run build && gh-pages -d public"
   },
   "keywords": [],

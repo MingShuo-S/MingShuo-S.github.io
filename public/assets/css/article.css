@@ -10,7 +10,7 @@
     --article-heading-4: 1.125rem;
 }
 
-/* 文章容器布局 */
+/* 文章容器 */
 .article-container {
     padding: 2rem 0 4rem;
     max-width: 1200px;
@@ -18,11 +18,34 @@
     position: relative;
 }
 
+/* ✅ 移动端容器占满全宽 */
+@media (max-width: 1024px) {
+    .article-container {
+        max-width: 100%;
+        padding: 1rem 0 2rem;
+    }
+}
+
+/* 文章容器布局 */
 .article-layout {
     display: grid;
     grid-template-columns: 280px 1fr;
     gap: 2rem;
     position: relative;
+    transition: grid-template-columns 0.3s ease;
+}
+
+/* 桌面端目录收起时的布局调整 */
+@media (min-width: 1025px) {
+    .article-layout:has(.article-toc.collapsed) {
+        grid-template-columns: 0 1fr;
+        gap: 0;
+    }
+    
+    .article-layout:has(.article-toc.collapsed) .article-main {
+        max-width: 100%;
+        width: 100%;
+    }
 }
 
 .article-main {
@@ -154,9 +177,57 @@
     background-color: var(--bg-secondary);
     border-radius: var(--radius);
     border: 1px solid var(--border-color);
-    transition: all 0.3s ease;
     z-index: 100;
     width: 280px;
+    flex-shrink: 0;
+    /* ✅ 性能优化：使用 will-change 提前告知浏览器 */
+    will-change: width;
+    /* ✅ 使用 transform 代替部分布局属性 */
+    transform: translateZ(0);
+}
+
+/* 桌面端收起状态：保留展开按钮区域 */
+@media (min-width: 1025px) {
+    .article-toc.collapsed {
+        width: 48px !important; /* 保留按钮宽度 */
+        min-width: 48px !important;
+        max-width: 48px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: 1px solid var(--border-color) !important;
+        overflow: hidden !important;
+        cursor: pointer;
+    }
+    
+    .article-toc.collapsed .toc-header {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 0 !important;
+        border-bottom: none !important;
+    }
+    
+    .article-toc.collapsed .toc-header h3 {
+        display: none !important; /* 隐藏标题文字 */
+    }
+    
+    
+    .article-toc.collapsed .toc-content {
+        display: none !important; /* 隐藏目录内容 */
+    }
+    
+    /* 目录收起时，主内容区域扩展 */
+    .article-layout:has(.article-toc.collapsed) {
+        grid-template-columns: 48px 1fr; /* 第一列保留 48px */
+        gap: 0;
+        /* ✅ 优化 Grid 布局过渡 */
+        transition: grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .article-layout:has(.article-toc.collapsed) .article-main {
+        max-width: calc(100% - 1rem);
+        width: 100%;
+    }
 }
 
 /* 目录标题 */
@@ -195,7 +266,19 @@
     color: var(--text-light);
     cursor: pointer;
     padding: 0.25rem;
-    transition: var(--transition);
+    /* ✅ 优化：使用更精确的 transition，只控制 transform */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* ✅ GPU 加速 */
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+/* 确保 Font Awesome 图标继承父元素的过渡效果 */
+.toc-toggle i {
+    transition: inherit;
+    /* ✅ GPU 加速 */
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
 .toc-content {
@@ -617,12 +700,20 @@
         width: 100%;
     }
     
-    .article-toc.collapsed {
+    /* ✅ 移动端主内容区占满全宽 */
+    .article-main {
+        max-width: 100%;
         width: 100%;
+        padding: 0 1rem;
     }
     
-    .article-toc.collapsed .toc-header h3 {
-        display: block;
+    /* 移动端收起状态：上下收起 */
+    .article-toc.collapsed .toc-content {
+        display: none;
+    }
+    
+    .article-toc.collapsed {
+        margin-bottom: 1rem;
     }
     
     .toc-content {
@@ -631,10 +722,6 @@
 }
 
 @media (max-width: 768px) {
-    .article-container {
-        padding: 1rem 0 2rem;
-    }
-    
     .article-title {
         font-size: 1.75rem;
     }
@@ -645,6 +732,11 @@
     
     .article-content {
         font-size: 0.9375rem;
+    }
+    
+    /* ✅ 移动端内容区增加内边距 */
+    .article-main {
+        padding: 0 1rem;
     }
     
     .article-content h1 {
