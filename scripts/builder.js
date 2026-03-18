@@ -360,6 +360,14 @@ class SafeSiteBuilder {
 
         let html = await fs.readFile(templateFile, 'utf-8');
 
+        // 读取项目数据
+        const projectsFile = path.join(this.dataDir, 'projects.json');
+        let projects = [];
+        if (await fs.pathExists(projectsFile)) {
+            const projectsData = await fs.readJson(projectsFile);
+            projects = projectsData.projects || [];
+        }
+
         // 生成实际的文章列表 HTML
         const latestArticles = articles.slice(0, 3);
         let articlesHtml = '';
@@ -386,9 +394,55 @@ class SafeSiteBuilder {
             articlesHtml = '<p class="no-articles">暂无文章，欢迎关注后续更新。</p>';
         }
 
+        // 生成精选项目列表 HTML（只显示 featured 项目，最多 2 个）
+        let projectsHtml = '';
+        const featuredProjects = projects.filter(p => p.featured).slice(0, 2);
+        
+        if (featuredProjects.length > 0) {
+            projectsHtml = featuredProjects.map(project => {
+                const statusText = this.getStatusText(project.status);
+                const tagsHtml = (project.tags || []).slice(0, 3).map(tag => `<span class="tag">${tag}</span>`).join('');
+                const githubLink = project.github ? 
+                    `<a href="https://github.com/${project.github}" target="_blank" rel="noopener" class="btn btn-secondary">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>` : '';
+                
+                return `
+                <article class="project-card${project.featured ? ' featured' : ''}" data-category="${project.category}">
+                    <div class="project-icon">${project.icon || '🚀'}</div>
+                    <h2 class="project-title">${project.title}</h2>
+                    
+                    <span class="project-status status-${project.status}">
+                        ${statusText}
+                    </span>
+                    
+                    <p class="project-description">${project.description}</p>
+                    
+                    <div class="project-tags">
+                        ${tagsHtml}
+                    </div>
+                    
+                    <div class="project-footer">
+                        <div class="project-links">
+                            <a href="${project.url || '#'}" target="_blank" rel="noopener" class="btn btn-primary">
+                                <i class="fas fa-external-link-alt"></i> 访问项目
+                            </a>
+                            ${githubLink}
+                        </div>
+                    </div>
+                </article>
+                `;
+            }).join('\n');
+        } else {
+            projectsHtml = '<p class="no-projects">暂无项目，敬请期待！</p>';
+        }
+
         // 计算统计信息
         const totalWords = articles.reduce((sum, article) => sum + (article.wordCount || 0), 0);
         const siteDays = this.calculateSiteDays('2025-01-01');
+        const totalStars = projects.reduce((sum, p) => sum + (p.stars || 0), 0);
+        const languages = [...new Set(projects.map(p => p.language).filter(Boolean))];
+        const languagesCount = languages.length;
 
         // 替换站点配置变量
         html = this.replaceVariables(html, {
@@ -413,10 +467,23 @@ class SafeSiteBuilder {
                   html.substring(articlesGridEnd);
         }
 
+        // 替换项目列表
+        const projectsGridStart = html.indexOf('<div class="projects-grid" id="projectsGrid">');
+        const projectsGridEnd = html.indexOf('</div>', projectsGridStart) + 6;
+        
+        if (projectsGridStart !== -1 && projectsGridEnd !== -1) {
+            html = html.substring(0, projectsGridStart) + 
+                  `<div class="projects-grid" id="projectsGrid">\n${projectsHtml}\n</div>` + 
+                  html.substring(projectsGridEnd);
+        }
+
         // 更新统计信息
         html = html.replace(/id="totalArticles">[^<]*</, `id="totalArticles">${articles.length}<`);
         html = html.replace(/id="totalWords">[^<]*</, `id="totalWords">${totalWords}<`);
         html = html.replace(/id="siteDays">[^<]*</, `id="siteDays">${siteDays}<`);
+        html = html.replace(/id="totalProjects">[^<]*</, `id="totalProjects">${projects.length}<`);
+        html = html.replace(/id="totalStars">[^<]*</, `id="totalStars">${totalStars}<`);
+        html = html.replace(/id="languagesCount">[^<]*</, `id="languagesCount">${languagesCount}<`);
         
         // 为根目录的 index.html 添加 /public 前缀到所有内部链接
         // 替换 href 属性中的链接（排除外部链接、锚点链接、mailto:、tel: 等特殊协议）
@@ -424,6 +491,12 @@ class SafeSiteBuilder {
         html = html.replace(/href="(?!https?:\/\/)(?!#)(?!mailto:)(?!tel:)(?!\/")([^"]+)"/g, 'href="/public$1"');
         // 替换 src 属性中的链接（排除外部链接）
         html = html.replace(/src="(?!https?:\/\/)([^"]+)"/g, 'src="/public$1"');
+        
+        // 在主页中添加 projects.css 引用（在 style.css 之后）
+        html = html.replace(
+            '<link rel="stylesheet" href="/public/assets/css/style.css">',
+            '<link rel="stylesheet" href="/public/assets/css/style.css">\n    <link rel="stylesheet" href="/public/assets/css/projects.css">'
+        );
 
         // 确保输出目录存在（临时目录用于其他资源）
         await fs.ensureDir(this.outputDir);
@@ -433,7 +506,7 @@ class SafeSiteBuilder {
 
         // 写入主页到项目根目录
         await fs.writeFile(path.join(this.rootOutputDir, 'index.html'), html);
-        console.log('🏠 已生成主页 index.html 到项目根目录（包含最新文章）');
+        console.log('🏠 已生成主页 index.html 到项目根目录（包含最新文章和精选项目）');
     }
 
     async generateArticlesIndex(articles, siteConfig) {
@@ -513,43 +586,151 @@ class SafeSiteBuilder {
     }
 
     async generateProjectsPage(siteConfig) {
+        const templateFile = path.join(this.templateDir, 'projects.html');
+        const dataFile = path.join(this.dataDir, 'projects.json');
+
+        if (!await fs.pathExists(templateFile)) {
+            console.log('⚠️  未找到 projects 模板，跳过 projects 页面生成');
+            return;
+        }
+
+        if (!await fs.pathExists(dataFile)) {
+            console.log('⚠️  未找到 projects 数据文件，跳过 projects 页面生成');
+            return;
+        }
+
+        // 读取模板和数据
+        let html = await fs.readFile(templateFile, 'utf-8');
+        const projectsData = await fs.readJson(dataFile);
+
+        // 合并数据
+        const data = {
+            page: {
+                title: '项目展示',
+                description: '展示我的个人项目和开源作品',
+                keywords: '项目，开源，GitHub，编程作品',
+                og_description: '探索我的技术项目和开源贡献'
+            },
+            projects: {
+                ...siteConfig.projects,
+                items: projectsData.projects || []
+            },
+            categories: projectsData.categories || [],
+            site: siteConfig.site,
+            social: siteConfig.social
+        };
+
+        // 处理项目列表 - 使用占位符替换
+        if (data.projects.items && Array.isArray(data.projects.items)) {
+            const projectsHtml = data.projects.items.map(project => {
+                const featuredClass = project.featured ? 'featured' : '';
+                const statusText = this.getStatusText(project.status);
+                const tagsHtml = (project.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('');
+                const githubLink = project.github ? 
+                    `<a href="https://github.com/${project.github}" target="_blank" rel="noopener" class="btn btn-secondary">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>` : '';
+                
+                return `
+                <article class="project-card ${featuredClass}" data-category="${project.category}">
+                    <div class="project-icon">${project.icon || '🚀'}</div>
+                    <h2 class="project-title">${project.title}</h2>
+                    
+                    <span class="project-status status-${project.status}">
+                        ${statusText}
+                    </span>
+                    
+                    <p class="project-description">${project.description}</p>
+                    
+                    <div class="project-tags">
+                        ${tagsHtml}
+                    </div>
+                    
+                    <div class="project-footer">
+                        <div class="project-links">
+                            <a href="${project.url || '#'}" target="_blank" rel="noopener" class="btn btn-primary">
+                                <i class="fas fa-external-link-alt"></i> 访问项目
+                            </a>
+                            ${githubLink}
+                        </div>
+                    </div>
+                </article>
+                `;
+            }).join('\n');
+            
+            // 使用占位符替换项目列表
+            html = html.replace('___PROJECTS_HTML_PLACEHOLDER___', projectsHtml);
+        } else {
+            // 如果没有项目，显示空状态
+            html = html.replace('___PROJECTS_HTML_PLACEHOLDER___', `
+                <div class="no-projects">
+                    <i class="fas fa-box-open"></i>
+                    <h2>暂无项目</h2>
+                    <p>这里还没有项目，敬请期待！</p>
+                </div>
+            `);
+        }
+
+        // 处理分类的 each 循环
+        if (data.categories && Array.isArray(data.categories)) {
+            const categoriesHtml = data.categories.map(cat => 
+                `<button class="filter-btn" data-filter="${cat.filter}">${cat.name}</button>`
+            ).join('');
+            
+            const categoriesEachRegex = /\{\{#each categories\}\}([\s\S]*?)\{\{\/each\}\}/g;
+            html = html.replace(categoriesEachRegex, categoriesHtml);
+        }
+
+        // 替换简单变量
+        html = this.replaceVariables(html, {
+            '{{page.title}}': data.page.title,
+            '{{page.description}}': data.page.description,
+            '{{page.keywords}}': data.page.keywords,
+            '{{page.og_description}}': data.page.og_description,
+            '{{projects.intro}}': data.projects.intro || '',
+            '{{projects.stats.most_used_language}}': data.projects.stats?.most_used_language || 'JavaScript',
+            '{{site.title}}': siteConfig.site.title,
+            '{{site.description}}': siteConfig.site.description,
+            '{{site.author}}': siteConfig.site.author,
+            '{{site.year}}': siteConfig.site.year,
+            '{{site.url}}': siteConfig.site.url,
+            '{{site.email}}': siteConfig.social?.email || '',
+            '{{site.social.github}}': siteConfig.social?.github || '',
+            '{{site.social.bilibili}}': siteConfig.social?.bilibili || ''
+        });
+
+        // 更新统计数据
+        const totalProjects = data.projects.items.length;
+        const totalStars = data.projects.items.reduce((sum, p) => sum + (p.stars || 0), 0);
+        const languages = [...new Set(data.projects.items.map(p => p.language).filter(Boolean))];
+        const languagesCount = languages.length;
+        
+        html = html.replace(/id="totalProjects">[^<]*</, `id="totalProjects">${totalProjects}<`);
+        html = html.replace(/id="totalStars">[^<]*</, `id="totalStars">${totalStars}<`);
+        html = html.replace(/id="languagesCount">[^<]*</, `id="languagesCount">${languagesCount}<`);
+
+        // 路径转换（projects 页面在 /projects/ 目录下，深度为 3 层）
+        // 将 /assets/ 转换为 ../../assets/
+        html = html.replace(/(href|src)="\/assets\//g, '$1="../../assets/"');
+        
+        // 创建 projects 输出目录
         const pageDir = path.join(this.outputDir, 'projects');
         await fs.ensureDir(pageDir);
 
-        const html = `
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>项目展示 | ${siteConfig.site.title}</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-</head>
-<body>
-    <nav class="navbar">
-        <div class="container">
-            <a href="../../" class="nav-brand">${siteConfig.site.title}</a>
-            <div class="nav-menu">
-                <a href="../../" class="nav-link">首页</a>
-                <a href="../writings" class="nav-link">文章</a>
-                <a href="../projects" class="nav-link active">项目</a>
-                <a href="../about" class="nav-link">关于</a>
-            </div>
-        </div>
-    </nav>
-    
-    <div style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem; text-align: center;">
-        <h1>🚧 项目展示</h1>
-        <p>此页面正在建设中，敬请期待...</p>
-        <a href="../../" style="display: inline-block; margin-top: 2rem; padding: 0.75rem 1.5rem; background: #4a6cf7; color: white; border-radius: 8px; text-decoration: none;">
-            返回首页
-        </a>
-    </div>
-</body>
-</html>`;
-
+        // 写入 projects 页面
         await fs.writeFile(path.join(pageDir, 'index.html'), html);
         console.log('📄 已生成项目页面 /projects/');
+    }
+
+    getStatusText(status) {
+        const statusMap = {
+            'active': '🟢 进行中',
+            'developing': '🔵 开发中',
+            'experimental': '🟡 实验中',
+            'completed': '✅ 已完成',
+            'archived': '📦 已归档'
+        };
+        return statusMap[status] || '⚪ 未知';
     }
 
     async generateAboutPage(siteConfig) {

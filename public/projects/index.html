@@ -1,31 +1,212 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 网站元信息 -->
     <title>项目展示 | Sunshine's Blog</title>
+    <meta name="description" content="展示我的个人项目和开源作品">
+    <meta name="author" content="Mingshuo_S">
+    <meta name="keywords" content="项目，开源，GitHub，编程作品">
+    
+    <!-- Open Graph 社交分享 -->
+    <meta property="og:title" content="项目展示 | Sunshine's Blog">
+    <meta property="og:description" content="探索我的技术项目和开源贡献">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mingshuo-s.github.io/projects/">
+    
+    <!-- 样式 -->
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/projects.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 图标 -->
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- 主题颜色 -->
+    <meta name="theme-color" content="#4a6cf7">
 </head>
 <body>
+    <!-- 导航栏 -->
     <nav class="navbar">
         <div class="container">
-            <a href="../../" class="nav-brand">Sunshine's Blog</a>
+            <a href="../../index.html" class="nav-brand">
+                <span class="brand-text">Sunshine's Blog</span>
+            </a>
+            
             <div class="nav-menu">
-                <a href="../../" class="nav-link">首页</a>
-                <a href="../writings" class="nav-link">文章</a>
-                <a href="../projects" class="nav-link active">项目</a>
-                <a href="../about" class="nav-link">关于</a>
+                <a href="../../index.html" class="nav-link">
+                    <i class="fas fa-home"></i> 首页
+                </a>
+                <a href="../writings" class="nav-link">
+                    <i class="fas fa-pen"></i> 文章
+                </a>
+                <a href="../projects" class="nav-link active">
+                    <i class="fas fa-rocket"></i> 项目
+                </a>
+                <a href="../about" class="nav-link">
+                    <i class="fas fa-user"></i> 关于
+                </a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
     </nav>
-    
-    <div style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem; text-align: center;">
-        <h1>🚧 项目展示</h1>
-        <p>此页面正在建设中，敬请期待...</p>
-        <a href="../../" style="display: inline-block; margin-top: 2rem; padding: 0.75rem 1.5rem; background: #4a6cf7; color: white; border-radius: 8px; text-decoration: none;">
-            返回首页
-        </a>
-    </div>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        <div class="projects-page-container">
+            <!-- 头部区域 -->
+            <header class="projects-header">
+                <h1>🚀 项目展示</h1>
+                <p class="projects-intro">这里展示我的个人项目和开源作品，记录从想法到实现的成长历程。每个项目都是一次技术探索和实践的结晶。</p>
+                
+                <!-- 统计数据 -->
+                <div class="projects-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalProjects">2</div>
+                        <div class="stat-label">项目总数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalStars">0</div>
+                        <div class="stat-label">累计 Stars</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="languagesCount">2</div>
+                        <div class="stat-label">使用语言数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">JavaScript</div>
+                        <div class="stat-label">主要语言</div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- 分类筛选 -->
+            <div class="category-filter">
+                <button class="filter-btn" data-filter="all">全部</button><button class="filter-btn" data-filter="open-source">开源项目</button><button class="filter-btn" data-filter="experimental">实验作品</button><button class="filter-btn" data-filter="learning">学习笔记</button>
+            </div>
+            
+            <!-- 项目列表 -->
+            <div class="projects-grid" id="projectsGrid">
+                
+                <article class="project-card featured" data-category="open-source">
+                    <div class="project-icon">📝</div>
+                    <h2 class="project-title">RemUp</h2>
+                    
+                    <span class="project-status status-developing">
+                        🔵 开发中
+                    </span>
+                    
+                    <p class="project-description">一款创新的笔记语言工具，致力于提升知识管理和学习效率。支持结构化笔记、双向链接和智能标签系统。</p>
+                    
+                    <div class="project-tags">
+                        <span class="tag">笔记工具</span><span class="tag">简易编译器</span><span class="tag">vscode插件</span><span class="tag">编辑软件</span>
+                    </div>
+                    
+                    <div class="project-footer">
+                        <div class="project-links">
+                            <a href="https://github.com/MingShuo-S/RemUp" target="_blank" rel="noopener" class="btn btn-primary">
+                                <i class="fas fa-external-link-alt"></i> 访问项目
+                            </a>
+                            <a href="https://github.com/MingShuo-S/RemUp" target="_blank" rel="noopener" class="btn btn-secondary">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                        </div>
+                    </div>
+                </article>
+                
+
+                <article class="project-card featured" data-category="open-source">
+                    <div class="project-icon">🌐</div>
+                    <h2 class="project-title">MingShuo-S.github.io</h2>
+                    
+                    <span class="project-status status-active">
+                        🟢 进行中
+                    </span>
+                    
+                    <p class="project-description">基于 GitHub Pages 的静态个人博客系统，采用模块化设计和自动化构建流程，支持 Markdown 渲染和多主题切换。</p>
+                    
+                    <div class="project-tags">
+                        <span class="tag">博客</span><span class="tag">静态站点</span><span class="tag">GitHub Pages</span>
+                    </div>
+                    
+                    <div class="project-footer">
+                        <div class="project-links">
+                            <a href="https://mingshuo-s.github.io" target="_blank" rel="noopener" class="btn btn-primary">
+                                <i class="fas fa-external-link-alt"></i> 访问项目
+                            </a>
+                            <a href="https://github.com/MingShuo-S/MingShuo-S.github.io" target="_blank" rel="noopener" class="btn btn-secondary">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                        </div>
+                    </div>
+                </article>
+                
+            </div>
+            
+            <!-- 返回首页按钮 -->
+            <div style="margin-top: 3rem; text-align: center;">
+                <a href="../../index.html" class="btn btn-secondary">
+                    <i class="fas fa-home"></i> 返回首页
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>Sunshine's Blog</h3>
+                    <p>记录技术思考、项目经验和学习成长</p>
+                    <p class="footer-copyright">© 2024-2025 Mingshuo_S. 保留所有权利。</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>探索</h4>
+                        <a href="../writings">所有文章</a>
+                        <a href="../projects">所有项目</a>
+                        <a href="../tags">标签分类</a>
+                        <a href="../archive">文章归档</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>链接</h4>
+                        <a href="../about">关于我</a>
+                        <a href="../friends">友情链接</a>
+                        <a href="../rss.xml">RSS订阅</a>
+                        <a href="../sitemap.xml">站点地图</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>联系</h4>
+                        <a href="mailto:Sunshine_Mings@outloook.com">发送邮件</a>
+                        <a href="https://github.com/MingShuo-S">GitHub</a>
+                        <a href="https://space.bilibili.com/361518274">Bilibili</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>本博客由 <a href="https://github.com/MingShuo-S/MingShuo-S.github.io" target="_blank" rel="noopener">MingShuo-S.github.io</a> 驱动</p>
+                <p>最后更新于 <span id="lastUpdated">今天</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/projects.js"></script>
 </body>
 </html>

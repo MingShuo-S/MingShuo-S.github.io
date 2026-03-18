@@ -8,7 +8,7 @@
     <title>Sunshine's Blog | 记录技术思考、项目经验和学习成长</title>
     <meta name="description" content="记录技术思考、项目经验和学习成长">
     <meta name="author" content="Mingshuo_S">
-    <meta name="keywords" content="南大软工, 个人博客, 技术博客, 开源项目, 学习笔记, Sunshine, 阳光">
+    <meta name="keywords" content="南大软工，个人博客，技术博客，开源项目，学习笔记，Sunshine, 阳光">
     
     <!-- Open Graph 社交分享 -->
     <meta property="og:title" content="Sunshine's Blog">
@@ -19,6 +19,7 @@
     
     <!-- 样式 -->
     <link rel="stylesheet" href="/public/assets/css/style.css">
+    <link rel="stylesheet" href="/public/assets/css/projects.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- 图标 -->
@@ -175,8 +176,61 @@
                 </div>
                 
                 <div class="projects-grid" id="projectsGrid">
-                    <!-- 项目列表会由 JavaScript 动态加载 -->
-                    <div class="loading">加载项目中...</div>
+
+                <article class="project-card featured" data-category="open-source">
+                    <div class="project-icon">📝</div>
+                    <h2 class="project-title">RemUp</h2>
+                    
+                    <span class="project-status status-developing">
+                        🔵 开发中
+                    </span>
+                    
+                    <p class="project-description">一款创新的笔记语言工具，致力于提升知识管理和学习效率。支持结构化笔记、双向链接和智能标签系统。</p>
+                    
+                    <div class="project-tags">
+                        <span class="tag">笔记工具</span><span class="tag">简易编译器</span><span class="tag">vscode插件</span>
+                    </div>
+                    
+                    <div class="project-footer">
+                        <div class="project-links">
+                            <a href="https://github.com/MingShuo-S/RemUp" target="_blank" rel="noopener" class="btn btn-primary">
+                                <i class="fas fa-external-link-alt"></i> 访问项目
+                            </a>
+                            <a href="https://github.com/MingShuo-S/RemUp" target="_blank" rel="noopener" class="btn btn-secondary">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                        </div>
+                    </div>
+                </article>
+                
+
+                <article class="project-card featured" data-category="open-source">
+                    <div class="project-icon">🌐</div>
+                    <h2 class="project-title">MingShuo-S.github.io</h2>
+                    
+                    <span class="project-status status-active">
+                        🟢 进行中
+                    </span>
+                    
+                    <p class="project-description">基于 GitHub Pages 的静态个人博客系统，采用模块化设计和自动化构建流程，支持 Markdown 渲染和多主题切换。</p>
+                    
+                    <div class="project-tags">
+                        <span class="tag">博客</span><span class="tag">静态站点</span><span class="tag">GitHub Pages</span>
+                    </div>
+                    
+                    <div class="project-footer">
+                        <div class="project-links">
+                            <a href="https://mingshuo-s.github.io" target="_blank" rel="noopener" class="btn btn-primary">
+                                <i class="fas fa-external-link-alt"></i> 访问项目
+                            </a>
+                            <a href="https://github.com/MingShuo-S/MingShuo-S.github.io" target="_blank" rel="noopener" class="btn btn-secondary">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                        </div>
+                    </div>
+                </article>
+                
+</div>
                 </div>
             </div>
         </section>
@@ -191,7 +245,7 @@
                         <div class="stat-label">文章总数</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="totalProjects">0</div>
+                        <div class="stat-number" id="totalProjects">2</div>
                         <div class="stat-label">项目总数</div>
                     </div>
                     <div class="stat-card">
