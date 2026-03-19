@@ -47,17 +47,20 @@ class SafeSiteBuilder {
             // 6. 生成文章列表页
             await this.generateArticlesIndex(articles, siteConfig);
 
-            // 7. 复制静态资源
+            // 7. 生成标签分类页
+            await this.generateTagsPage(articles, siteConfig);
+
+            // 8. 复制静态资源
             await this.copyAssets();
 
-            // 8. 生成功能页面
+            // 9. 生成功能页面
             await this.generateProjectsPage(siteConfig);
             await this.generateAboutPage(siteConfig);
 
-            // 9. 生成站点地图
+            // 10. 生成站点地图
             await this.generateSitemap(articles, siteConfig);
 
-            // 10. 用临时目录安全地替换最终目录
+            // 11. 用临时目录安全地替换最终目录
             await this.replaceFinalOutput();
 
             const duration = ((Date.now() - startTime) / 1000).toFixed(2);
@@ -544,7 +547,7 @@ class SafeSiteBuilder {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>所有文章 | ${siteConfig.site.title}</title>
+    <title>所有文章 | Sunshine's Blog</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
         .articles-list-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
@@ -556,10 +559,11 @@ class SafeSiteBuilder {
 <body>
     <nav class="navbar">
         <div class="container">
-            <a href="../../" class="nav-brand">${siteConfig.site.title}</a>
+            <a href="../../" class="nav-brand">Sunshine's Blog</a>
             <div class="nav-menu">
                 <a href="../../" class="nav-link">首页</a>
                 <a href="../writings" class="nav-link active">文章</a>
+                <a href="../tags" class="nav-link">标签</a>
                 <a href="../projects" class="nav-link">项目</a>
                 <a href="../about" class="nav-link">关于</a>
             </div>
@@ -583,6 +587,232 @@ class SafeSiteBuilder {
 
         await fs.writeFile(path.join(articlesDir, 'index.html'), html);
         console.log('📚 已生成文章列表页 /writings/');
+    }
+
+    async generateTagsPage(articles, siteConfig) {
+        const templateFile = path.join(this.templateDir, 'tags.html');
+
+        if (!await fs.pathExists(templateFile)) {
+            console.log('⚠️  未找到 tags 模板，跳过 tags 页面生成');
+            return;
+        }
+
+        // 读取项目数据
+        const projectsFile = path.join(this.dataDir, 'projects.json');
+        let projects = [];
+        if (await fs.pathExists(projectsFile)) {
+            const projectsData = await fs.readJson(projectsFile);
+            projects = projectsData.projects || [];
+        }
+
+        // 统计文章标签
+        const articleTagMap = new Map();
+        articles.forEach(article => {
+            if (article.tags && Array.isArray(article.tags)) {
+                article.tags.forEach(tag => {
+                    if (!articleTagMap.has(tag)) {
+                        articleTagMap.set(tag, {articles: [], projects: []});
+                    }
+                    articleTagMap.get(tag).articles.push(article);
+                });
+            }
+        });
+
+        // 统计项目标签
+        projects.forEach(project => {
+            if (project.tags && Array.isArray(project.tags)) {
+                project.tags.forEach(tag => {
+                    if (!articleTagMap.has(tag)) {
+                        articleTagMap.set(tag, {articles: [], projects: []});
+                    }
+                    articleTagMap.get(tag).projects.push(project);
+                });
+            }
+        });
+
+        // 转换为数组并排序（按总数量）
+        const tags = Array.from(articleTagMap.entries())
+            .map(([name, data]) => ({
+                name,
+                slug: name.toLowerCase().replace(/\s+/g, '-'),
+                articleCount: data.articles.length,
+                projectCount: data.projects.length,
+                totalCount: data.articles.length + data.projects.length,
+                articles: data.articles.sort((a, b) => new Date(b.rawDate) - new Date(a.rawDate)),
+                projects: data.projects
+            }))
+            .sort((a, b) => b.totalCount - a.totalCount); // 按总数量降序排列
+
+        // 生成标签云 HTML
+        const tagsCloudHtml = tags.map(tag => 
+            `<a href="#tag-${tag.slug}" class="tag-cloud-item" data-tag="${tag.slug}">
+                ${tag.name}
+                <span class="tag-count">${tag.totalCount}</span>
+            </a>`
+        ).join('\n');
+
+        // 生成筛选按钮 HTML
+        const filterButtonsHtml = tags.map(tag => 
+            `<button class="filter-btn" data-filter="${tag.slug}">${tag.name}</button>`
+        ).join('\n');
+
+        // 生成文章和项目列表 HTML
+        let itemsListHtml = '';
+        
+        // 合并所有带标签的内容（文章 + 项目）并按日期排序
+        const allItemsWithTag = [];
+        
+        // 添加文章
+        articles.forEach(article => {
+            if (article.tags && article.tags.length > 0) {
+                allItemsWithTag.push({
+                    type: 'article',
+                    data: article
+                });
+            }
+        });
+        
+        // 添加项目
+        projects.forEach(project => {
+            if (project.tags && project.tags.length > 0) {
+                allItemsWithTag.push({
+                    type: 'project',
+                    data: project
+                });
+            }
+        });
+        
+        // 按日期排序（最新的在前）
+        allItemsWithTag.sort((a, b) => {
+            const dateA = new Date(a.data.rawDate || a.data.date || 0);
+            const dateB = new Date(b.data.rawDate || b.data.date || 0);
+            return dateB - dateA;
+        });
+        
+        // 生成 HTML
+        allItemsWithTag.forEach(item => {
+            const tagsDataAttr = (item.data.tags || []).map(t => t.toLowerCase().replace(/\s+/g, '-')).join(',');
+            
+            if (item.type === 'article') {
+                // 文章卡片
+                itemsListHtml += `
+                    <article class="article-card" data-tags="${tagsDataAttr}" data-type="article">
+                        <div class="card-header">
+                            <div class="card-category">${item.data.category || '未分类'}</div>
+                            <h3 class="card-title">
+                                <a href="../posts/${item.data.slug}/">${item.data.title}</a>
+                            </h3>
+                            <p class="card-excerpt">${item.data.summary || '暂无摘要'}</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-date">${item.data.formattedDate}</div>
+                            <div class="card-tags">
+                                ${(item.data.tags || []).slice(0, 5).map(tag => 
+                                    `<a href="#tag-${tag.toLowerCase().replace(/\s+/g, '-')}" class="tag-link">${tag}</a>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    </article>
+                `;
+            } else if (item.type === 'project') {
+                // 项目卡片
+                const statusClass = item.data.status === 'completed' ? 'status-completed' : 
+                                   item.data.status === 'maintaining' ? 'status-maintaining' : 'status-developing';
+                const statusText = item.data.status === 'completed' ? '已完成' : 
+                                  item.data.status === 'maintaining' ? '维护中' : '开发中';
+                
+                itemsListHtml += `
+                    <article class="project-card ${item.data.featured ? 'featured' : ''}" data-tags="${tagsDataAttr}" data-type="project">
+                        <div class="project-icon">${item.data.icon || '🚀'}</div>
+                        <h3 class="project-title">
+                            <a href="${item.data.url || '#'}">${item.data.title}</a>
+                        </h3>
+                        <span class="project-status ${statusClass}">
+                            ${statusText}
+                        </span>
+                        <p class="project-description">${item.data.description || '暂无描述'}</p>
+                        <div class="project-tags">
+                            ${(item.data.tags || []).slice(0, 5).map(tag => 
+                                `<a href="#tag-${tag.toLowerCase().replace(/\s+/g, '-')}" class="tag-link">${tag}</a>`
+                            ).join('')}
+                        </div>
+                        <div class="project-footer">
+                            <div class="project-links">
+                                ${item.data.url ? `<a href="${item.data.url}" target="_blank" rel="noopener" class="btn btn-primary">
+                                    <i class="fas fa-external-link-alt"></i> 访问项目
+                                </a>` : ''}
+                                ${item.data.github ? `<a href="${item.data.github}" target="_blank" rel="noopener" class="btn btn-secondary">
+                                    <i class="fab fa-github"></i> GitHub
+                                </a>` : ''}
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }
+        });
+        
+        // 如果没有内容，显示提示
+        if (itemsListHtml === '') {
+            itemsListHtml = '<p class="no-articles">暂无内容。</p>';
+        }
+
+        // 计算统计数据
+        const articlesWithTag = articles.filter(a => a.tags && a.tags.length > 0).length;
+        const projectsWithTags = projects.filter(p => p.tags && p.tags.length > 0).length;
+        const totalArticleTagCount = articles.reduce((sum, a) => sum + (a.tags ? a.tags.length : 0), 0);
+        const totalProjectTagCount = projects.reduce((sum, p) => sum + (p.tags ? p.tags.length : 0), 0);
+        const totalItemsWithTag = articlesWithTag + projectsWithTags;
+        const totalTagCount = totalArticleTagCount + totalProjectTagCount;
+        const avgTags = totalItemsWithTag > 0 ? (totalTagCount / totalItemsWithTag).toFixed(1) : 0;
+
+        // 读取模板
+        let html = await fs.readFile(templateFile, 'utf-8');
+
+        // 替换占位符
+        html = html.replace('___TAGS_CLOUD_PLACEHOLDER___', tagsCloudHtml || '<p class="no-tags">暂无标签</p>');
+        html = html.replace('___FILTER_BUTTONS_PLACEHOLDER___', tags.length > 0 ? filterButtonsHtml : '');
+        html = html.replace('___ARTICLES_LIST_PLACEHOLDER___', itemsListHtml);
+
+        // 替换页面配置变量
+        const replacements = {
+            '{{page.title}}': '标签分类',
+            '{{page.description}}': '浏览所有文章标签和项目标签',
+            '{{page.keywords}}': '标签，分类，文章标签，项目标签',
+            '{{page.og_description}}': '探索博客中的所有标签分类',
+            '{{page.intro}}': '通过标签快速定位感兴趣的文章和项目',
+            '{{site.title}}': siteConfig.site.title,
+            '{{site.description}}': siteConfig.site.description,
+            '{{site.author}}': siteConfig.site.author,
+            '{{site.year}}': siteConfig.site.year,
+            '{{site.url}}': siteConfig.site.url,
+            '{{site.email}}': siteConfig.social?.email || '',
+            '{{site.social.github}}': siteConfig.social?.github || '',
+            '{{site.social.bilibili}}': siteConfig.social?.bilibili || ''
+        };
+
+        html = this.replaceVariables(html, replacements);
+
+        // 更新统计数据
+        html = html.replace(/id="totalTags">[^<]*</, `id="totalTags">${tags.length}<`);
+        html = html.replace(/id="totalArticlesWithTag">[^<]*</, `id="totalArticlesWithTag">${totalItemsWithTag}<`);
+        html = html.replace(/id="avgTagsPerArticle">[^<]*</, `id="avgTagsPerArticle">${avgTags}<`);
+        
+        // 添加项目统计（如果模板中有这些元素）
+        if (html.includes('id="totalProjects"')) {
+            html = html.replace(/id="totalProjects">[^<]*</, `id="totalProjects">${projectsWithTags}<`);
+        }
+
+        // 路径转换（tags 页面在 /tags/ 目录下，深度为 3 层）
+        // 将 /assets/ 转换为 ../../assets/
+        html = html.replace(/(href|src)="\/assets\//g, '$1="../../assets/"');
+        
+        // 创建 tags 输出目录
+        const pageDir = path.join(this.outputDir, 'tags');
+        await fs.ensureDir(pageDir);
+
+        // 写入 tags 页面
+        await fs.writeFile(path.join(pageDir, 'index.html'), html);
+        console.log(`🏷️  已生成标签页面 /tags/ (${tags.length} 个标签，包含文章和项目)`);
     }
 
     async generateProjectsPage(siteConfig) {

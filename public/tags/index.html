@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 网站元信息 -->
+    <title>标签分类 | Sunshine's Blog</title>
+    <meta name="description" content="浏览所有文章标签和项目标签">
+    <meta name="author" content="Mingshuo_S">
+    <meta name="keywords" content="标签，分类，文章标签，项目标签">
+    
+    <!-- Open Graph 社交分享 -->
+    <meta property="og:title" content="标签分类 | Sunshine's Blog">
+    <meta property="og:description" content="探索博客中的所有标签分类">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mingshuo-s.github.io/tags/">
+    
+    <!-- 样式 -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/projects.css">
+    <link rel="stylesheet" href="../assets/css/tags.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 图标 -->
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- 主题颜色 -->
+    <meta name="theme-color" content="#4a6cf7">
+    
+    <style>
+        .tags-page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .tags-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .tags-intro {
+            color: #666;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+        
+        .no-articles {
+            text-align: center;
+            padding: 3rem;
+            color: #888;
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+     <!-- 导航栏 -->
+     <nav class="navbar">
+        <div class="container">
+            <a href="../../index.html" class="nav-brand">
+                <span class="brand-text">Sunshine's Blog</span>
+            </a>
+            
+            <div class="nav-menu">
+                <a href="../../index.html" class="nav-link">
+                    <i class="fas fa-home"></i> 首页
+                </a>
+                <a href="../writings" class="nav-link">
+                    <i class="fas fa-pen"></i> 文章
+                </a>
+                <a href="../tags" class="nav-link">
+                    <i class="fas fa-tags"></i> 标签
+                </a>
+                <a href="../projects" class="nav-link">
+                    <i class="fas fa-rocket"></i> 项目
+                </a>
+                <a href="../about" class="nav-link">
+                    <i class="fas fa-user"></i> 关于
+                </a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        <div class="tags-page-container">
+            <!-- 头部区域 -->
+            <header class="tags-header">
+                <h1>🏷️ 标签分类</h1>
+                <p class="tags-intro">通过标签快速定位感兴趣的文章和项目</p>
+                
+                <!-- 统计数据 -->
+                <div class="projects-stats" style="margin-top: 2rem;">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalTags">11</div>
+                        <div class="stat-label">标签总数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalArticlesWithTag">4</div>
+                        <div class="stat-label">有标签内容数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="avgTagsPerArticle">3.3</div>
+                        <div class="stat-label">篇均标签数</div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- 筛选按钮（合并标签云功能） -->
+            <div class="tag-filter" id="tagFilter">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="博客">博客</button>
+<button class="filter-btn" data-filter="静态站点">静态站点</button>
+<button class="filter-btn" data-filter="前端工程">前端工程</button>
+<button class="filter-btn" data-filter="javascript">JavaScript</button>
+<button class="filter-btn" data-filter="node.js">Node.js</button>
+<button class="filter-btn" data-filter="博客搭建">博客搭建</button>
+<button class="filter-btn" data-filter="笔记工具">笔记工具</button>
+<button class="filter-btn" data-filter="简易编译器">简易编译器</button>
+<button class="filter-btn" data-filter="vscode插件">vscode插件</button>
+<button class="filter-btn" data-filter="编辑软件">编辑软件</button>
+<button class="filter-btn" data-filter="github-pages">GitHub Pages</button>
+            </div>
+            
+            <!-- 内容列表 -->
+            <div class="articles-grid" id="articlesGrid">
+                
+                    <article class="article-card" data-tags="博客" data-type="article">
+                        <div class="card-header">
+                            <div class="card-category">闲谈</div>
+                            <h3 class="card-title">
+                                <a href="../posts/hello-u/">你好，欢迎</a>
+                            </h3>
+                            <p class="card-excerpt">一篇对个人博客的基础介绍</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-date">2026年3月18日</div>
+                            <div class="card-tags">
+                                <a href="#tag-博客" class="tag-link">博客</a>
+                            </div>
+                        </div>
+                    </article>
+                
+                    <article class="article-card" data-tags="前端工程,静态站点,javascript,node.js,博客搭建" data-type="article">
+                        <div class="card-header">
+                            <div class="card-category">技术实践</div>
+                            <h3 class="card-title">
+                                <a href="../posts/building-personal-blog-from-scratch/">从零搭建静态博客：现代前端工程化实践与思考</a>
+                            </h3>
+                            <p class="card-excerpt">记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，包含模块化、构建系统和部署策略的完整实践。</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-date">2025年1月28日</div>
+                            <div class="card-tags">
+                                <a href="#tag-前端工程" class="tag-link">前端工程</a><a href="#tag-静态站点" class="tag-link">静态站点</a><a href="#tag-javascript" class="tag-link">JavaScript</a><a href="#tag-node.js" class="tag-link">Node.js</a><a href="#tag-博客搭建" class="tag-link">博客搭建</a>
+                            </div>
+                        </div>
+                    </article>
+                
+                    <article class="project-card featured" data-tags="笔记工具,简易编译器,vscode插件,编辑软件" data-type="project">
+                        <div class="project-icon">📝</div>
+                        <h3 class="project-title">
+                            <a href="../../remup">RemUp</a>
+                        </h3>
+                        <span class="project-status status-developing">
+                            开发中
+                        </span>
+                        <p class="project-description">一款创新的笔记语言工具，致力于提升知识管理和学习效率。支持结构化笔记、双向链接和智能标签系统。(PS: 点击 访问项目 有惊喜哦)</p>
+                        <div class="project-tags">
+                            <a href="#tag-笔记工具" class="tag-link">笔记工具</a><a href="#tag-简易编译器" class="tag-link">简易编译器</a><a href="#tag-vscode插件" class="tag-link">vscode插件</a><a href="#tag-编辑软件" class="tag-link">编辑软件</a>
+                        </div>
+                        <div class="project-footer">
+                            <div class="project-links">
+                                <a href="../../remup" target="_blank" rel="noopener" class="btn btn-primary">
+                                    <i class="fas fa-external-link-alt"></i> 访问项目
+                                </a>
+                                <a href="MingShuo-S/RemUp" target="_blank" rel="noopener" class="btn btn-secondary">
+                                    <i class="fab fa-github"></i> GitHub
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                
+                    <article class="project-card featured" data-tags="博客,静态站点,github-pages" data-type="project">
+                        <div class="project-icon">🌐</div>
+                        <h3 class="project-title">
+                            <a href="https://mingshuo-s.github.io">MingShuo-S.github.io</a>
+                        </h3>
+                        <span class="project-status status-developing">
+                            开发中
+                        </span>
+                        <p class="project-description">基于 GitHub Pages 的静态个人博客系统，采用模块化设计和自动化构建流程，支持 Markdown 渲染和多主题切换。</p>
+                        <div class="project-tags">
+                            <a href="#tag-博客" class="tag-link">博客</a><a href="#tag-静态站点" class="tag-link">静态站点</a><a href="#tag-github-pages" class="tag-link">GitHub Pages</a>
+                        </div>
+                        <div class="project-footer">
+                            <div class="project-links">
+                                <a href="https://mingshuo-s.github.io" target="_blank" rel="noopener" class="btn btn-primary">
+                                    <i class="fas fa-external-link-alt"></i> 访问项目
+                                </a>
+                                <a href="MingShuo-S/MingShuo-S.github.io" target="_blank" rel="noopener" class="btn btn-secondary">
+                                    <i class="fab fa-github"></i> GitHub
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>Sunshine's Blog</h3>
+                    <p>记录技术思考、项目经验和学习成长</p>
+                    <p class="footer-copyright">© 2025 Mingshuo_S. 保留所有权利。</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>探索</h4>
+                        <a href="../writings">所有文章</a>
+                        <a href="../projects">所有项目</a>
+                        <a href="../tags">标签分类</a>
+                        <a href="../archive">文章归档</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>链接</h4>
+                        <a href="../about">关于我</a>
+                        <a href="../friends">友情链接</a>
+                        <a href="../rss.xml">RSS订阅</a>
+                        <a href="../sitemap.xml">站点地图</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>联系</h4>
+                        <a href="mailto:Sunshine_Mings@outloook.com">发送邮件</a>
+                        <a href="MingShuo-S">GitHub</a>
+                        <a href="https://space.bilibili.com/361518274">Bilibili</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>本博客由 <a href="https://github.com/MingShuo-S/MingShuo-S.github.io" target="_blank" rel="noopener">MingShuo-S.github.io</a> 驱动</p>
+                <p>最后更新于 <span id="lastUpdated">今天</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/tags.js"></script>
+</body>
+</html>
