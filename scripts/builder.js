@@ -50,17 +50,23 @@ class SafeSiteBuilder {
             // 7. 生成标签分类页
             await this.generateTagsPage(articles, siteConfig);
 
-            // 8. 复制静态资源
+            // 8. 生成归档页面
+            await this.generateArchivePage(articles, siteConfig);
+
+            // 9. 生成 RSS 订阅源
+            await this.generateRSSFeed(articles, siteConfig);
+
+            // 10. 复制静态资源
             await this.copyAssets();
 
-            // 9. 生成功能页面
+            // 11. 生成功能页面
             await this.generateProjectsPage(siteConfig);
             await this.generateAboutPage(siteConfig);
 
-            // 10. 生成站点地图
+            // 12. 生成站点地图
             await this.generateSitemap(articles, siteConfig);
 
-            // 11. 用临时目录安全地替换最终目录
+            // 13. 用临时目录安全地替换最终目录
             await this.replaceFinalOutput();
 
             const duration = ((Date.now() - startTime) / 1000).toFixed(2);
@@ -591,11 +597,49 @@ class SafeSiteBuilder {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>所有文章 | Sunshine's Blog</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <!-- RSS 订阅 -->
+    <link rel="alternate" type="application/rss+xml" title="Sunshine's Blog" href="../../rss.xml">
     <style>
         .articles-list-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         .articles-header { margin-bottom: 3rem; }
         .articles-count { color: #666; font-size: 1.1rem; }
         .no-articles { text-align: center; padding: 3rem; color: #888; }
+        
+        /* 归档跳转按钮 */
+        .archive-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 6px rgba(74, 108, 247, 0.2);
+            transition: all 0.3s ease;
+            position: absolute;
+            right: 2rem;
+            top: 5.5rem;
+        }
+        
+        .archive-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(74, 108, 247, 0.3);
+        }
+        
+        .archive-btn i {
+            font-size: 1.1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .archive-btn {
+                position: static;
+                margin-top: 1rem;
+                margin-bottom: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -617,6 +661,13 @@ class SafeSiteBuilder {
             <h1>所有文章</h1>
             <p class="articles-count">共 ${articles.length} 篇文章</p>
         </header>
+        
+        <!-- 归档跳转按钮 -->
+        <a href="../archive/" class="archive-btn" title="按时间线查看归档">
+            <i class="fas fa-box-archive"></i>
+            <span>时间线归档</span>
+        </a>
+        
         <div class="articles-grid">
             ${articlesListHtml}
         </div>
@@ -1226,6 +1277,253 @@ class SafeSiteBuilder {
         const diffTime = Math.abs(today - start);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         return diffDays;
+    }
+
+    /**
+     * 生成 RSS 订阅源
+     */
+    async generateRSSFeed(articles, siteConfig) {
+        console.log('📰 生成 RSS 订阅源...');
+        
+        const siteUrl = siteConfig.site.url || 'https://mingshuo-s.github.io';
+        const siteTitle = siteConfig.site.title || 'Sunshine\'s Blog';
+        const siteDescription = siteConfig.site.description || '个人博客';
+        const siteAuthor = siteConfig.site.author || 'Mingshuo_S';
+        
+        // 只取最新的 20 篇文章
+        const latestArticles = articles.slice(0, 20);
+        
+        // 生成当前时间的 RFC 822 格式
+        const buildDate = new Date().toUTCString();
+        
+        // 生成 RSS 2.0 内容
+        let rssContent = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>${this.escapeXml(siteTitle)}</title>
+    <link>${siteUrl}</link>
+    <description>${this.escapeXml(siteDescription)}</description>
+    <language>zh-cn</language>
+    <lastBuildDate>${buildDate}</lastBuildDate>
+    <pubDate>${buildDate}</pubDate>
+    <ttl>60</ttl>
+    <atom:link href="${siteUrl}/rss.xml" rel="self" type="application/rss+xml"/>
+`;
+
+        // 添加文章条目
+        for (const article of latestArticles) {
+            const articleUrl = `${siteUrl}/public/posts/${article.slug}/`;
+            const pubDate = new Date(article.rawDate || article.date).toUTCString();
+            
+            // 生成摘要（如果有 summary 字段优先使用）
+            let description = article.summary || '';
+            if (!description && article.excerpt) {
+                description = article.excerpt;
+            }
+            if (!description) {
+                // 如果没有摘要，截取正文前 200 字
+                description = this.truncateText(article.content || '', 200);
+            }
+            
+            // 生成完整的 RSS item
+            rssContent += `
+    <item>
+      <title>${this.escapeXml(article.title)}</title>
+      <link>${articleUrl}</link>
+      <guid isPermaLink="true">${articleUrl}</guid>
+      <pubDate>${pubDate}</pubDate>
+      <description>${this.escapeXml(description)}</description>
+      <author>${siteAuthor}</author>
+      ${article.tags ? article.tags.map(tag => `<category>${this.escapeXml(tag)}</category>`).join('\n      ') : ''}
+    </item>`;
+        }
+
+        rssContent += `
+  </channel>
+</rss>`;
+
+        // 写入到临时构建目录（稍后会自动移动到 finalOutputDir）
+        const rssPath = path.join(this.tempOutputDir, 'rss.xml');
+        await fs.ensureDir(path.dirname(rssPath));
+        await fs.writeFile(rssPath, rssContent, 'utf-8');
+        
+        console.log(`✅ RSS 订阅源已生成`);
+    }
+
+    /**
+     * 转义 XML 特殊字符
+     */
+    escapeXml(text) {
+        if (!text) return '';
+        return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&apos;');
+    }
+
+    /**
+     * 截断文本到指定长度
+     */
+    truncateText(text, maxLength) {
+        if (!text) return '';
+        const cleanText = text.replace(/<[^>]*>/g, ''); // 移除 HTML 标签
+        if (cleanText.length <= maxLength) return cleanText;
+        return cleanText.substring(0, maxLength) + '...';
+    }
+
+    /**
+     * 生成时间线归档页面
+     */
+    async generateArchivePage(articles, siteConfig) {
+        console.log('📅 生成时间线归档页面...');
+        
+        // 按年份和月份分组文章
+        const archiveData = {};
+        
+        articles.forEach(article => {
+            const date = new Date(article.rawDate || article.date);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1; // 0-11 → 1-12
+            
+            if (!archiveData[year]) {
+                archiveData[year] = {};
+            }
+            
+            if (!archiveData[year][month]) {
+                archiveData[year][month] = [];
+            }
+            
+            archiveData[year][month].push(article);
+        });
+        
+        // 按月份排序（倒序）
+        Object.keys(archiveData).forEach(year => {
+            const months = Object.keys(archiveData[year]).sort((a, b) => b - a);
+            const sortedMonths = {};
+            months.forEach(month => {
+                sortedMonths[month] = archiveData[year][month];
+            });
+            archiveData[year] = sortedMonths;
+        });
+        
+        // 生成 HTML
+        let timelineHtml = '';
+        const years = Object.keys(archiveData).sort((a, b) => b - a);
+        
+        years.forEach((year, yearIndex) => {
+            const yearArticles = [];
+            Object.values(archiveData[year]).forEach(monthArticles => {
+                yearArticles.push(...monthArticles);
+            });
+            
+            timelineHtml += `
+            <div class="timeline-year">
+                <div class="year-header">
+                    <h2 class="year-title">${year}年</h2>
+                    <span class="year-count">${yearArticles.length}篇文章</span>
+                </div>
+                <div class="timeline-line"></div>
+                <div class="months-grid">
+`;
+            
+            Object.entries(archiveData[year]).forEach(([month, monthArticles]) => {
+                const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', 
+                                   '七月', '八月', '九月', '十月', '十一月', '十二月'];
+                
+                timelineHtml += `
+                    <div class="month-group">
+                        <h3 class="month-title">${monthNames[parseInt(month) - 1]}</h3>
+                        <div class="articles-timeline">
+`;
+                        
+                        monthArticles.forEach(article => {
+                            const day = new Date(article.rawDate || article.date).getDate();
+                            timelineHtml += `
+                            <div class="timeline-item">
+                                <div class="timeline-marker">
+                                    <span class="day">${day}</span>
+                                </div>
+                                <div class="timeline-content">
+                                    <a href="../posts/${article.slug}/" class="article-link">
+                                        <h4 class="article-title">${article.title}</h4>
+                                    </a>
+                                    <p class="article-excerpt">${article.summary || ''}</p>
+                                    <div class="article-meta">
+                                        ${(article.tags || []).slice(0, 3).map(tag => 
+                                            `<span class="tag">${tag}</span>`
+                                        ).join('')}
+                                    </div>
+                                </div>
+                            </div>
+`;
+                        });
+                        
+                        timelineHtml += `
+                        </div>
+                    </div>
+`;
+            });
+            
+            timelineHtml += `
+                </div>
+            </div>
+`;
+        });
+        
+        // 生成完整的归档页面
+        const html = `
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间线归档 | Sunshine's Blog</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/archive.css">
+    <!-- RSS 订阅 -->
+    <link rel="alternate" type="application/rss+xml" title="Sunshine's Blog" href="../../rss.xml">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="../../" class="nav-brand">Sunshine's Blog</a>
+            <div class="nav-menu">
+                <a href="../../" class="nav-link">首页</a>
+                <a href="../writings" class="nav-link">文章</a>
+                <a href="../tags" class="nav-link">标签</a>
+                <a href="../projects" class="nav-link">项目</a>
+                <a href="../about" class="nav-link">关于</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="archive-container">
+        <header class="archive-header">
+            <h1><i class="fas fa-box-archive"></i> 时间线归档</h1>
+            <p class="archive-description">按时间顺序浏览所有文章，记录成长的足迹</p>
+        </header>
+        
+        <div class="timeline-wrapper">
+            ${timelineHtml}
+        </div>
+        
+        <div class="back-to-top">
+            <a href="#" class="back-btn"><i class="fas fa-arrow-up"></i> 返回顶部</a>
+        </div>
+    </div>
+    
+    <script src="../assets/js/archive.js"></script>
+</body>
+</html>`;
+
+        // 写入文件
+        const archiveDir = path.join(this.outputDir, 'archive');
+        await fs.ensureDir(archiveDir);
+        await fs.writeFile(path.join(archiveDir, 'index.html'), html);
+        
+        console.log(`📅 已生成归档页面 /archive/ (${years.length}个年份，共${articles.length}篇文章)`);
     }
 }
 

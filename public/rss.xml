@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Sunshine&apos;s Blog</title>
+    <link>https://mingshuo-s.github.io</link>
+    <description>记录技术思考、项目经验和学习成长</description>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 19 Mar 2026 14:53:59 GMT</lastBuildDate>
+    <pubDate>Thu, 19 Mar 2026 14:53:59 GMT</pubDate>
+    <ttl>60</ttl>
+    <atom:link href="https://mingshuo-s.github.io/rss.xml" rel="self" type="application/rss+xml"/>
+
+    <item>
+      <title>你好，欢迎</title>
+      <link>https://mingshuo-s.github.io/public/posts/hello-u/</link>
+      <guid isPermaLink="true">https://mingshuo-s.github.io/public/posts/hello-u/</guid>
+      <pubDate>Wed, 18 Mar 2026 00:00:00 GMT</pubDate>
+      <description>一篇对个人博客的基础介绍</description>
+      <author>Mingshuo_S</author>
+      <category>博客</category>
+    </item>
+    <item>
+      <title>从零搭建静态博客：现代前端工程化实践与思考</title>
+      <link>https://mingshuo-s.github.io/public/posts/building-personal-blog-from-scratch/</link>
+      <guid isPermaLink="true">https://mingshuo-s.github.io/public/posts/building-personal-blog-from-scratch/</guid>
+      <pubDate>Tue, 28 Jan 2025 00:00:00 GMT</pubDate>
+      <description>记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，包含模块化、构建系统和部署策略的完整实践。</description>
+      <author>Mingshuo_S</author>
+      <category>前端工程</category>
+      <category>静态站点</category>
+      <category>JavaScript</category>
+      <category>Node.js</category>
+      <category>博客搭建</category>
+    </item>
+  </channel>
+</rss>
