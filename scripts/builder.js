@@ -440,6 +440,48 @@ class SafeSiteBuilder {
             projectsHtml = '<p class="no-projects">暂无项目，敬请期待！</p>';
         }
 
+        // 生成友情链接 HTML
+        const friendsFile = path.join(this.dataDir, 'friends.json');
+        let friendsHtml = '';
+        
+        if (await fs.pathExists(friendsFile)) {
+            const friendsData = await fs.readJson(friendsFile);
+            const links = friendsData.links || [];
+            
+            friendsHtml = links.map(link => {
+                // 判断图标类型：Font Awesome 或 emoji
+                let iconHtml = '';
+                if (link.icon && (link.icon.startsWith('fa') || link.icon.includes('fa-'))) {
+                    // Font Awesome 图标
+                    iconHtml = `<i class="${link.icon}"></i>`;
+                } else if (link.icon) {
+                    // Emoji 图标
+                    iconHtml = `<span class="friend-emoji">${link.icon}</span>`;
+                } else {
+                    // 默认链接图标
+                    iconHtml = `<i class="fas fa-link"></i>`;
+                }
+                
+                return `
+                <a href="${link.url}" target="_blank" rel="noopener" class="friend-card">
+                    <div class="friend-icon">
+                        ${iconHtml}
+                    </div>
+                    <div class="friend-info">
+                        <h3 class="friend-title">${link.title}</h3>
+                        <p class="friend-description">${link.description || ''}</p>
+                        ${link.category ? `<span class="friend-category">${link.category}</span>` : ''}
+                    </div>
+                </a>
+                `;
+            }).join('\n');
+        } else {
+            friendsHtml = '<p class="no-friends">暂无友情链接。</p>';
+        }
+
+        // 替换友情链接占位符
+        html = html.replace('___FRIENDS_LIST_PLACEHOLDER___', friendsHtml);
+
         // 计算统计信息
         const totalWords = articles.reduce((sum, article) => sum + (article.wordCount || 0), 0);
         const siteDays = this.calculateSiteDays('2025-01-01');

@@ -358,3 +358,118 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ===== 友情链接 ===== */
+
+.friends-section {
+    padding: 4rem 0;
+    background-color: var(--bg-secondary);
+}
+
+.friends-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.friend-card {
+    display: block;
+    background-color: var(--bg-color);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    border: 2px solid var(--border-color);
+    box-shadow: var(--shadow);
+}
+
+.friend-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(74, 108, 247, 0.2);
+    border-color: var(--primary-color);
+}
+
+.friend-icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Emoji 图标样式 */
+.friend-emoji {
+    font-size: 2.5rem;
+    line-height: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Font Awesome 图标样式 */
+.friend-icon i {
+    transition: transform 0.3s ease;
+}
+
+.friend-card:hover .friend-icon i {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.friend-info {
+    text-align: center;
+}
+
+.friend-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.friend-description {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+}
+
+.friend-category {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: rgba(74, 108, 247, 0.1);
+    color: var(--primary-color);
+    border-radius: 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.no-friends {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-light);
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+    .friends-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .friend-card {
+        padding: 1.25rem;
+    }
+    
+    .friend-icon {
+        font-size: 2rem;
+    }
+    
+    .friend-title {
+        font-size: 1.1rem;
+    }
+    
+    .friend-description {
+        font-size: 0.85rem;
+    }
+}
