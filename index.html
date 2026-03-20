@@ -295,8 +295,24 @@
                         <div class="stat-label">累计字数</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="siteDays">443</div>
+                        <div class="stat-number" id="siteDays">444</div>
                         <div class="stat-label">运行天数</div>
+                    </div>
+                    <div class="stat-card site-stat-card">
+                        <div class="stat-number">
+                            <span id="busuanzi_value_site_pv"><i class="fas fa-spinner fa-spin"></i></span>
+                        </div>
+                        <div class="stat-label">
+                            <i class="fas fa-chart-line"></i> 总访问量
+                        </div>
+                    </div>
+                    <div class="stat-card site-stat-card">
+                        <div class="stat-number">
+                            <span id="busuanzi_value_site_uv"><i class="fas fa-spinner fa-spin"></i></span>
+                        </div>
+                        <div class="stat-label">
+                            <i class="fas fa-user"></i> 访客数量
+                        </div>
                     </div>
                 </div>
             </div>
@@ -348,5 +364,8 @@
 
     <!-- JavaScript -->
     <script src="/public/assets/js/main.js"></script>
+    
+    <!-- Busuanzi 访问量统计 -->
+    <script async src="//busuanzibak.com/i/1.2/busuanzi.min.js"></script>
 </body>
 </html>

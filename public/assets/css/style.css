@@ -440,6 +440,33 @@ section {
     font-size: 1rem;
 }
 
+.site-stat-card .stat-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.site-stat-card .stat-number i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.site-stat-card .stat-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+}
+
+#busuanzi_value_site_pv,
+#busuanzi_value_site_uv {
+    font-weight: 700;
+    min-width: 4rem;
+    display: inline-block;
+}
+
 /* ===== 页脚 ===== */
 .footer {
     background-color: var(--bg-secondary);

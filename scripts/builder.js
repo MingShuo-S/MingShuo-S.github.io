@@ -539,9 +539,9 @@ class SafeSiteBuilder {
         // 为根目录的 index.html 添加 /public 前缀到所有内部链接
         // 替换 href 属性中的链接（排除外部链接、锚点链接、mailto:、tel: 等特殊协议）
         // 注意：保留根路径 / 不变（首页链接）
-        html = html.replace(/href="(?!https?:\/\/)(?!#)(?!mailto:)(?!tel:)(?!\/")([^"]+)"/g, 'href="/public$1"');
+        html = html.replace(/href="(?!https?:\/\/)(?!\/\/)(?!#)(?!mailto:)(?!tel:)(?!\/")([^"]+)"/g, 'href="/public$1"');
         // 替换 src 属性中的链接（排除外部链接）
-        html = html.replace(/src="(?!https?:\/\/)([^"]+)"/g, 'src="/public$1"');
+        html = html.replace(/src="(?!https?:\/\/)(?!\/\/)([^"]+)"/g, 'src="/public$1"');
         
         // 在主页中添加 projects.css 引用（在 style.css 之后）
         html = html.replace(
