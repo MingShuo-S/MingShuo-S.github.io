@@ -365,7 +365,40 @@
     <!-- JavaScript -->
     <script src="/public/assets/js/main.js"></script>
     
-    <!-- Busuanzi 访问量统计 -->
-    <script async src="//busuanzibak.com/i/1.2/busuanzi.min.js"></script>
+    <!-- Cloudflare Workers 访问量统计 -->
+    <script>
+    (function() {
+        const COUNTER_API = 'https://site-counter.2954809209.workers.dev';
+        
+        async function updateCounter() {
+            try {
+                // POST 增加 PV
+                await fetch(COUNTER_API + '?key=site_pv', { method: 'POST' });
+                
+                // GET 获取最新数据
+                const res = await fetch(COUNTER_API + '?key=site_pv');
+                const data = await res.json();
+                
+                if (data.success) {
+                    document.getElementById('busuanzi_value_site_pv').textContent = data.count.toLocaleString();
+                } else {
+                    document.getElementById('busuanzi_value_site_pv').textContent = '—';
+                }
+            } catch (error) {
+                console.error('Counter error:', error);
+                document.getElementById('busuanzi_value_site_pv').textContent = '—';
+            }
+            
+            // UV 暂时用 PV 代替（简化实现）
+            document.getElementById('busuanzi_value_site_uv').textContent = document.getElementById('busuanzi_value_site_pv').textContent;
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', updateCounter);
+        } else {
+            updateCounter();
+        }
+    })();
+    </script>
 </body>
 </html>

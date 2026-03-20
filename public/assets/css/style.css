@@ -467,6 +467,12 @@ section {
     display: inline-block;
 }
 
+/* Busuanzi 加载失败或超时样式 */
+.busuanzi-loading {
+    opacity: 0.6;
+    font-size: 0.875rem;
+}
+
 /* ===== 页脚 ===== */
 .footer {
     background-color: var(--bg-secondary);
