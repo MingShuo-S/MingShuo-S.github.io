@@ -5,8 +5,8 @@
     <link>https://mingshuo-s.github.io</link>
     <description>记录技术思考、项目经验和学习成长</description>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 20 Mar 2026 02:08:57 GMT</lastBuildDate>
-    <pubDate>Fri, 20 Mar 2026 02:08:57 GMT</pubDate>
+    <lastBuildDate>Fri, 20 Mar 2026 17:39:29 GMT</lastBuildDate>
+    <pubDate>Fri, 20 Mar 2026 17:39:29 GMT</pubDate>
     <ttl>60</ttl>
     <atom:link href="https://mingshuo-s.github.io/rss.xml" rel="self" type="application/rss+xml"/>
 
@@ -23,14 +23,15 @@
       <title>从零搭建静态博客：现代前端工程化实践与思考</title>
       <link>https://mingshuo-s.github.io/public/posts/building-personal-blog-from-scratch/</link>
       <guid isPermaLink="true">https://mingshuo-s.github.io/public/posts/building-personal-blog-from-scratch/</guid>
-      <pubDate>Tue, 28 Jan 2025 00:00:00 GMT</pubDate>
-      <description>记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，包含模块化、构建系统和部署策略的完整实践。</description>
+      <pubDate>Sun, 15 Mar 2026 00:00:00 GMT</pubDate>
+      <description>记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，探索基础学习能力与 AI 工具如何协同促进快速成长。</description>
       <author>Mingshuo_S</author>
       <category>前端工程</category>
       <category>静态站点</category>
       <category>JavaScript</category>
       <category>Node.js</category>
       <category>博客搭建</category>
+      <category>AI 辅助编程</category>
     </item>
   </channel>
 </rss>

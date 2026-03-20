@@ -159,10 +159,10 @@
                         <h3 class="card-title">
                             <a href="/public/posts/building-personal-blog-from-scratch/">从零搭建静态博客：现代前端工程化实践与思考</a>
                         </h3>
-                        <p class="card-excerpt">记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，包含模块化、构建系统和部署策略的完整实践。</p>
+                        <p class="card-excerpt">记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，探索基础学习能力与 AI 工具如何协同促进快速成长。</p>
                     </div>
                     <div class="card-footer">
-                        <div class="card-date">2025年1月28日</div>
+                        <div class="card-date">2026年3月15日</div>
                         <div class="card-tags">
                             <span class="tag">前端工程</span><span class="tag">静态站点</span><span class="tag">JavaScript</span>
                         </div>
@@ -291,7 +291,7 @@
                         <div class="stat-label">项目总数</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="totalWords">1101</div>
+                        <div class="stat-number" id="totalWords">1564</div>
                         <div class="stat-label">累计字数</div>
                     </div>
                     <div class="stat-card">
@@ -374,107 +374,44 @@
             localStorage.setItem('site_last_visit', new Date().toDateString());
         }
         
-        // 带重试机制的获取数据函数
-        async function fetchWithRetry(url, options, maxRetries = 3) {
-            let lastError;
-            
-            for (let i = 0; i < maxRetries; i++) {
-                try {
-                    const controller = new AbortController();
-                    // 超时时间：15 秒（适应国内访问 Cloudflare 较慢的情况）
-                    const timeoutId = setTimeout(() => {
-                        controller.abort();
-                        console.warn(`Counter request timeout after 15s (attempt ${i + 1}/${maxRetries})`);
-                    }, 15000);
-                    
-                    const res = await fetch(url, { 
-                        ...options,
-                        signal: controller.signal 
-                    });
-                    clearTimeout(timeoutId);
-                    
-                    if (!res.ok) {
-                        throw new Error(`HTTP error! status: ${res.status}`);
-                    }
-                    
-                    return await res.json();
-                } catch (error) {
-                    lastError = error;
-                    
-                    // 如果是 abort 错误（超时），记录日志并继续重试
-                    if (error.name === 'AbortError') {
-                        console.warn(`Counter request aborted (attempt ${i + 1}/${maxRetries})`);
-                    } else {
-                        console.warn(`Counter fetch error (attempt ${i + 1}/${maxRetries}):`, error.message);
-                    }
-                    
-                    // 如果不是最后一次尝试，等待一段时间后重试
-                    if (i < maxRetries - 1) {
-                        // 指数退避：第 1 次等 2 秒，第 2 次等 4 秒
-                        const waitTime = 2000 * Math.pow(2, i);
-                        console.log(`Retrying in ${waitTime / 1000}s...`);
-                        await new Promise(resolve => setTimeout(resolve, waitTime));
-                    }
-                }
-            }
-            
-            // 所有重试都失败后抛出最后的错误
-            throw lastError;
-        }
-        
         async function updateCounter() {
-            const counterElement = document.getElementById('busuanzi_value_site_pv');
-            
-            if (!counterElement) {
-                console.warn('Counter element not found');
-                return;
-            }
-            
             try {
                 // 只有今天首次访问时才增加计数
                 if (!hasVisitedToday()) {
-                    // POST 增加 PV（仅在首次访问时），不等待结果
-                    fetch(COUNTER_API + '?key=site_pv', { method: 'POST' })
-                        .then(() => {
-                            markAsVisited();
-                            console.log('Counter incremented successfully');
-                        })
-                        .catch(err => console.warn('Failed to increment counter:', err));
+                    // POST 增加 PV（仅在首次访问时）
+                    await fetch(COUNTER_API + '?key=site_pv', { method: 'POST' });
+                    markAsVisited();
                 }
                 
-                // GET 获取最新数据（带重试机制）
-                const data = await fetchWithRetry(COUNTER_API + '?key=site_pv', { 
-                    method: 'GET' 
+                // GET 获取最新数据（带超时处理）
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 秒超时
+                
+                const res = await fetch(COUNTER_API + '?key=site_pv', { 
+                    signal: controller.signal 
                 });
+                clearTimeout(timeoutId);
+                
+                const data = await res.json();
                 
                 if (data.success) {
-                    counterElement.textContent = data.count.toLocaleString();
+                    document.getElementById('busuanzi_value_site_pv').textContent = data.count.toLocaleString();
                 } else if (data.error) {
                     // KV 未配置的友好提示
-                    counterElement.textContent = '配置中...';
+                    document.getElementById('busuanzi_value_site_pv').textContent = '配置中...';
                     console.warn('访问量统计：', data.error);
                 } else {
-                    counterElement.textContent = '—';
+                    document.getElementById('busuanzi_value_site_pv').textContent = '—';
                 }
             } catch (error) {
-                console.warn('Counter error after all retries:', error.message);
-                // 所有重试失败后显示加载图标，给用户一个视觉反馈
-                counterElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                console.warn('Counter error:', error.message);
+                // 超时时显示加载状态，稍后重试
+                document.getElementById('busuanzi_value_site_pv').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
                 
-                // 30 秒后再尝试一次（后台静默重试）
-                setTimeout(async () => {
-                    try {
-                        const data = await fetchWithRetry(COUNTER_API + '?key=site_pv', { 
-                            method: 'GET' 
-                        });
-                        if (data.success) {
-                            counterElement.textContent = data.count.toLocaleString();
-                        }
-                    } catch (finalError) {
-                        console.warn('Final retry failed:', finalError.message);
-                        counterElement.textContent = '—';
-                    }
-                }, 30000);
+                // 10 秒后重试一次
+                setTimeout(() => {
+                    document.getElementById('busuanzi_value_site_pv').textContent = '—';
+                }, 10000);
             }
         }
         
