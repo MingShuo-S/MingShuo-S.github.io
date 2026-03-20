@@ -306,14 +306,6 @@
                             <i class="fas fa-chart-line"></i> 总访问量
                         </div>
                     </div>
-                    <div class="stat-card site-stat-card">
-                        <div class="stat-number">
-                            <span id="busuanzi_value_site_uv"><i class="fas fa-spinner fa-spin"></i></span>
-                        </div>
-                        <div class="stat-label">
-                            <i class="fas fa-user"></i> 访客数量
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -370,27 +362,57 @@
     (function() {
         const COUNTER_API = 'https://site-counter.2954809209.workers.dev';
         
+        // 检查是否已经访问过（防止重复计数）
+        function hasVisitedToday() {
+            const lastVisit = localStorage.getItem('site_last_visit');
+            const today = new Date().toDateString();
+            return lastVisit === today;
+        }
+        
+        // 标记今日已访问
+        function markAsVisited() {
+            localStorage.setItem('site_last_visit', new Date().toDateString());
+        }
+        
         async function updateCounter() {
             try {
-                // POST 增加 PV
-                await fetch(COUNTER_API + '?key=site_pv', { method: 'POST' });
+                // 只有今天首次访问时才增加计数
+                if (!hasVisitedToday()) {
+                    // POST 增加 PV（仅在首次访问时）
+                    await fetch(COUNTER_API + '?key=site_pv', { method: 'POST' });
+                    markAsVisited();
+                }
                 
-                // GET 获取最新数据
-                const res = await fetch(COUNTER_API + '?key=site_pv');
+                // GET 获取最新数据（带超时处理）
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 秒超时
+                
+                const res = await fetch(COUNTER_API + '?key=site_pv', { 
+                    signal: controller.signal 
+                });
+                clearTimeout(timeoutId);
+                
                 const data = await res.json();
                 
                 if (data.success) {
                     document.getElementById('busuanzi_value_site_pv').textContent = data.count.toLocaleString();
+                } else if (data.error) {
+                    // KV 未配置的友好提示
+                    document.getElementById('busuanzi_value_site_pv').textContent = '配置中...';
+                    console.warn('访问量统计：', data.error);
                 } else {
                     document.getElementById('busuanzi_value_site_pv').textContent = '—';
                 }
             } catch (error) {
-                console.error('Counter error:', error);
-                document.getElementById('busuanzi_value_site_pv').textContent = '—';
+                console.warn('Counter error:', error.message);
+                // 超时时显示加载状态，稍后重试
+                document.getElementById('busuanzi_value_site_pv').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                
+                // 10 秒后重试一次
+                setTimeout(() => {
+                    document.getElementById('busuanzi_value_site_pv').textContent = '—';
+                }, 10000);
             }
-            
-            // UV 暂时用 PV 代替（简化实现）
-            document.getElementById('busuanzi_value_site_uv').textContent = document.getElementById('busuanzi_value_site_pv').textContent;
         }
         
         if (document.readyState === 'loading') {
