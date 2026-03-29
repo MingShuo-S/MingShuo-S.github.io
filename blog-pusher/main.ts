@@ -154,13 +154,24 @@ export default class BlogPublisherPlugin extends Plugin {
 				
 				this.appendOutput('✅ 构建成功！', 'success');
 				
+				// 执行 Git 提交和推送
 				if (shouldPush) {
-					this.appendOutput('正在推送到远程仓库...', 'info');
-					// 构建成功后会自动推送到 Git（在 builder.js 中已实现）
+					this.appendOutput('🔄 正在添加文件到 Git...', 'info');
+					await execPromise(`cd "${projectRoot}" && git add .`);
+					
+					this.appendOutput('📝 正在提交更改...', 'info');
+					const commitMessage = `chore: auto-publish blog posts at ${new Date().toLocaleString('zh-CN')}`;
+					await execPromise(`cd "${projectRoot}" && git commit -m "${commitMessage}"`);
+					
+					this.appendOutput('🚀 正在推送到远程仓库...', 'info');
+					await execPromise(`cd "${projectRoot}" && git push`);
+					
 					this.appendOutput('✅ 已推送到远程仓库！', 'success');
+				} else {
+					this.appendOutput('💡 提示：如需推送到 GitHub，请点击"构建并提交推送"按钮', 'info');
 				}
 				
-				new Notice('博客构建成功！');
+				new Notice(shouldPush ? '博客已构建并发布到 GitHub！' : '博客构建成功！');
 				
 			} catch (error) {
 				this.appendOutput(`构建命令执行失败：${error.message}`, 'error');
