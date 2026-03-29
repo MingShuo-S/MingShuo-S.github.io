@@ -19,6 +19,11 @@ class SafeSiteBuilder {
         this.templateDir = path.join(this.sourceDir, 'templates');
         this.dataDir = path.join(this.sourceDir, 'data');
         this.assetsDir = path.join(this.sourceDir, 'assets');
+        
+        // Obsidian 仓库配置
+        this.obsidianDir = 'C:\\Users\\29548\\Documents\\Sunshine\\ANOTES';
+        // 是否启用 Obsidian 模式（直接从 Obsidian 仓库读取）
+        this.useObsidianMode = true;
     }
 
     async build() {
@@ -52,6 +57,9 @@ class SafeSiteBuilder {
 
             // 8. 生成归档页面
             await this.generateArchivePage(articles, siteConfig);
+            
+            // 8.1 生成分类归档页面
+            await this.generateCategoryArchivePage(articles, siteConfig);
 
             // 9. 生成 RSS 订阅源
             await this.generateRSSFeed(articles, siteConfig);
@@ -141,72 +149,153 @@ class SafeSiteBuilder {
     }
 
     async processArticles() {
-        const articlesDir = path.join(this.dataDir, 'articles');
+        // 根据模式确定文章目录
+        const articlesDir = this.useObsidianMode ? this.obsidianDir : path.join(this.dataDir, 'articles');
 
         if (!await fs.pathExists(articlesDir)) {
             console.log('📝 未找到文章目录，跳过文章处理');
             return [];
         }
 
-        const files = await fs.readdir(articlesDir);
         const articles = [];
+        
+        // 递归读取所有 markdown 文件
+        const files = await this.readMarkdownFilesRecursively(articlesDir);
 
         for (const file of files) {
-            if (file.endsWith('.md')) {
-                console.log(`  📄 处理: ${file}`);
+            console.log(`  📄 处理：${file.relativePath}`);
+            console.log(`    绝对路径：${file.absolutePath}`);
+            console.log(`    dirname: ${path.dirname(file.relativePath)}`);
 
-                try {
-                    const filePath = path.join(articlesDir, file);
-                    const fileContent = await fs.readFile(filePath, 'utf-8');
+            try {
+                const fileContent = await fs.readFile(file.absolutePath, 'utf-8');
 
-                    // 解析 Front Matter 和正文
-                    const { data: frontmatter, content: markdown } = matter(fileContent);
+                // 解析 Front Matter 和正文
+                const { data: frontmatter, content: markdown } = matter(fileContent);
 
-                    // 生成文章 slug
-                    const slug = this.generateSlug(file, frontmatter.title);
+                // 优先级 1: 使用文件名作为标题（去除 .md 后缀和日期前缀）
+                let titleFromFilename = this.extractTitleFromFilename(file.fileName);
+                
+                // 优先级 2: 使用 Front Matter 中的 title（如果显式提供了）
+                const title = frontmatter.title || titleFromFilename;
 
-                    // 转换 Markdown 为 HTML
-                    marked.setOptions({ 
-                        gfm: true, 
-                        breaks: true,
-                        headerIds: true
-                    });
-                    const htmlContent = marked.parse(markdown);
+                // 生成文章 slug
+                const slug = this.generateSlug(file.fileName, title);
 
-                    // 计算阅读时间
-                    const wordCount = markdown.split(/\s+/).length;
-                    const readTime = Math.max(1, Math.ceil(wordCount / 200));
+                // 处理 Markdown 标题级别：将所有标题提升一级
+                // # (h1) → ## (h2), ## (h2) → ### (h3)，以此类推
+                const processedMarkdown = this.shiftMarkdownHeadings(markdown);
 
-                    // 格式化日期
-                    const rawDate = frontmatter.date || this.extractDateFromFilename(file) || new Date().toISOString().split('T')[0];
-                    const formattedDate = this.formatDate(rawDate);
+                // 转换 Markdown 为 HTML
+                marked.setOptions({ 
+                    gfm: true, 
+                    breaks: true,
+                    headerIds: true
+                });
+                let htmlContent = marked.parse(processedMarkdown);
 
-                    // 构建文章对象
-                    const article = {
-                        ...frontmatter,
-                        slug,
-                        content: htmlContent,
-                        rawDate,
-                        formattedDate,
-                        fileName: file,
-                        read_time: readTime,
-                        wordCount: wordCount,
-                        url: `/posts/${slug}/`
-                    };
+                // 在正文开头添加文章标题（作为 h1）
+                // 这样 article-content 区域的第一个标题就是文章主标题
+                const titleHeading = `<h1 class="article-main-title">${title}</h1>\n\n`;
+                htmlContent = titleHeading + htmlContent;
 
-                    if (!article.title) {
-                        article.title = this.slugToTitle(slug);
-                    }
+                // 计算阅读时间
+                const wordCount = markdown.split(/\s+/).length;
+                const readTime = Math.max(1, Math.ceil(wordCount / 200));
 
-                    articles.push(article);
+                // 格式化日期
+                const rawDate = frontmatter.date || this.extractDateFromFilename(file.fileName) || new Date().toISOString().split('T')[0];
+                const formattedDate = this.formatDate(rawDate);
 
-                } catch (error) {
-                    console.error(`❌ 处理文章 ${file} 失败:`, error.message);
-                }
+                // 自动从文件夹路径生成分类（category）
+                const category = this.extractCategoryFromPath(file.relativePath);
+                
+                // 使用 Front Matter 中的 tags（不再合并文件夹标签）
+                const allTags = frontmatter.tags || [];
+
+                // 构建文章对象
+                const article = {
+                    ...frontmatter,
+                    title,  // 使用从文件名或 Front Matter 提取的标题
+                    category,  // 使用文件夹路径作为分类
+                    slug,
+                    content: htmlContent,
+                    rawDate,
+                    formattedDate,
+                    fileName: file.fileName,
+                    relativePath: file.relativePath,
+                    read_time: readTime,
+                    wordCount: wordCount,
+                    url: `/posts/${slug}/`,
+                    tags: allTags
+                };
+
+                articles.push(article);
+
+            } catch (error) {
+                console.error(`❌ 处理文章 ${file.fileName} 失败:`, error.message);
             }
         }
 
         return articles.sort((a, b) => new Date(b.rawDate) - new Date(a.rawDate));
+    }
+
+    /**
+     * 递归读取目录下所有 markdown 文件
+     */
+    async readMarkdownFilesRecursively(dir, baseDir = dir) {
+        const files = [];
+        const items = await fs.readdir(dir, { withFileTypes: true });
+
+        for (const item of items) {
+            const fullPath = path.join(dir, item.name);
+            
+            if (item.isDirectory()) {
+                // 递归处理子目录
+                const subFiles = await this.readMarkdownFilesRecursively(fullPath, baseDir);
+                files.push(...subFiles);
+            } else if (item.isFile() && item.name.endsWith('.md')) {
+                // 添加 markdown 文件
+                const relativePath = path.relative(baseDir, fullPath);
+                files.push({
+                    absolutePath: fullPath,
+                    relativePath: relativePath,
+                    fileName: item.name
+                });
+            }
+        }
+
+        return files;
+    }
+
+    /**
+     * 从文件路径提取分类（category）
+     * 使用文件夹名称作为文章分类，支持多级文件夹（取最深层的文件夹名）
+     */
+    extractCategoryFromPath(relativePath) {
+        // 获取文件所在目录
+        const dirPath = path.dirname(relativePath);
+        
+        // 如果在根目录，返回默认分类
+        if (dirPath === '.' || dirPath === '') {
+            return '未分类';
+        }
+        
+        // 将路径分隔符统一为正斜杠
+        const normalizedPath = dirPath.replace(/\\/g, '/');
+        
+        // 分割路径获取所有文件夹
+        const folders = normalizedPath.split('/');
+        
+        // 过滤掉以下划线开头的文件夹（通常用于特殊用途）
+        const validFolders = folders.filter(folder => !folder.startsWith('_'));
+        
+        // 返回最深层的文件夹名作为分类
+        if (validFolders.length > 0) {
+            return validFolders[validFolders.length - 1];
+        }
+        
+        return '未分类';
     }
 
     async generateArticlePage(article, siteConfig) {
@@ -248,9 +337,23 @@ class SafeSiteBuilder {
         // 处理条件语句
         html = this.processConditionalStatements(html, article, siteConfig);
 
-        // 处理标签 - 使用正则表达式更灵活地匹配
+        // 处理标签 - 区分普通标签和文件夹标签
         if (article.tags && Array.isArray(article.tags) && article.tags.length > 0) {
-            const tagsHtml = article.tags.map(tag => `<a href="/tags/${tag}" class="tag">${tag}</a>`).join('\n');
+            const folderTagsSet = new Set(article.folderTags || []);
+            
+            // 根据文章 URL 深度计算相对路径前缀
+            // 文章页面在 /posts/{slug}/ 目录下，需要回退两层到根目录
+            const relativePathPrefix = '../..';
+            
+            const tagsHtml = article.tags.map(tag => {
+                const isFolderTag = folderTagsSet.has(tag);
+                // 为文件夹标签添加特殊样式类
+                const className = isFolderTag ? 'tag folder-tag' : 'tag';
+                const titleAttr = isFolderTag ? ` title="来自文件夹分类"` : '';
+                // 添加 hash 参数，实现自动筛选
+                return `<a href="${relativePathPrefix}/tags/#tag-${tag}" class="${className}"${titleAttr}>${isFolderTag ? '📁 ' : ''}${tag}</a>`;
+            }).join('\n');
+            
             html = html.replace(
                 /(<div class="tags-list">\s*)\{\{article_tags\}\}(\s*<\/div>)/,
                 `$1${tagsHtml}$2`
@@ -606,6 +709,13 @@ class SafeSiteBuilder {
         .no-articles { text-align: center; padding: 3rem; color: #888; }
         
         /* 归档跳转按钮 */
+        .archive-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: flex-end;
+        }
+        
         .archive-btn {
             display: inline-flex;
             align-items: center;
@@ -619,9 +729,7 @@ class SafeSiteBuilder {
             font-size: 0.95rem;
             box-shadow: 0 4px 6px rgba(74, 108, 247, 0.2);
             transition: all 0.3s ease;
-            position: absolute;
-            right: 2rem;
-            top: 5.5rem;
+            position: static;
         }
         
         .archive-btn:hover {
@@ -634,10 +742,14 @@ class SafeSiteBuilder {
         }
         
         @media (max-width: 768px) {
+            .archive-buttons {
+                flex-direction: column;
+                justify-content: center;
+            }
+            
             .archive-btn {
-                position: static;
-                margin-top: 1rem;
-                margin-bottom: 2rem;
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -663,10 +775,16 @@ class SafeSiteBuilder {
         </header>
         
         <!-- 归档跳转按钮 -->
-        <a href="../archive/" class="archive-btn" title="按时间线查看归档">
-            <i class="fas fa-box-archive"></i>
-            <span>时间线归档</span>
-        </a>
+        <div class="archive-buttons">
+            <a href="../archive/" class="archive-btn" title="按时间线查看归档">
+                <i class="fas fa-box-archive"></i>
+                <span>时间线归档</span>
+            </a>
+            <a href="../categories/" class="archive-btn" title="按分类查看归档">
+                <i class="fas fa-folder-tree"></i>
+                <span>分类归档</span>
+            </a>
+        </div>
         
         <div class="articles-grid">
             ${articlesListHtml}
@@ -1271,6 +1389,53 @@ class SafeSiteBuilder {
         return match ? match[1] : null;
     }
 
+    /**
+     * 从文件名提取标题（去除 .md 后缀和日期前缀）
+     */
+    extractTitleFromFilename(filename) {
+        // 移除 .md 后缀
+        let title = filename.replace(/\.md$/, '');
+        
+        // 移除日期前缀（格式：YYYY-MM-DD-）
+        title = title.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+        
+        // 将连字符和下划线替换为空格
+        title = title.replace(/[-_]/g, ' ');
+        
+        // 清理多余空格
+        title = title.trim();
+        
+        // 判断是否包含中文
+        const hasChinese = /[\u4e00-\u9fa5]/.test(title);
+        
+        if (hasChinese) {
+            // 中文标题：保持原样，只清理空格
+            return title;
+        } else {
+            // 英文标题：每个单词首字母大写
+            return title.replace(/\b\w/g, l => l.toUpperCase());
+        }
+    }
+
+    /**
+     * 将 Markdown 内容中的所有标题提升一级
+     * # → ##, ## → ###, ### → ####，以此类推
+     * 
+     * 这样在 Obsidian 中用#作为文章主标题，实际渲染时会变成 h2
+     */
+    shiftMarkdownHeadings(markdown) {
+        // 匹配 Markdown 标题行（以#开头的行）
+        const headingRegex = /^(#{1,6})\s+(.*)$/gm;
+        
+        return markdown.replace(headingRegex, (match, hashes, text) => {
+            // 增加一个#，但不超过 6 个
+            const newLevel = Math.min(hashes.length + 1, 6);
+            const newHashes = '#'.repeat(newLevel);
+            
+            return `${newHashes} ${text}`;
+        });
+    }
+
     calculateSiteDays(startDate) {
         const start = new Date(startDate);
         const today = new Date();
@@ -1524,6 +1689,152 @@ class SafeSiteBuilder {
         await fs.writeFile(path.join(archiveDir, 'index.html'), html);
         
         console.log(`📅 已生成归档页面 /archive/ (${years.length}个年份，共${articles.length}篇文章)`);
+    }
+
+    /**
+     * 生成分类归档页面
+     */
+    async generateCategoryArchivePage(articles, siteConfig) {
+        console.log('📂 生成分类归档页面...');
+        
+        // 按分类组织文章
+        const categoryData = {};
+        
+        articles.forEach(article => {
+            const category = article.category || '未分类';
+            
+            if (!categoryData[category]) {
+                categoryData[category] = [];
+            }
+            
+            categoryData[category].push(article);
+        });
+        
+        // 按文章数量排序分类（多的在前）
+        const sortedCategories = Object.entries(categoryData)
+            .sort((a, b) => b[1].length - a[1].length);
+        
+        // 生成分类统计信息
+        let categoryStats = '';
+        sortedCategories.forEach(([category, categoryArticles]) => {
+            categoryStats += `
+            <div class="category-stat-item">
+                <a href="#category-${encodeURIComponent(category)}" class="category-stat-link">
+                    <span class="category-name">${category}</span>
+                    <span class="category-count">${categoryArticles.length}</span>
+                </a>
+            </div>`;
+        });
+        
+        // 生成分类内容
+        let categoryHtml = '';
+        sortedCategories.forEach(([category, categoryArticles]) => {
+            // 每个分类的文章按日期倒序排列
+            categoryArticles.sort((a, b) => new Date(b.rawDate || b.date) - new Date(a.rawDate || a.date));
+            
+            categoryHtml += `
+            <div class="category-group" id="category-${encodeURIComponent(category)}">
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <i class="fas fa-folder-open"></i>
+                        ${category}
+                    </h2>
+                    <span class="category-article-count">${categoryArticles.length}篇文章</span>
+                </div>
+                <div class="category-articles">
+`;
+            
+            categoryArticles.forEach(article => {
+                categoryHtml += `
+                    <article class="category-article-card">
+                        <div class="article-card-content">
+                            <h3 class="article-card-title">
+                                <a href="../posts/${article.slug}/" class="article-card-link">${article.title}</a>
+                            </h3>
+                            <p class="article-card-summary">${article.summary || ''}</p>
+                            <div class="article-card-meta">
+                                <time datetime="${article.rawDate}" class="article-date">
+                                    <i class="far fa-calendar"></i> ${article.formattedDate.split('年')[0]}年${article.formattedDate.split('年')[1]}
+                                </time>
+                                <span class="article-read-time">
+                                    <i class="far fa-clock"></i> ${article.read_time}分钟阅读
+                                </span>
+                            </div>
+                            ${(article.tags || []).length > 0 ? `
+                            <div class="article-card-tags">
+                                ${(article.tags || []).slice(0, 5).map(tag => 
+                                    `<span class="tag">${tag}</span>`
+                                ).join('')}
+                            </div>` : ''}
+                        </div>
+                    </article>
+`;
+            });
+            
+            categoryHtml += `
+                </div>
+            </div>
+`;
+        });
+        
+        // 生成完整的分类归档页面
+        const html = `
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分类归档 | Sunshine's Blog</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/category-archive.css">
+    <!-- RSS 订阅 -->
+    <link rel="alternate" type="application/rss+xml" title="Sunshine's Blog" href="../../rss.xml">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="../../" class="nav-brand">Sunshine's Blog</a>
+            <div class="nav-menu">
+                <a href="../../" class="nav-link">首页</a>
+                <a href="../writings" class="nav-link">文章</a>
+                <a href="../tags" class="nav-link">标签</a>
+                <a href="../projects" class="nav-link">项目</a>
+                <a href="../about" class="nav-link">关于</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="category-archive-container">
+        <header class="archive-header">
+            <h1><i class="fas fa-folder-tree"></i> 分类归档</h1>
+            <p class="archive-description">按分类浏览所有文章，探索感兴趣的主题</p>
+        </header>
+        
+        <!-- 分类统计 -->
+        <div class="category-stats">
+            ${categoryStats}
+        </div>
+        
+        <!-- 分类内容 -->
+        <div class="category-content">
+            ${categoryHtml}
+        </div>
+        
+        <div class="back-to-top">
+            <a href="#" class="back-btn"><i class="fas fa-arrow-up"></i> 返回顶部</a>
+        </div>
+    </div>
+    
+    <script src="../assets/js/category-archive.js"></script>
+</body>
+</html>`;
+
+        // 写入文件
+        const categoryArchiveDir = path.join(this.outputDir, 'categories');
+        await fs.ensureDir(categoryArchiveDir);
+        await fs.writeFile(path.join(categoryArchiveDir, 'index.html'), html);
+        
+        console.log(`📂 已生成分类归档页面 /categories/ (${sortedCategories.length}个分类，共${articles.length}篇文章)`);
     }
 }
 

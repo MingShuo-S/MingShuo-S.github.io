@@ -15,6 +15,13 @@
         .no-articles { text-align: center; padding: 3rem; color: #888; }
         
         /* 归档跳转按钮 */
+        .archive-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: flex-end;
+        }
+        
         .archive-btn {
             display: inline-flex;
             align-items: center;
@@ -28,9 +35,7 @@
             font-size: 0.95rem;
             box-shadow: 0 4px 6px rgba(74, 108, 247, 0.2);
             transition: all 0.3s ease;
-            position: absolute;
-            right: 2rem;
-            top: 5.5rem;
+            position: static;
         }
         
         .archive-btn:hover {
@@ -43,10 +48,14 @@
         }
         
         @media (max-width: 768px) {
+            .archive-buttons {
+                flex-direction: column;
+                justify-content: center;
+            }
+            
             .archive-btn {
-                position: static;
-                margin-top: 1rem;
-                margin-bottom: 2rem;
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -68,22 +77,45 @@
     <div class="articles-list-container">
         <header class="articles-header">
             <h1>所有文章</h1>
-            <p class="articles-count">共 2 篇文章</p>
+            <p class="articles-count">共 3 篇文章</p>
         </header>
         
         <!-- 归档跳转按钮 -->
-        <a href="../archive/" class="archive-btn" title="按时间线查看归档">
-            <i class="fas fa-box-archive"></i>
-            <span>时间线归档</span>
-        </a>
+        <div class="archive-buttons">
+            <a href="../archive/" class="archive-btn" title="按时间线查看归档">
+                <i class="fas fa-box-archive"></i>
+                <span>时间线归档</span>
+            </a>
+            <a href="../categories/" class="archive-btn" title="按分类查看归档">
+                <i class="fas fa-folder-tree"></i>
+                <span>分类归档</span>
+            </a>
+        </div>
         
         <div class="articles-grid">
             
                 <article class="article-card">
                     <div class="card-header">
+                        <div class="card-category">测试文件</div>
+                        <h3 class="card-title">
+                            <a href="../posts/obsidian-写作关联/">obsidian 写作关联</a>
+                        </h3>
+                        <p class="card-excerpt">这是一篇测试文章，用于验证 Obsidian 自动化发布流程</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-date">2026年3月29日</div>
+                        <div class="card-tags">
+                            <span class="tag">测试</span><span class="tag">自动化</span>
+                        </div>
+                    </div>
+                </article>
+            
+
+                <article class="article-card">
+                    <div class="card-header">
                         <div class="card-category">闲谈</div>
                         <h3 class="card-title">
-                            <a href="../posts/hello-u/">你好，欢迎</a>
+                            <a href="../posts/你好，欢迎/">你好，欢迎</a>
                         </h3>
                         <p class="card-excerpt">一篇对个人博客的基础介绍</p>
                     </div>
@@ -98,9 +130,9 @@
 
                 <article class="article-card">
                     <div class="card-header">
-                        <div class="card-category">技术实践</div>
+                        <div class="card-category">AI写的</div>
                         <h3 class="card-title">
-                            <a href="../posts/building-personal-blog-from-scratch/">从零搭建静态博客：现代前端工程化实践与思考</a>
+                            <a href="../posts/从零搭建静态博客：现代前端工程化实践与思考/">从零搭建静态博客：现代前端工程化实践与思考</a>
                         </h3>
                         <p class="card-excerpt">记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，探索基础学习能力与 AI 工具如何协同促进快速成长。</p>
                     </div>

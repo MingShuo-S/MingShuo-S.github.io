@@ -62,21 +62,30 @@
             });
         }
         
-        // 支持 URL hash 直接定位到某个标签
+        // 支持 URL hash 直接定位到某个标签（优先处理）
         if (window.location.hash) {
             const hash = window.location.hash.slice(1); // 移除 #
-            const tagSlug = hash.replace('tag-', '');
+            
+            // 支持两种格式：#tag-xxx 或直接 #xxx
+            let tagSlug = hash;
+            if (hash.startsWith('tag-')) {
+                tagSlug = hash.replace('tag-', '');
+            } else if (hash.startsWith('tags/')) {
+                // 如果是从 /tags/xxx 跳转过来（虽然不会真的跳转，但以防万一）
+                tagSlug = hash.replace('tags/', '');
+            }
             
             // 找到对应的筛选按钮并触发点击
             const targetButton = Array.from(filterContainer.querySelectorAll('.filter-btn'))
                 .find(btn => btn.getAttribute('data-filter') === tagSlug);
             
             if (targetButton) {
-                targetButton.click();
-                // 平滑滚动到内容区域
+                // 延迟执行，确保 DOM 完全渲染
                 setTimeout(() => {
+                    targetButton.click();
+                    // 平滑滚动到内容区域
                     articlesGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 300);
+                }, 100);
             }
         }
         

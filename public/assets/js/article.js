@@ -269,10 +269,13 @@ function setupShareButtons() {
     if (shareButtons.length === 0) return; // 添加元素存在性检查
     
     shareButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            
             const platform = this.getAttribute('data-platform');
+            // 使用当前页面的实际 URL
             const currentUrl = window.location.href;
-            const title = document.title;
+            const title = document.title.replace(/ \| .*/, ''); // 移除网站标题后缀
             
             if (platform === 'copy-link') {
                 copyToClipboard(currentUrl);
@@ -302,11 +305,45 @@ function setupShareButtons() {
 
 // 复制到剪贴板
 function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        console.log('复制成功:', text);
-    }).catch(err => {
-        console.error('复制失败:', err);
-    });
+    // 优先使用现代 Clipboard API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+            console.log('复制成功:', text);
+        }).catch(err => {
+            console.error('复制失败:', err);
+            // 降级方案
+            fallbackCopyToClipboard(text);
+        });
+    } else {
+        // 降级方案：使用 execCommand
+        fallbackCopyToClipboard(text);
+    }
+}
+
+// 降级复制方法
+function fallbackCopyToClipboard(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    
+    try {
+        textArea.focus();
+        textArea.select();
+        const successful = document.execCommand('copy');
+        if (successful) {
+            showToast('链接已复制到剪贴板！');
+        } else {
+            showToast('复制失败，请手动复制链接');
+        }
+    } catch (err) {
+        console.error('Fallback copy failed:', err);
+        showToast('复制失败，请手动复制链接');
+    }
+    
+    document.body.removeChild(textArea);
 }
 
 // 显示提示

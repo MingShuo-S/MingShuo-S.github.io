@@ -80,15 +80,15 @@
                 <!-- 统计数据 -->
                 <div class="projects-stats" style="margin-top: 2rem;">
                     <div class="stat-card">
-                        <div class="stat-number" id="totalTags">12</div>
+                        <div class="stat-number" id="totalTags">14</div>
                         <div class="stat-label">标签总数</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="totalArticlesWithTag">4</div>
+                        <div class="stat-number" id="totalArticlesWithTag">5</div>
                         <div class="stat-label">有标签内容数</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="avgTagsPerArticle">3.5</div>
+                        <div class="stat-number" id="avgTagsPerArticle">3.2</div>
                         <div class="stat-label">篇均标签数</div>
                     </div>
                 </div>
@@ -99,6 +99,8 @@
                 <button class="filter-btn active" data-filter="all">全部</button>
                 <button class="filter-btn" data-filter="博客">博客</button>
 <button class="filter-btn" data-filter="静态站点">静态站点</button>
+<button class="filter-btn" data-filter="测试">测试</button>
+<button class="filter-btn" data-filter="自动化">自动化</button>
 <button class="filter-btn" data-filter="前端工程">前端工程</button>
 <button class="filter-btn" data-filter="javascript">JavaScript</button>
 <button class="filter-btn" data-filter="node.js">Node.js</button>
@@ -114,11 +116,27 @@
             <!-- 内容列表 -->
             <div class="articles-grid" id="articlesGrid">
                 
+                    <article class="article-card" data-tags="测试,自动化" data-type="article">
+                        <div class="card-header">
+                            <div class="card-category">测试文件</div>
+                            <h3 class="card-title">
+                                <a href="../posts/obsidian-写作关联/">obsidian 写作关联</a>
+                            </h3>
+                            <p class="card-excerpt">这是一篇测试文章，用于验证 Obsidian 自动化发布流程</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-date">2026年3月29日</div>
+                            <div class="card-tags">
+                                <a href="#tag-测试" class="tag-link">测试</a><a href="#tag-自动化" class="tag-link">自动化</a>
+                            </div>
+                        </div>
+                    </article>
+                
                     <article class="article-card" data-tags="博客" data-type="article">
                         <div class="card-header">
                             <div class="card-category">闲谈</div>
                             <h3 class="card-title">
-                                <a href="../posts/hello-u/">你好，欢迎</a>
+                                <a href="../posts/你好，欢迎/">你好，欢迎</a>
                             </h3>
                             <p class="card-excerpt">一篇对个人博客的基础介绍</p>
                         </div>
@@ -132,9 +150,9 @@
                 
                     <article class="article-card" data-tags="前端工程,静态站点,javascript,node.js,博客搭建,ai-辅助编程" data-type="article">
                         <div class="card-header">
-                            <div class="card-category">技术实践</div>
+                            <div class="card-category">AI写的</div>
                             <h3 class="card-title">
-                                <a href="../posts/building-personal-blog-from-scratch/">从零搭建静态博客：现代前端工程化实践与思考</a>
+                                <a href="../posts/从零搭建静态博客：现代前端工程化实践与思考/">从零搭建静态博客：现代前端工程化实践与思考</a>
                             </h3>
                             <p class="card-excerpt">记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，探索基础学习能力与 AI 工具如何协同促进快速成长。</p>
                         </div>

@@ -366,23 +366,43 @@
     margin-bottom: 1.5rem;
 }
 
-/* 标题样式 */
+/* 文章正文主标题（来自文件名） */
+.article-content .article-main-title {
+    font-size: 2rem;
+    line-height: 1.3;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+    color: var(--text-color);
+    font-weight: 600;
+    text-align: left; /* 改为左对齐 */
+}
+
+/* 标题样式 - 全部左对齐 */
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4,
+.article-content h5,
+.article-content h6 {
+    text-align: left;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
 .article-content h1 {
     font-size: 1.75rem;
     margin-top: 2.5rem;
     margin-bottom: 1.25rem;
     padding-bottom: 0.5rem;
     border-bottom: 2px solid var(--border-color);
-    color: var(--text-color);
-    font-weight: 600;
 }
 
 .article-content h2 {
     font-size: 1.5rem;
     margin-top: 2rem;
     margin-bottom: 1rem;
-    color: var(--text-color);
-    font-weight: 600;
     position: relative;
     padding-left: 0.75rem;
 }
@@ -402,22 +422,65 @@
     font-size: 1.25rem;
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
-    color: var(--text-color);
-    font-weight: 600;
 }
 
 .article-content h4 {
     font-size: 1.125rem;
     margin-top: 1.25rem;
     margin-bottom: 0.5rem;
-    color: var(--text-color);
-    font-weight: 600;
 }
 
-/* 段落样式 */
+.article-content h5 {
+    font-size: 1rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.article-content h6 {
+    font-size: 0.9375rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+/* 段落样式 - 左对齐 */
 .article-content p {
-    text-align: justify;
+    text-align: left;
     margin-bottom: 1.5rem;
+}
+
+/* 列表样式 - 左对齐 */
+.article-content ul,
+.article-content ol {
+    text-align: left;
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+}
+
+.article-content li {
+    text-align: left;
+    margin-bottom: 0.5rem;
+    line-height: 1.7;
+}
+
+/* 嵌套列表 */
+.article-content li > ul,
+.article-content li > ol {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    padding-left: 1.5rem;
+}
+
+/* 引用块 - 左对齐 */
+.article-content blockquote {
+    text-align: left;
+    border-left: 4px solid var(--primary-color);
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+    color: var(--text-light);
+    font-style: italic;
+    background-color: rgba(74, 108, 247, 0.05);
+    padding: 1rem 1.5rem;
+    border-radius: 0 4px 4px 0;
 }
 
 /* 代码块样式 - 修复 */
@@ -645,12 +708,50 @@
     font-size: 1.25rem;
 }
 
-.share-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
-    background-color: var(--primary-color);
+/* 复制链接按钮特殊样式 - 显示文字 */
+.share-btn.copy-link {
+    width: auto;
+    padding: 0 1.5rem;
+    border-radius: 2rem;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+}
+
+.share-btn.copy-link span {
+    display: inline-block;
+}
+
+.share-btn.copy-link i {
+    font-size: 1.125rem;
+}
+
+/* Toast 提示 */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
     color: white;
-    border-color: var(--primary-color);
+    padding: 1rem 2rem;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    animation: toastSlideIn 0.3s ease-out;
+    max-width: 90%;
+    text-align: center;
+    font-size: 0.9375rem;
+}
+
+@keyframes toastSlideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 2rem);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
 }
 
 /* 导航按钮 */

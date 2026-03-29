@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>从零搭建静态博客：现代前端工程化实践与思考 | Sunshine's Blog</title>
+    <meta name="description" content="记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，探索基础学习能力与 AI 工具如何协同促进快速成长。">
+    <meta name="author" content="Mingshuo_S">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="从零搭建静态博客：现代前端工程化实践与思考">
+    <meta property="og:description" content="记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，探索基础学习能力与 AI 工具如何协同促进快速成长。">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mingshuo-s.github.io/posts/从零搭建静态博客：现代前端工程化实践与思考/">
+    <meta property="article:published_time" content="Sun Mar 15 2026 08:00:00 GMT+0800 (中国标准时间)">
+    <meta property="article:author" content="Mingshuo_S">
+    <meta property="article:section" content="AI写的">
+    
+    <!-- 样式 -->
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <!-- 图标 -->
+    <link rel="icon" href="../../assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- RSS 订阅 -->
+    <link rel="alternate" type="application/rss+xml" title="Sunshine's Blog" href="https://mingshuo-s.github.io/rss.xml">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="../../../index.html" class="nav-brand">
+                <span class="brand-text">Sunshine's Blog</span>
+            </a>
+            
+            <div class="nav-menu">
+                <a href="../../../index.html" class="nav-link">
+                    <i class="fas fa-home"></i> 首页
+                </a>
+                <a href="../../writings" class="nav-link">
+                    <i class="fas fa-pen"></i> 文章
+                </a>
+                <a href="../../tags" class="nav-link">
+                    <i class="fas fa-tags"></i> 标签
+                </a>
+                <a href="../../projects" class="nav-link">
+                    <i class="fas fa-rocket"></i> 项目
+                </a>
+                <a href="../../about" class="nav-link">
+                    <i class="fas fa-user"></i> 关于
+                </a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 文章容器 -->
+    <main class="article-container">
+        <div class="container article-layout">
+            <!-- 文章目录 -->
+            <aside class="article-toc" id="toc">
+                <div class="toc-header">
+                    <h3>📑 目录</h3>
+                    <button class="toc-toggle" id="tocToggle" aria-label="切换目录" aria-expanded="true">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+                <nav class="toc-content" id="tocContent">
+                    <!-- 目录将由 JavaScript 动态生成 -->
+                </nav>
+            </aside>
+
+            <!-- 文章内容区域 -->
+            <div class="article-main">
+                <!-- 文章头部 -->
+                <header class="article-header">
+                    <div class="article-meta">
+                        <span class="category">AI写的</span>
+                        <span class="divider">·</span>
+                        <time datetime="Sun Mar 15 2026 08:00:00 GMT+0800 (中国标准时间)" class="date">2026年3月15日</time>
+                        <span class="divider">·</span>
+                        <span class="read-time">8 分钟阅读</span>
+                        <span class="difficulty 进阶">进阶</span>
+                    </div>
+                    
+                    <h1 class="article-title">从零搭建静态博客：现代前端工程化实践与思考</h1>
+                    
+                    <p class="article-summary">记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，探索基础学习能力与 AI 工具如何协同促进快速成长。</p>
+                    
+                    <!-- 作者信息 -->
+                    <div class="author-card">
+                        <img src="../../assets/images/avatar.jpg" alt="Mingshuo_S" class="author-avatar" width="48" height="48">
+                        <div class="author-info">
+                            <div class="author-name">Mingshuo_S</div>
+                            <div class="author-bio">编程菜鸟这一块</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 封面图片（仅在存在时显示） -->
+                    
+                </header>
+
+                <!-- 文章内容 -->
+                <article class="article-content" id="articleContent">
+                    <h1 class="article-main-title">从零搭建静态博客：现代前端工程化实践与思考</h1>
+
+<h2>从零搭建静态博客：现代前端工程化实践与思考</h2>
+<blockquote>
+<p>最好的学习方式是创造，而创造的最佳起点是构建一个属于自己的数字花园。在这个 AI 触手可及的时代，我们有了更强大的创造工具。</p>
+</blockquote>
+<h3>引言：为什么要从零开始？</h3>
+<p>在众多优秀的静态站点生成器（如 Hexo、Hugo、Jekyll）存在的今天，为什么还要选择从零开始搭建博客？这个问题困扰了很多人，但对我来说，<strong>学习过程本身就是最大的价值</strong>。</p>
+<p>不过，这里的&quot;从零开始&quot;不是指每一行代码都自己手写，而是：</p>
+<ul>
+<li><p><strong>从零理解需求</strong>：而不是盲目套用现成方案</p>
+</li>
+<li><p><strong>从零设计架构</strong>：而不是接受黑盒封装</p>
+</li>
+<li><p><strong>从零把控质量</strong>：而不是被动依赖社区维护</p>
+</li>
+<li><p><strong>从零优化体验</strong>：而不是满足于默认配置</p>
+</li>
+</ul>
+<p><strong>核心观点</strong>：使用现成工具是<strong>消费技术</strong>，自建系统是<strong>理解技术</strong>，而<strong>善用 AI 则是加速理解</strong>。</p>
+<h4>传统工具 vs 自建系统 vs AI 协作</h4>
+<p>| 特性 | 传统静态站点生成器 | 自建系统 | 自建+AI 协作 |</p>
+<p>|------|-------------------|----------|-------------|</p>
+<p>| <strong>学习成本</strong> | 低，快速上手 | 高，需要深入理解 | 中等，AI 降低门槛 |</p>
+<p>| <strong>灵活度</strong> | 中等，受限于插件生态 | 极高，完全自主控制 | 极高，且实现更快 |</p>
+<p>| <strong>技术深度</strong> | 表层应用 | 底层原理到工程实践 | 原理 + 效率双收 |</p>
+<p>| <strong>开发周期</strong> | 1-2 天配置 | 1-2 周开发 | 3-5 天开发 |</p>
+<p>| <strong>可扩展性</strong> | 依赖社区维护 | 按需扩展，无限制 | 按需扩展，AI 助力 |</p>
+<p>| <strong>部署复杂度</strong> | 简化，一键部署 | 需要自行配置 | 配置 + AI 优化建议 |</p>
+<p>看到了吗？<strong>AI 协作不是降低质量，而是在保持深度的同时提升效率。</strong></p>
+<h3>一、技术栈选择与思考</h3>
+<h4>1.1 为什么选择纯前端技术栈？</h4>
+<pre><code class="language-mermaid">
+graph TD
+
+    A[需求分析] --&gt; B[静态内容为主]
+
+    B --&gt; C[快速加载]
+
+    C --&gt; D[SEO友好]
+
+    D --&gt; E[零服务器成本]
+
+    E --&gt; F[选择纯前端]
+</code></pre>
+<p><strong>决策依据</strong>：</p>
+<ol>
+<li><p><strong>内容性质</strong>：博客以文字为主，交互需求简单</p>
+</li>
+<li><p><strong>性能要求</strong>：静态文件可被CDN缓存，加载极快</p>
+</li>
+<li><p><strong>成本考量</strong>：GitHub Pages 提供免费托管</p>
+</li>
+<li><p><strong>维护成本</strong>：无需服务器运维，专注内容创作</p>
+</li>
+</ol>
+<h4>1.2 核心工具链</h4>
+<pre><code class="language-javascript">
+// package.json 中的关键依赖
+
+{
+
+  &quot;devDependencies&quot;: {
+
+    // 构建工具
+
+    &quot;fs-extra&quot;: &quot;^11.0.0&quot;,      // 增强的文件操作
+
+    &quot;marked&quot;: &quot;^12.0.0&quot;,        // Markdown 解析
+
+    &quot;gray-matter&quot;: &quot;^4.0.3&quot;,    // Front Matter 解析
+
+    // 开发工具
+
+    &quot;nodemon&quot;: &quot;^3.0.0&quot;,        // 文件监听
+
+    &quot;live-server&quot;: &quot;^1.2.0&quot;,    // 本地开发服务器
+
+    // 代码质量
+
+    &quot;prettier&quot;: &quot;^3.0.0&quot;,       // 代码格式化
+
+    &quot;eslint&quot;: &quot;^8.0.0&quot;          // 代码检查
+
+  }
+
+}
+</code></pre>
+<p><strong>选择理由</strong>：</p>
+<ul>
+<li><p><strong>fs-extra</strong>：Node.js 原生 fs 模块的增强版，提供 Promise 支持</p>
+</li>
+<li><p><strong>marked</strong>：轻量级、高性能的 Markdown 解析器</p>
+</li>
+<li><p><strong>gray-matter</strong>：优雅地解析 YAML Front Matter</p>
+</li>
+<li><p><strong>nodemon</strong>：开发时自动重启，提升开发体验</p>
+</li>
+</ul>
+<h3>二、架构设计与模块化</h3>
+<h4>2.1 项目结构设计</h4>
+<pre><code>
+my-blog/
+
+├── src/                    # 源码目录
+
+│   ├── data/              # 内容数据
+
+│   │   ├── articles/      # Markdown 文章
+
+│   │   ├── projects/      # 项目数据
+
+│   │   └── config.json    # 站点配置
+
+│   ├── templates/         # HTML 模板
+
+│   │   ├── base.html      # 基础布局
+
+│   │   └── article.html   # 文章模板
+
+│   └── assets/           # 静态资源
+
+│       ├── css/
+
+│       ├── js/
+
+│       └── images/
+
+├── scripts/               # 构建脚本
+
+│   └── builder.js        # 静态站点生成器
+
+└── public/               # 构建输出
+</code></pre>
+<p><strong>设计理念</strong>：<strong>关注点分离</strong>（Separation of Concerns）</p>
+<ul>
+<li><p>数据与表现分离</p>
+</li>
+<li><p>模板与逻辑分离</p>
+</li>
+<li><p>开发与生产分离</p>
+</li>
+</ul>
+<p><strong>说实话</strong>：这个架构是我设计的，但 <code>builder.js</code> 的具体实现，AI 帮我写了大概 70%。</p>
+<p>一开始我想自己从头写，但在实现了基础的 Markdown 解析后，我发现：</p>
+<ul>
+<li><p>文件路径处理有很多边界情况（Windows vs Unix、绝对路径 vs 相对路径）</p>
+</li>
+<li><p>错误处理要考虑很多场景（文件不存在、权限问题、磁盘空间不足）</p>
+</li>
+<li><p>性能优化需要专业知识（缓存策略、增量构建、并发处理）</p>
+</li>
+</ul>
+<p>如果都自己摸索，可能需要几周时间。</p>
+<p><strong>我的选择</strong>：让 AI 帮忙实现这些&quot;脏活累活&quot;，我把精力放在：</p>
+<ul>
+<li><p>架构设计是否合理</p>
+</li>
+<li><p>代码质量是否达标</p>
+</li>
+<li><p>边界情况是否考虑周全</p>
+</li>
+<li><p>可扩展性是否足够</p>
+</li>
+</ul>
+<p><strong>结果</strong>：3 天就完成了整个构建系统，而且每一行代码我都理解。</p>
+<p>这比&quot;从零手写&quot;更有价值——因为我学会了<strong>如何驾驭工具</strong>。</p>
+<h4>2.2 构建系统设计</h4>
+<pre><code class="language-javascript">
+// builder.js 的核心架构
+
+class SiteBuilder {
+
+  constructor() {
+
+    this.pipeline = [
+
+      this.cleanOutput.bind(this),
+
+      this.loadConfig.bind(this),
+
+      this.processContent.bind(this),
+
+      this.generatePages.bind(this),
+
+      this.optimizeAssets.bind(this)
+
+    ];
+
+  }
+
+  async build() {
+
+    for (const step of this.pipeline) {
+
+      await step();
+
+    }
+
+  }
+
+}
+</code></pre>
+<p><strong>构建流程</strong>：</p>
+<ol>
+<li><p><strong>清理阶段</strong>：删除旧的构建文件</p>
+</li>
+<li><p><strong>读取阶段</strong>：加载配置和内容</p>
+</li>
+<li><p><strong>转换阶段</strong>：Markdown → HTML，模板渲染</p>
+</li>
+<li><p><strong>生成阶段</strong>：输出静态文件</p>
+</li>
+<li><p><strong>优化阶段</strong>：压缩、合并、添加哈希</p>
+</li>
+</ol>
+<p><strong>这个架构怎么来的？</strong></p>
+<p>我给 AI 的描述是：</p>
+<blockquote>
+<p>&quot;我想要一个类似工厂流水线的构建系统，每个步骤独立可测，失败了能优雅处理，还能方便地加新功能。&quot;</p>
+</blockquote>
+<p>AI 给了我第一版代码——用的是简单的函数调用链。</p>
+<p>我让它改了两次：</p>
+<ol>
+<li><p>&quot;改成类的设计，这样状态管理更方便&quot;</p>
+</li>
+<li><p>&quot;加上 pipeline 模式，每一步都能单独测试&quot;</p>
+</li>
+</ol>
+<p><strong>最后得到的版本</strong>，就是你现在看到的这个样子。</p>
+<p><strong>我的收获</strong>：</p>
+<ul>
+<li><p>学会了<strong>流水线设计模式</strong>（从 AI 的实现中理解）</p>
+</li>
+<li><p>理解了<strong>面向对象的优势</strong>（我自己提出的需求）</p>
+</li>
+<li><p>掌握了<strong>渐进式重构</strong>的方法（通过和 AI 的对话学习）</p>
+</li>
+</ul>
+<p>如果是我自己从零写，可能还在纠结<code>fs.remove()</code>和 <code>fs.emptyDir()</code> 的区别。</p>
+<p>但现在，我可以自信地说：<strong>我理解这个系统的每一部分，并且有能力修改和优化它。</strong></p>
+<p>这就够了。</p>
+<h3>三、Markdown 处理与扩展</h3>
+<h4>3.1 Front Matter 设计</h4>
+<pre><code class="language-yaml">
+---
+
+title: &quot;文章标题&quot;
+
+date: 2025-01-28
+
+tags: [&quot;标签1&quot;, &quot;标签2&quot;]
+
+category: &quot;分类&quot;
+
+summary: &quot;文章摘要&quot;
+
+read_time: 10
+
+difficulty: &quot;进阶&quot;
+
+cover_image: &quot;/assets/cover.jpg&quot;
+
+---
+</code></pre>
+<p><strong>元数据作用</strong>：</p>
+<ul>
+<li><p><strong>SEO优化</strong>：title, description, keywords</p>
+</li>
+<li><p><strong>内容组织</strong>：tags, category</p>
+</li>
+<li><p><strong>用户体验</strong>：read_time, difficulty</p>
+</li>
+<li><p><strong>视觉呈现</strong>：cover_image</p>
+</li>
+</ul>
+<h4>3.2 Markdown 扩展功能</h4>
+<pre><code class="language-javascript">
+// 自定义 Markdown 渲染器
+
+const renderer = new marked.Renderer();
+
+  
+
+// 1. 标题锚点
+
+renderer.heading = function(text, level) {
+
+  const escapedText = text.toLowerCase().replace(/[^\w]+/g, &#39;-&#39;);
+
+  return `&lt;h${level} id=&quot;${escapedText}&quot;&gt;${text}&lt;/h${level}&gt;`;
+
+};
+
+  
+
+// 2. 代码块增强
+
+renderer.code = function(code, language) {
+
+  const highlighted = hljs.highlight(code, { language }).value;
+
+  return `
+
+    &lt;div class=&quot;code-block&quot;&gt;
+
+      &lt;div class=&quot;code-header&quot;&gt;
+
+        &lt;span class=&quot;language&quot;&gt;${language}&lt;/span&gt;
+
+        &lt;button class=&quot;copy-btn&quot;&gt;复制&lt;/button&gt;
+
+      &lt;/div&gt;
+
+      &lt;pre&gt;&lt;code class=&quot;hljs ${language}&quot;&gt;${highlighted}&lt;/code&gt;&lt;/pre&gt;
+
+    &lt;/div&gt;
+
+  `;
+
+};
+</code></pre>
+<h3>四、模板引擎与组件化</h3>
+<h4>4.1 简单的模板引擎实现</h4>
+<pre><code class="language-javascript">
+// 简易模板引擎
+
+class TemplateEngine {
+
+  constructor(template, data) {
+
+    this.template = template;
+
+    this.data = data;
+
+  }
+
+  render() {
+
+    return this.template.replace(/\{\{(\w+)\}\}/g, (match, key) =&gt; {
+
+      return this.data[key] || &#39;&#39;;
+
+    });
+
+  }
+
+}
+
+  
+
+// 使用示例
+
+const template = &#39;&lt;h1&gt;{{title}}&lt;/h1&gt;&lt;p&gt;{{content}}&lt;/p&gt;&#39;;
+
+const data = { title: &#39;Hello&#39;, content: &#39;World&#39; };
+
+const engine = new TemplateEngine(template, data);
+
+console.log(engine.render()); // &lt;h1&gt;Hello&lt;/h1&gt;&lt;p&gt;World&lt;/p&gt;
+</code></pre>
+<h4>4.2 组件化设计</h4>
+<pre><code>
+&lt;!-- 文章卡片组件 --&gt;
+
+&lt;article class=&quot;article-card&quot; data-id=&quot;{{id}}&quot;&gt;
+
+  &lt;div class=&quot;card-header&quot;&gt;
+
+    &lt;div class=&quot;category&quot;&gt;{{category}}&lt;/div&gt;
+
+    &lt;h3 class=&quot;title&quot;&gt;{{title}}&lt;/h3&gt;
+
+    &lt;p class=&quot;summary&quot;&gt;{{summary}}&lt;/p&gt;
+
+  &lt;/div&gt;
+
+  &lt;div class=&quot;card-footer&quot;&gt;
+
+    &lt;div class=&quot;meta&quot;&gt;
+
+      &lt;time&gt;{{date}}&lt;/time&gt;
+
+      &lt;span class=&quot;read-time&quot;&gt;{{read_time}} min&lt;/span&gt;
+
+    &lt;/div&gt;
+
+    &lt;div class=&quot;tags&quot;&gt;
+
+      {{#each tags}}
+
+      &lt;span class=&quot;tag&quot;&gt;{{this}}&lt;/span&gt;
+
+      {{/each}}
+
+    &lt;/div&gt;
+
+  &lt;/div&gt;
+
+&lt;/article&gt;
+</code></pre>
+<h3>五、性能优化策略</h3>
+<h4>5.1 构建时优化</h4>
+<pre><code class="language-javascript">
+// 图片优化示例
+
+async function optimizeImages() {
+
+  const images = await glob(&#39;src/assets/images/**/*.{jpg,png,webp}&#39;);
+
+  for (const image of images) {
+
+    // 1. 压缩图片
+
+    await sharp(image)
+
+      .resize(1200) // 限制最大宽度
+
+      .webp({ quality: 80 }) // 转换为 WebP
+
+      .toFile(image.replace(/\.(jpg|png)$/, &#39;.webp&#39;));
+
+    // 2. 生成不同尺寸
+
+    await generateResponsiveImages(image);
+
+  }
+
+}
+</code></pre>
+<h4>5.2 运行时优化</h4>
+<pre><code class="language-css">
+/* 关键 CSS 内联 */
+
+&lt;style&gt;
+
+  /* 首屏关键样式 */
+
+  .header, .hero, .first-article {
+
+    /* 精简的初始样式 */
+
+  }
+
+&lt;/style&gt;
+
+  
+
+&lt;!-- 非关键 CSS 异步加载 --&gt;
+
+&lt;link
+
+  rel=&quot;preload&quot;
+
+  href=&quot;/assets/css/non-critical.css&quot;
+
+  as=&quot;style&quot;
+
+  onload=&quot;this.onload=null;this.rel=&#39;stylesheet&#39;&quot;
+
+&gt;
+
+&lt;noscript&gt;
+
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;/assets/css/non-critical.css&quot;&gt;
+
+&lt;/noscript&gt;
+</code></pre>
+<h3>六、开发工作流优化</h3>
+<h4>6.1 自动化脚本配置</h4>
+<pre><code class="language-json">
+{
+
+  &quot;scripts&quot;: {
+
+    &quot;dev&quot;: &quot;concurrently \&quot;npm run build:watch\&quot; \&quot;npm run serve\&quot;&quot;,
+
+    &quot;build&quot;: &quot;NODE_ENV=production node scripts/builder.js&quot;,
+
+    &quot;build:watch&quot;: &quot;nodemon --watch src --ext md,html,json --exec \&quot;npm run build\&quot;&quot;,
+
+    &quot;serve&quot;: &quot;live-server public --port=3000 --watch=public&quot;,
+
+    &quot;deploy&quot;: &quot;npm run build &amp;&amp; gh-pages -d public&quot;,
+
+    &quot;format&quot;: &quot;prettier --write \&quot;src/**/*.{js,md,css,html}\&quot;&quot;,
+
+    &quot;lint&quot;: &quot;eslint src/scripts/**/*.js&quot;
+
+  }
+
+}
+</code></pre>
+<h4>6.2 Git Hooks 集成</h4>
+<pre><code class="language-json">
+{
+
+  &quot;husky&quot;: {
+
+    &quot;hooks&quot;: {
+
+      &quot;pre-commit&quot;: &quot;npm run lint &amp;&amp; npm run format&quot;,
+
+      &quot;pre-push&quot;: &quot;npm run build&quot;
+
+    }
+
+  }
+
+}
+</code></pre>
+<h3>七、部署与持续集成</h3>
+<h4>7.1 GitHub Actions 自动化部署</h4>
+<pre><code>
+## .github/workflows/deploy.yml
+
+name: Deploy to GitHub Pages
+
+  
+
+on:
+
+  push:
+
+    branches: [ main ]
+
+  pull_request:
+
+    branches: [ main ]
+
+  
+
+jobs:
+
+  build-and-deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+
+        uses: actions/setup-node@v3
+
+        with:
+
+          node-version: &#39;18&#39;
+
+          cache: &#39;npm&#39;
+
+      - name: Install dependencies
+
+        run: npm ci
+
+      - name: Build
+
+        run: npm run build
+
+      - name: Deploy
+
+        uses: peaceiris/actions-gh-pages@v3
+
+        with:
+
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+          publish_dir: ./public
+</code></pre>
+<h3>八、遇到的挑战与解决方案</h3>
+<h4>8.1 跨平台路径问题</h4>
+<p><strong>问题</strong>：Windows 和 Unix 系统的路径分隔符不同</p>
+<pre><code class="language-javascript">
+// ❌ 错误写法
+
+const path = &#39;src/data/articles&#39;;
+
+  
+
+// ✅ 正确写法
+
+const path = path.join(&#39;src&#39;, &#39;data&#39;, &#39;articles&#39;);
+</code></pre>
+<h4>8.2 相对路径处理</h4>
+<p><strong>问题</strong>：文章中的图片引用路径需要转换</p>
+<pre><code class="language-javascript">
+function processImagePaths(content, slug) {
+
+  // 将相对路径转换为绝对路径
+
+  return content.replace(
+
+    /!\[([^\]]*)\]\(([^)]+)\)/g,
+
+    (match, alt, src) =&gt; {
+
+      if (!src.startsWith(&#39;http&#39;)) {
+
+        src = `/assets/images/${slug}/${src}`;
+
+      }
+
+      return `!${src}`;
+
+    }
+
+  );
+
+}
+</code></pre>
+<h4>8.3 增量构建优化</h4>
+<p><strong>问题</strong>：每次构建都处理所有文件，效率低下</p>
+<pre><code class="language-javascript">
+// 文件哈希缓存
+
+class BuildCache {
+
+  constructor() {
+
+    this.cacheFile = &#39;.build-cache.json&#39;;
+
+  }
+
+  async getFileHash(filePath) {
+
+    const content = await fs.readFile(filePath);
+
+    return createHash(&#39;md5&#39;).update(content).digest(&#39;hex&#39;);
+
+  }
+
+  async hasChanged(filePath) {
+
+    const currentHash = await this.getFileHash(filePath);
+
+    const cache = await this.loadCache();
+
+    return cache[filePath] !== currentHash;
+
+  }
+
+}
+</code></pre>
+<h3>九、技术收获与反思</h3>
+<h4>9.1 技术层面的提升</h4>
+<p><strong>通过这个项目，我学到了什么？</strong></p>
+<ol>
+<li><strong>Node.js 文件系统操作</strong>：深入理解了异步文件处理</li>
+</ol>
+<p>   - 虽然大部分代码是 AI 写的，但我 review 了每一行</p>
+<p>   - 知道了 <code>fs.readFile()</code>和<code>fs.readFileSync()</code> 的区别</p>
+<p>   - 学会了用 <code>fs-extra</code> 增强错误处理</p>
+<ol start="2">
+<li><strong>构建工具原理</strong>：理解了 Webpack、Vite 等工具的基本思想</li>
+</ol>
+<p>   - 通过自己实现一个简单的构建系统</p>
+<p>   - 明白了&quot;打包&quot;、&quot;转换&quot;、&quot;优化&quot;的本质</p>
+<p>   - <strong>AI 帮我实现了细节，但我理解了整体</strong></p>
+<ol start="3">
+<li><strong>模块化设计</strong>：学会了如何设计可维护的代码结构</li>
+</ol>
+<p>   - 从 AI 给的第一版&quot;面条代码&quot;开始</p>
+<p>   - 我要求它重构为类的设计</p>
+<p>   - 逐步演进出现在的 pipeline 架构</p>
+<ol start="4">
+<li><strong>性能优化</strong>：掌握了前端性能优化的多种策略</li>
+</ol>
+<p>   - AI 建议的缓存机制</p>
+<p>   - 我提出的增量构建想法</p>
+<p>   - 共同实现的懒加载方案</p>
+<ol start="5">
+<li><strong>AI 协作能力</strong>：这可能是最重要的收获</li>
+</ol>
+<p>   - 学会了如何向 AI 清晰地描述问题</p>
+<p>   - 学会了如何验证 AI 给出的方案</p>
+<p>   - 学会了如何在 AI 的基础上继续优化</p>
+<p><strong>说实话</strong>：如果这个项目的代码 100% 是我自己写的，我可能学得更深。</p>
+<p><strong>但我也敢说</strong>：现在这种&quot;20% 设计 + 30% Review + 50% AI 实现&quot;的模式，让我在相同时间内学到了更多。</p>
+<p>因为我把省下来的时间用来：</p>
+<ul>
+<li><p>深入理解架构设计的权衡</p>
+</li>
+<li><p>思考如何把这个模式复用到其他项目</p>
+</li>
+<li><p>写文章分享经验（比如你现在看的这篇）</p>
+</li>
+</ul>
+<p><strong>这才是 AI 时代的正确学习方式。</strong></p>
+<h4>9.2 工程思维的形成</h4>
+<ol>
+<li><strong>迭代开发</strong>：从简单到复杂，逐步添加功能</li>
+</ol>
+<p>   - 第一版只能解析 Markdown</p>
+<p>   - 第二版加了模板变量替换</p>
+<p>   - 第三版支持条件渲染</p>
+<p>   - 第四版实现路径自动转换</p>
+<p>   <strong>AI 的作用</strong>：快速实现每个版本的基础功能</p>
+<p>   <strong>我的作用</strong>：决定迭代方向，把控代码质量</p>
+<ol start="2">
+<li><strong>错误处理</strong>：学会了防御性编程和错误边界处理</li>
+</ol>
+<p>   - AI 最初给的代码没有错误处理</p>
+<p>   - 我让它加上了 try-catch</p>
+<p>   - 后来又要求区分致命错误和警告</p>
+<p>   - 最后实现了优雅的降级方案</p>
+<ol start="3">
+<li><strong>文档意识</strong>：代码注释、README、技术文档的撰写</li>
+</ol>
+<p>   - AI 生成的代码注释很简陋</p>
+<p>   - 我重新写了所有关键函数的注释</p>
+<p>   - 补充了使用示例和注意事项</p>
+<p>   - <strong>这个过程让我更理解代码本身</strong></p>
+<ol start="4">
+<li><strong>版本控制</strong>：合理的 Git 提交策略和分支管理</li>
+</ol>
+<p>   - AI 不懂 Git 最佳实践</p>
+<p>   - 我自己设计了提交规范</p>
+<p>   - 建立了 feature branch 工作流</p>
+<p>   - <strong>这是 AI 无法替代的经验</strong></p>
+<h4>9.3 可改进的方向</h4>
+<pre><code class="language-mermaid">
+graph LR
+
+    A[当前版本] --&gt; B[插件系统]
+
+    A --&gt; C[主题系统]
+
+    A --&gt; D[TypeScript 迁移]
+
+    A --&gt; E[更好的 AI 协作流程]
+
+    B --&gt; E1[代码高亮插件]
+
+    B --&gt; F[评论系统插件]
+
+    C --&gt; G[主题市场]
+
+    C --&gt; H[在线编辑器]
+
+    E --&gt; I[提示词库]
+
+    E --&gt; J[自动化 Review]
+</code></pre>
+<p>看到最后一个分支了吗？&quot;<strong>更好的 AI 协作流程</strong>&quot;——这是我独有的思考。</p>
+<p>大部分人只想着怎么用 AI 写代码，而我在想：</p>
+<ul>
+<li><p>如何把和 AI 的对话记录下来形成知识库</p>
+</li>
+<li><p>如何让 AI 更好地理解我的项目上下文</p>
+</li>
+<li><p>如何建立一套&quot;AI 辅助代码审查&quot;的流程</p>
+</li>
+<li><p>如何把这篇文章的经验分享给更多人</p>
+</li>
+</ul>
+<p><strong>这就是为什么我说&quot;善用 AI 比从零手写更有价值&quot;</strong>。</p>
+<p>因为我不仅在写代码，还在<strong>创造方法论</strong>。</p>
+<h3>十、给后来者的建议</h3>
+<h4>10.1 学习路径建议</h4>
+<p><strong>阶段一：基础功能（1-2 周）</strong></p>
+<ul>
+<li><p>Markdown 解析</p>
+</li>
+<li><p>简单模板渲染</p>
+</li>
+<li><p>基础样式设计</p>
+</li>
+</ul>
+<p><strong>AI 协作建议</strong>：</p>
+<ul>
+<li><p>✅ 让 AI 帮你搭建项目骨架</p>
+</li>
+<li><p>✅ 让 AI 解释每个依赖的作用</p>
+</li>
+<li><p>❌ 不要让 AI 直接给你完整方案（先自己思考）</p>
+</li>
+</ul>
+<p><strong>阶段二：增强功能（1-2 周）</strong></p>
+<ul>
+<li><p>代码高亮</p>
+</li>
+<li><p>图片优化</p>
+</li>
+<li><p>RSS 生成</p>
+</li>
+</ul>
+<p><strong>AI 协作建议</strong>：</p>
+<ul>
+<li><p>✅ 提供多个方案让 AI 对比</p>
+</li>
+<li><p>✅ 要求 AI 解释每个方案的权衡</p>
+</li>
+<li><p>❌ 不要盲目采纳第一个建议</p>
+</li>
+</ul>
+<p><strong>阶段三：工程优化（2-3 周）</strong></p>
+<ul>
+<li><p>构建缓存</p>
+</li>
+<li><p>增量更新</p>
+</li>
+<li><p>错误监控</p>
+</li>
+</ul>
+<p><strong>AI 协作建议</strong>：</p>
+<ul>
+<li><p>✅ 提出优化目标，让 AI 设计方案</p>
+</li>
+<li><p>✅ 和 AI 一起分析性能瓶颈</p>
+</li>
+<li><p>❌ 不要让 AI 代替你思考&quot;为什么要优化&quot;</p>
+</li>
+</ul>
+<p><strong>关键原则</strong>：</p>
+<blockquote>
+<p><strong>AI 是加速器，不是替代品。</strong></p>
+</blockquote>
+<blockquote>
+</blockquote>
+<blockquote>
+<p>它可以让你的学习速度提升 3-5 倍，但前提是你已经有了一定的基础。</p>
+</blockquote>
+<h4>10.2 技术选型建议</h4>
+<pre><code class="language-javascript">
+// 根据需求选择技术栈（2026 年版）
+
+const techStack = {
+
+  beginner: {
+
+    // 快速上手，专注内容
+
+    builder: &#39;Hexo&#39;,
+
+    hosting: &#39;Vercel&#39;,
+
+    theme: &#39;Next&#39;,
+
+    ai_usage: &#39;配置问题咨询&#39;
+
+  },
+
+  intermediate: {
+
+    // 平衡学习与效率
+
+    builder: &#39;自研 + marked&#39;,
+
+    hosting: &#39;GitHub Pages&#39;,
+
+    features: [&#39;标签&#39;, &#39;归档&#39;, &#39;RSS&#39;],
+
+    ai_usage: &#39;代码实现 + 方案对比&#39;
+
+  },
+
+  advanced: {
+
+    // 完全控制，深度定制
+
+    builder: &#39;完整构建系统&#39;,
+
+    hosting: &#39;多云协同&#39;,
+
+    features: [&#39;插件系统&#39;, &#39;评论&#39;, &#39;搜索&#39;],
+
+    ai_usage: &#39;架构评审 + 性能优化&#39;
+
+  }
+
+};
+</code></pre>
+<p>看到 <code>ai_usage</code> 字段了吗？<strong>不同阶段，AI 的用法不同</strong>。</p>
+<ul>
+<li><p><strong>初学者</strong>：用 AI 查文档、问配置</p>
+</li>
+<li><p><strong>进阶者</strong>：用 AI 写代码、比方案</p>
+</li>
+<li><p><strong>高手</strong>：用 AI 做评审、提建议</p>
+</li>
+</ul>
+<p><strong>你现在在哪个阶段？就用对应的 AI 用法。</strong></p>
+<h4>10.3 避免的坑</h4>
+<p><strong>❌ 我踩过的坑</strong>：</p>
+<ol>
+<li><strong>过度依赖 AI</strong>：一开始连<code>console.log()</code>都让 AI 写，结果离开了 AI 就不会调试</li>
+</ol>
+<p>   - <strong>改进</strong>：现在只在复杂场景用 AI，简单问题自己解决</p>
+<ol start="2">
+<li><strong>不验证就使用</strong>：AI 给的第一个方案直接用，结果有 bug</li>
+</ol>
+<p>   - <strong>改进</strong>：现在会要求 AI 给出测试用例，并且自己跑一遍</p>
+<ol start="3">
+<li><strong>不记录对话</strong>：同样的问题问了三次 AI，每次都重新解释</li>
+</ol>
+<p>   - <strong>改进</strong>：建立了知识库，效率提升 50%</p>
+<ol start="4">
+<li><strong>不好意思承认用了 AI</strong>：觉得&quot;这不算是我的作品&quot;</li>
+</ol>
+<p>   - <strong>改进</strong>：坦然面对，重点是我理解、我掌控、我创造</p>
+<p><strong>✅ 给你的建议</strong>：</p>
+<ol>
+<li><p><strong>从 MVP（最小可行产品）开始</strong>：先让系统跑起来，再慢慢优化</p>
+</li>
+<li><p><strong>每个功能都要有文档记录</strong>：包括为什么这么设计、有哪些备选方案</p>
+</li>
+<li><p><strong>参考优秀开源项目的设计</strong>：但要用自己的方式实现</p>
+</li>
+<li><p><strong>至少要有基础的单元测试</strong>：AI 生成的代码也要测试</p>
+</li>
+<li><p><strong>定期 review AI 生成的代码</strong>：确保没有&quot;黑盒&quot;</p>
+</li>
+</ol>
+<h4>10.4 关于 AI 协作的真心话</h4>
+<p><strong>我知道你在想什么</strong>：</p>
+<blockquote>
+<p>&quot;用了 AI，这还算是我的作品吗？&quot;</p>
+</blockquote>
+<p><strong>我的回答</strong>：</p>
+<ul>
+<li><p>如果架构是你设计的，<strong>算</strong></p>
+</li>
+<li><p>如果每行代码你都理解，<strong>算</strong></p>
+</li>
+<li><p>如果有问题你能修复，<strong>算</strong></p>
+</li>
+<li><p>如果有人问你能讲清楚，<strong>算</strong></p>
+</li>
+</ul>
+<p><strong>反之</strong>：</p>
+<ul>
+<li><p>如果只是复制粘贴，<strong>不算</strong></p>
+</li>
+<li><p>如果离开 AI 就不会改，<strong>不算</strong></p>
+</li>
+<li><p>如果被问到实现细节支支吾吾，<strong>不算</strong></p>
+</li>
+</ul>
+<p><strong>区别在哪里？</strong></p>
+<p>在于你是<strong>主导者</strong>还是<strong>搬运工</strong>。</p>
+<p>我写这篇文章，就是想证明：</p>
+<p><strong>即使大部分代码是 AI 写的，只要方法得当，你依然可以学到很多，而且比从零手写学得更多、更快。</strong></p>
+<p>关键在于：</p>
+<ul>
+<li><p>你是否真正理解了代码</p>
+</li>
+<li><p>你是否具备修改和优化的能力</p>
+</li>
+<li><p>你是否从中总结出了方法论</p>
+</li>
+<li><p>你是否能把这些经验复用到其他项目</p>
+</li>
+</ul>
+<p>如果答案是肯定的，那么：</p>
+<p><strong>用了 AI 又怎样？你依然是这个项目的创造者。</strong></p>
+<hr>
+<h3>项目资源</h3>
+<ul>
+<li><p><strong>源码仓库</strong>：<a href="https://github.com/MingShuo-S/MingShuo-S.github.io">https://github.com/MingShuo-S/MingShuo-S.github.io</a></p>
+</li>
+<li><p><strong>在线演示</strong>：<a href="https://mingshuo-s.github.io">https://mingshuo-s.github.io</a></p>
+</li>
+<li><p><strong>技术文档</strong>：<a href="https://github.com/MingShuo-S/MingShuo-S.github.io/wiki">https://github.com/MingShuo-S/MingShuo-S.github.io/wiki</a></p>
+</li>
+</ul>
+<h3>扩展阅读</h3>
+<ol>
+<li><p><a href="https://www.netlify.com/blog/2020/04/14/what-is-a-static-site-generator-and-3-ways-to-find-the-best-one/">https://www.netlify.com/blog/2020/04/14/what-is-a-static-site-generator-and-3-ways-to-find-the-best-one/</a></p>
+</li>
+<li><p><a href="https://frontendmasters.com/books/front-end-handbook/2019/4-tools/">https://frontendmasters.com/books/front-end-handbook/2019/4-tools/</a></p>
+</li>
+<li><p><a href="http://aosabook.org/en/">http://aosabook.org/en/</a></p>
+</li>
+</ol>
+<hr>
+<p><strong>版权声明</strong>：本文为个人技术实践记录，遵循 CC BY-NC-SA 4.0 协议。欢迎分享，但需保留原文链接。</p>
+<p><strong>最后更新</strong>：2026年3月12日  </p>
+<p><strong>作者</strong>：阳光</p>
+<p><strong>分类</strong>：技术实践 / 前端工程 / 个人项目</p>
+
+                </article>
+
+                <!-- 文章尾部 -->
+                <footer class="article-footer">
+                    <!-- 标签 -->
+                    <div class="article-tags">
+                        <h3>🏷️ 标签</h3>
+                        <div class="tags-list">
+                            <a href="../../tags/#tag-前端工程" class="tag">前端工程</a>
+<a href="../../tags/#tag-静态站点" class="tag">静态站点</a>
+<a href="../../tags/#tag-JavaScript" class="tag">JavaScript</a>
+<a href="../../tags/#tag-Node.js" class="tag">Node.js</a>
+<a href="../../tags/#tag-博客搭建" class="tag">博客搭建</a>
+<a href="../../tags/#tag-AI 辅助编程" class="tag">AI 辅助编程</a>
+                        </div>
+                    </div>
+                    
+                    <!-- 元信息 -->
+                    <div class="article-meta-grid">
+                        <div class="meta-card">
+                            <h4>📅 发布时间</h4>
+                            <p>2026年3月15日</p>
+                        </div>
+                        <div class="meta-card">
+                            <h4>⏱️ 阅读时长</h4>
+                            <p>8 分钟</p>
+                        </div>
+                        <div class="meta-card">
+                            <h4>📊 难度等级</h4>
+                            <p>进阶</p>
+                        </div>
+                        <div class="meta-card">
+                            <h4>🏷️ 分类</h4>
+                            <p>AI写的</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 参考文献 -->
+                    <div class="article-bibliography">
+                        <h3>📚 参考文献</h3>
+                        <ul>
+                            <li>Node.js 官方文档</li>
+<li>MDN Web Docs</li>
+<li>Static Site Generators Comparison</li>
+<li>AI 辅助编程最佳实践</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 分享按钮 -->
+                    <div class="article-share">
+                        <h3>📤 分享文章</h3>
+                        <div class="share-buttons">
+                            <button class="share-btn copy-link" data-platform="copy-link" aria-label="复制链接">
+                                <i class="fas fa-link"></i>
+                                <span>复制链接</span>
+                            </button>
+                            <button class="share-btn share-twitter" data-platform="twitter" aria-label="分享到 Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </button>
+                            <button class="share-btn share-weibo" data-platform="weibo" aria-label="分享到微博">
+                                <i class="fab fa-weibo"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 导航 -->
+                    <div class="article-navigation">
+                        <a href="../../writings" class="nav-btn">
+                            <i class="fas fa-list"></i> 返回文章列表
+                        </a>
+                        <a href="/" class="nav-btn">
+                            <i class="fas fa-home"></i> 返回首页
+                        </a>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>Sunshine's Blog</h3>
+                    <p>记录技术思考、项目经验和学习成长</p>
+                    <p class="footer-copyright">© 2024-2025 Mingshuo_S</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>探索</h4>
+                        <a href="../../writings">所有文章</a>
+                        <a href="../../projects">所有项目</a>
+                        <a href="../../about">关于我</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>联系</h4>
+                        <a href="mailto:Sunshine_Mings@outloook.com">发送邮件</a>
+                        <a href="https://github.com/MingShuo-S">GitHub</a>
+                        <a href="https://space.bilibili.com/361518274">Bilibili</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>最后更新于 <span id="lastUpdated">2026年3月15日</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/article.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>
+        // 初始化代码高亮
+        hljs.highlightAll();
+    </script>
+</body>
+</html>

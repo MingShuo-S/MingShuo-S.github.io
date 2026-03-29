@@ -5,15 +5,25 @@
     <link>https://mingshuo-s.github.io</link>
     <description>记录技术思考、项目经验和学习成长</description>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 20 Mar 2026 17:39:29 GMT</lastBuildDate>
-    <pubDate>Fri, 20 Mar 2026 17:39:29 GMT</pubDate>
+    <lastBuildDate>Sun, 29 Mar 2026 13:26:50 GMT</lastBuildDate>
+    <pubDate>Sun, 29 Mar 2026 13:26:50 GMT</pubDate>
     <ttl>60</ttl>
     <atom:link href="https://mingshuo-s.github.io/rss.xml" rel="self" type="application/rss+xml"/>
 
     <item>
+      <title>obsidian 写作关联</title>
+      <link>https://mingshuo-s.github.io/public/posts/obsidian-写作关联/</link>
+      <guid isPermaLink="true">https://mingshuo-s.github.io/public/posts/obsidian-写作关联/</guid>
+      <pubDate>Sun, 29 Mar 2026 00:00:00 GMT</pubDate>
+      <description>这是一篇测试文章，用于验证 Obsidian 自动化发布流程</description>
+      <author>Mingshuo_S</author>
+      <category>测试</category>
+      <category>自动化</category>
+    </item>
+    <item>
       <title>你好，欢迎</title>
-      <link>https://mingshuo-s.github.io/public/posts/hello-u/</link>
-      <guid isPermaLink="true">https://mingshuo-s.github.io/public/posts/hello-u/</guid>
+      <link>https://mingshuo-s.github.io/public/posts/你好，欢迎/</link>
+      <guid isPermaLink="true">https://mingshuo-s.github.io/public/posts/你好，欢迎/</guid>
       <pubDate>Wed, 18 Mar 2026 00:00:00 GMT</pubDate>
       <description>一篇对个人博客的基础介绍</description>
       <author>Mingshuo_S</author>
@@ -21,8 +31,8 @@
     </item>
     <item>
       <title>从零搭建静态博客：现代前端工程化实践与思考</title>
-      <link>https://mingshuo-s.github.io/public/posts/building-personal-blog-from-scratch/</link>
-      <guid isPermaLink="true">https://mingshuo-s.github.io/public/posts/building-personal-blog-from-scratch/</guid>
+      <link>https://mingshuo-s.github.io/public/posts/从零搭建静态博客：现代前端工程化实践与思考/</link>
+      <guid isPermaLink="true">https://mingshuo-s.github.io/public/posts/从零搭建静态博客：现代前端工程化实践与思考/</guid>
       <pubDate>Sun, 15 Mar 2026 00:00:00 GMT</pubDate>
       <description>记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，探索基础学习能力与 AI 工具如何协同促进快速成长。</description>
       <author>Mingshuo_S</author>
