@@ -1201,6 +1201,16 @@ class SafeSiteBuilder {
 
         // 替换变量
         html = this.replaceTemplateVariables(html, data);
+        
+        // 额外确保 site 相关变量被正确替换（处理可能的嵌套对象问题）
+        html = html.replace(/\{\{site\.year\}\}/g, siteConfig.site.year.toString());
+        html = html.replace(/\{\{site\.title\}\}/g, siteConfig.site.title);
+        html = html.replace(/\{\{site\.author\}\}/g, siteConfig.site.author);
+        html = html.replace(/\{\{site\.description\}\}/g, siteConfig.site.description);
+        html = html.replace(/\{\{site\.url\}\}/g, siteConfig.site.url);
+        html = html.replace(/\{\{site\.email\}\}/g, siteConfig.social?.email || '');
+        html = html.replace(/\{\{site\.social\.github\}\}/g, siteConfig.social?.github || '');
+        html = html.replace(/\{\{site\.social\.bilibili\}\}/g, siteConfig.social?.bilibili || '');
 
         // 路径转换（about 页面在根目录下，深度为 2 层）
         // 将 /assets/ 转换为 ../assets/

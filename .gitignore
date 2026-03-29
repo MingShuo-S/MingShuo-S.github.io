@@ -13,6 +13,10 @@ wait/
 # 构建临时目录
 .temp_public/
 
+# 构建输出目录（不发布到 GitHub）
+public/
+index.html
+
 # 依赖目录
 node_modules/
 
