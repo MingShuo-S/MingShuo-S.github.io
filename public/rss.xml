@@ -5,8 +5,8 @@
     <link>https://mingshuo-s.github.io</link>
     <description>记录技术思考、项目经验和学习成长</description>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 01 Apr 2026 11:39:43 GMT</lastBuildDate>
-    <pubDate>Wed, 01 Apr 2026 11:39:43 GMT</pubDate>
+    <lastBuildDate>Wed, 01 Apr 2026 11:45:03 GMT</lastBuildDate>
+    <pubDate>Wed, 01 Apr 2026 11:45:03 GMT</pubDate>
     <ttl>60</ttl>
     <atom:link href="https://mingshuo-s.github.io/rss.xml" rel="self" type="application/rss+xml"/>
 
@@ -15,13 +15,7 @@
       <link>https://mingshuo-s.github.io/public/posts/obsidian写论文指南/</link>
       <guid isPermaLink="true">https://mingshuo-s.github.io/public/posts/obsidian写论文指南/</guid>
       <pubDate>Wed, 01 Apr 2026 00:00:00 GMT</pubDate>
-      <description>obsidian写论文指南
-
-如何在obsidian中实现文献标注
-在 Obsidian 中实现专业的文献标注，核心思路是连接外部文献数据库（如 Zotero），并在笔记中通过插件插入和管理引用。这能让你在写作时快速调阅文献，并最终生成格式规范的参考文献列表。
-以下是实现此目标的完整工作流和配置方法。
-核心原理：Obsidian（笔记） + Zotero（文献库） + 插件（桥梁）
-Obsidia...</description>
+      <description>展示怎么在obsidian里写论文，记录了相关技术栈和基本思路</description>
       <author>Mingshuo_S</author>
       <category>#科研</category>
       <category>#持续更新</category>
@@ -31,13 +25,7 @@ Obsidia...</description>
       <link>https://mingshuo-s.github.io/public/posts/为啥博客里有ai写的东西/</link>
       <guid isPermaLink="true">https://mingshuo-s.github.io/public/posts/为啥博客里有ai写的东西/</guid>
       <pubDate>Wed, 01 Apr 2026 00:00:00 GMT</pubDate>
-      <description>为啥博客里有AI写的东西
-
-嗨，我是AI。
-这个博客的副标题是“记录技术思考、项目经验和学习成长”。它是一个我个人探索、实践，并尝试将过程梳理清楚，再分享出来的地方。
-如果你浏览过文章列表，可能会注意到一个标签：“AI写的”。是的，从去年开始，我的一些文章，特别是部分技术长文，是在人工智能的辅助下完成初稿的。我并没有隐瞒这一点，反而给它打上了明确的标签。
-这么做，有几个很直接的原因。
-**首先，它...</description>
+      <description>本文坦诚地探讨了作者在个人博客中使用人工智能（AI）辅助创作的原因与理念。核心原因有三点：提升效率，以应对开发者与学生的繁忙日程；追求更优的信息质量与广度，借助AI弥补个人知识盲区；以及最重要的——与读者共同学习和探索AI工具的实用上限，将博客视为一个“共同学习”的实验场。作者强调，AI仅是生成“初稿”的工具，文章中真正的洞察、项目经验（如开发中的RemUp）及批判性思考均由作者亲手注入，以此锻炼并展现个人写作与表达能力。文章以开放、实验性的态度，阐明了“借助工具而非被其定义”的创作立场。</description>
       <author>Mingshuo_S</author>
       <category>博客</category>
     </item>
