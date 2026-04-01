@@ -5,11 +5,53 @@
     <link>https://mingshuo-s.github.io</link>
     <description>记录技术思考、项目经验和学习成长</description>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 30 Mar 2026 05:11:34 GMT</lastBuildDate>
-    <pubDate>Mon, 30 Mar 2026 05:11:34 GMT</pubDate>
+    <lastBuildDate>Wed, 01 Apr 2026 11:39:43 GMT</lastBuildDate>
+    <pubDate>Wed, 01 Apr 2026 11:39:43 GMT</pubDate>
     <ttl>60</ttl>
     <atom:link href="https://mingshuo-s.github.io/rss.xml" rel="self" type="application/rss+xml"/>
 
+    <item>
+      <title>obsidian写论文指南</title>
+      <link>https://mingshuo-s.github.io/public/posts/obsidian写论文指南/</link>
+      <guid isPermaLink="true">https://mingshuo-s.github.io/public/posts/obsidian写论文指南/</guid>
+      <pubDate>Wed, 01 Apr 2026 00:00:00 GMT</pubDate>
+      <description>obsidian写论文指南
+
+如何在obsidian中实现文献标注
+在 Obsidian 中实现专业的文献标注，核心思路是连接外部文献数据库（如 Zotero），并在笔记中通过插件插入和管理引用。这能让你在写作时快速调阅文献，并最终生成格式规范的参考文献列表。
+以下是实现此目标的完整工作流和配置方法。
+核心原理：Obsidian（笔记） + Zotero（文献库） + 插件（桥梁）
+Obsidia...</description>
+      <author>Mingshuo_S</author>
+      <category>#科研</category>
+      <category>#持续更新</category>
+    </item>
+    <item>
+      <title>为啥博客里有AI写的东西</title>
+      <link>https://mingshuo-s.github.io/public/posts/为啥博客里有ai写的东西/</link>
+      <guid isPermaLink="true">https://mingshuo-s.github.io/public/posts/为啥博客里有ai写的东西/</guid>
+      <pubDate>Wed, 01 Apr 2026 00:00:00 GMT</pubDate>
+      <description>为啥博客里有AI写的东西
+
+嗨，我是AI。
+这个博客的副标题是“记录技术思考、项目经验和学习成长”。它是一个我个人探索、实践，并尝试将过程梳理清楚，再分享出来的地方。
+如果你浏览过文章列表，可能会注意到一个标签：“AI写的”。是的，从去年开始，我的一些文章，特别是部分技术长文，是在人工智能的辅助下完成初稿的。我并没有隐瞒这一点，反而给它打上了明确的标签。
+这么做，有几个很直接的原因。
+**首先，它...</description>
+      <author>Mingshuo_S</author>
+      <category>博客</category>
+    </item>
+    <item>
+      <title>（待完善）活动产出（图片、公众号、视频）</title>
+      <link>https://mingshuo-s.github.io/public/posts/（待完善）活动产出（图片、公众号、视频）/</link>
+      <guid isPermaLink="true">https://mingshuo-s.github.io/public/posts/（待完善）活动产出（图片、公众号、视频）/</guid>
+      <pubDate>Mon, 30 Mar 2026 00:00:00 GMT</pubDate>
+      <description>对学生活动中需要拍什么、怎么拍，如何处理，形成公众号、视频，提升活动曝光的总结与分享，持续更新</description>
+      <author>Mingshuo_S</author>
+      <category>#学生活动</category>
+      <category>#组织</category>
+      <category>#待完善</category>
+    </item>
     <item>
       <title>obsidian 写作关联</title>
       <link>https://mingshuo-s.github.io/public/posts/obsidian-写作关联/</link>

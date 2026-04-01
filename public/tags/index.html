@@ -80,15 +80,15 @@
                 <!-- 统计数据 -->
                 <div class="projects-stats" style="margin-top: 2rem;">
                     <div class="stat-card">
-                        <div class="stat-number" id="totalTags">14</div>
+                        <div class="stat-number" id="totalTags">19</div>
                         <div class="stat-label">标签总数</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="totalArticlesWithTag">5</div>
+                        <div class="stat-number" id="totalArticlesWithTag">8</div>
                         <div class="stat-label">有标签内容数</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="avgTagsPerArticle">3.2</div>
+                        <div class="stat-number" id="avgTagsPerArticle">2.8</div>
                         <div class="stat-label">篇均标签数</div>
                     </div>
                 </div>
@@ -99,6 +99,11 @@
                 <button class="filter-btn active" data-filter="all">全部</button>
                 <button class="filter-btn" data-filter="博客">博客</button>
 <button class="filter-btn" data-filter="静态站点">静态站点</button>
+<button class="filter-btn" data-filter="#科研">#科研</button>
+<button class="filter-btn" data-filter="#持续更新">#持续更新</button>
+<button class="filter-btn" data-filter="#学生活动">#学生活动</button>
+<button class="filter-btn" data-filter="#组织">#组织</button>
+<button class="filter-btn" data-filter="#待完善">#待完善</button>
 <button class="filter-btn" data-filter="测试">测试</button>
 <button class="filter-btn" data-filter="自动化">自动化</button>
 <button class="filter-btn" data-filter="前端工程">前端工程</button>
@@ -115,6 +120,54 @@
             
             <!-- 内容列表 -->
             <div class="articles-grid" id="articlesGrid">
+                
+                    <article class="article-card" data-tags="#科研,#持续更新" data-type="article">
+                        <div class="card-header">
+                            <div class="card-category">AI写的</div>
+                            <h3 class="card-title">
+                                <a href="../posts/obsidian写论文指南/">obsidian写论文指南</a>
+                            </h3>
+                            <p class="card-excerpt">暂无摘要</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-date">2026年4月1日</div>
+                            <div class="card-tags">
+                                <a href="#tag-#科研" class="tag-link">#科研</a><a href="#tag-#持续更新" class="tag-link">#持续更新</a>
+                            </div>
+                        </div>
+                    </article>
+                
+                    <article class="article-card" data-tags="博客" data-type="article">
+                        <div class="card-header">
+                            <div class="card-category">AI写的</div>
+                            <h3 class="card-title">
+                                <a href="../posts/为啥博客里有ai写的东西/">为啥博客里有AI写的东西</a>
+                            </h3>
+                            <p class="card-excerpt">暂无摘要</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-date">2026年4月1日</div>
+                            <div class="card-tags">
+                                <a href="#tag-博客" class="tag-link">博客</a>
+                            </div>
+                        </div>
+                    </article>
+                
+                    <article class="article-card" data-tags="#学生活动,#组织,#待完善" data-type="article">
+                        <div class="card-header">
+                            <div class="card-category">学生活动</div>
+                            <h3 class="card-title">
+                                <a href="../posts/（待完善）活动产出（图片、公众号、视频）/">（待完善）活动产出（图片、公众号、视频）</a>
+                            </h3>
+                            <p class="card-excerpt">对学生活动中需要拍什么、怎么拍，如何处理，形成公众号、视频，提升活动曝光的总结与分享，持续更新</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-date">2026年3月30日</div>
+                            <div class="card-tags">
+                                <a href="#tag-#学生活动" class="tag-link">#学生活动</a><a href="#tag-#组织" class="tag-link">#组织</a><a href="#tag-#待完善" class="tag-link">#待完善</a>
+                            </div>
+                        </div>
+                    </article>
                 
                     <article class="article-card" data-tags="测试,自动化" data-type="article">
                         <div class="card-header">
