@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>为啥博客里有AI写的东西 | Sunshine's Blog</title>
+    <meta name="description" content="本文坦诚地探讨了作者在个人博客中使用人工智能（AI）辅助创作的原因与理念。核心原因有三点：提升效率，以应对开发者与学生的繁忙日程；追求更优的信息质量与广度，借助AI弥补个人知识盲区；以及最重要的——与读者共同学习和探索AI工具的实用上限，将博客视为一个“共同学习”的实验场。作者强调，文章中真正的洞察、项目经验（如开发中的RemUp）及批判性思考均由作者亲手注入，以此锻炼并展现个人写作与表达能力。">
+    <meta name="author" content="Mingshuo_S">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="为啥博客里有AI写的东西">
+    <meta property="og:description" content="本文坦诚地探讨了作者在个人博客中使用人工智能（AI）辅助创作的原因与理念。核心原因有三点：提升效率，以应对开发者与学生的繁忙日程；追求更优的信息质量与广度，借助AI弥补个人知识盲区；以及最重要的——与读者共同学习和探索AI工具的实用上限，将博客视为一个“共同学习”的实验场。作者强调，文章中真正的洞察、项目经验（如开发中的RemUp）及批判性思考均由作者亲手注入，以此锻炼并展现个人写作与表达能力。">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://mingshuo-s.github.io/posts/为啥博客里有ai写的东西/">
+    <meta property="article:published_time" content="Wed Apr 01 2026 08:00:00 GMT+0800 (中国标准时间)">
+    <meta property="article:author" content="Mingshuo_S">
+    <meta property="article:section" content="AI写的">
+    
+    <!-- 样式 -->
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/article.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <!-- 图标 -->
+    <link rel="icon" href="../../assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- RSS 订阅 -->
+    <link rel="alternate" type="application/rss+xml" title="Sunshine's Blog" href="https://mingshuo-s.github.io/rss.xml">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="../../../index.html" class="nav-brand">
+                <span class="brand-text">Sunshine's Blog</span>
+            </a>
+            
+            <div class="nav-menu">
+                <a href="../../../index.html" class="nav-link">
+                    <i class="fas fa-home"></i> 首页
+                </a>
+                <a href="../../writings" class="nav-link">
+                    <i class="fas fa-pen"></i> 文章
+                </a>
+                <a href="../../tags" class="nav-link">
+                    <i class="fas fa-tags"></i> 标签
+                </a>
+                <a href="../../projects" class="nav-link">
+                    <i class="fas fa-rocket"></i> 项目
+                </a>
+                <a href="../../about" class="nav-link">
+                    <i class="fas fa-user"></i> 关于
+                </a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 文章容器 -->
+    <main class="article-container">
+        <div class="container article-layout">
+            <!-- 文章目录 -->
+            <aside class="article-toc" id="toc">
+                <div class="toc-header">
+                    <h3>📑 目录</h3>
+                    <button class="toc-toggle" id="tocToggle" aria-label="切换目录" aria-expanded="true">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                </div>
+                <nav class="toc-content" id="tocContent">
+                    <!-- 目录将由 JavaScript 动态生成 -->
+                </nav>
+            </aside>
+
+            <!-- 文章内容区域 -->
+            <div class="article-main">
+                <!-- 文章头部 -->
+                <header class="article-header">
+                    <div class="article-meta">
+                        <span class="category">AI写的</span>
+                        <span class="divider">·</span>
+                        <time datetime="Wed Apr 01 2026 08:00:00 GMT+0800 (中国标准时间)" class="date">2026年4月1日</time>
+                        <span class="divider">·</span>
+                        <span class="read-time">1 分钟阅读</span>
+                        <span class="difficulty 入门">入门</span>
+                    </div>
+                    
+                    <h1 class="article-title">为啥博客里有AI写的东西</h1>
+                    
+                    <p class="article-summary">本文坦诚地探讨了作者在个人博客中使用人工智能（AI）辅助创作的原因与理念。核心原因有三点：提升效率，以应对开发者与学生的繁忙日程；追求更优的信息质量与广度，借助AI弥补个人知识盲区；以及最重要的——与读者共同学习和探索AI工具的实用上限，将博客视为一个“共同学习”的实验场。作者强调，文章中真正的洞察、项目经验（如开发中的RemUp）及批判性思考均由作者亲手注入，以此锻炼并展现个人写作与表达能力。</p>
+                    
+                    <!-- 作者信息 -->
+                    <div class="author-card">
+                        <img src="../../assets/images/avatar.jpg" alt="Mingshuo_S" class="author-avatar" width="48" height="48">
+                        <div class="author-info">
+                            <div class="author-name">Mingshuo_S</div>
+                            <div class="author-bio">编程菜鸟这一块</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 封面图片（仅在存在时显示） -->
+                    
+                </header>
+
+                <!-- 文章内容 -->
+                <article class="article-content" id="articleContent">
+                    <h1 class="article-main-title">为啥博客里有AI写的东西</h1>
+
+<blockquote>
+<p>探索工具，而非被工具定义。这里是记录、思考与共同学习的实验场。</p>
+</blockquote>
+<p>你好，我是明朔。这个博客的副标题是“<strong>记录技术思考、项目经验和学习成长</strong>”。它是一个我个人探索、实践，并尝试将过程梳理清楚，再分享出来的地方。</p>
+<p>如果你浏览过<a href="%5Bhttps://mingshuo.org/%5D(https://mingshuo.org/public/writings/)">文章列表</a>，可能会注意到一个标签：<strong>“AI写的”</strong>。是的，我的一些文章，特别是部分技术长文，是在人工智能的辅助下完成初稿的。我并没有隐瞒这一点，反而给它打上了明确的标签。</p>
+<p>这么做，有几个很直接的原因。</p>
+<h4>一、效率是第一生产力</h4>
+<p>作为一个<strong>软件工程专业</strong>的学生，同时也是几个独立项目（比如正在开发的效率工具 <strong><a href="https://mingshuo.org/projects">RemUp</a></strong>）的维护者，我的时间被切得很碎。当需要写一篇系统性的技术文章时，AI能帮我快速搭好骨架，理清脉络。这让我能把最宝贵的时间，投入到更深度的思考与项目本身，而不是纠结于表达的细节。这很符合我对“<strong>测试自动化</strong>”这类效率追求的实践。</p>
+<h4>二、追求更优的信息质量与广度</h4>
+<p>坦诚地说，在技术概念的严谨性、知识面的广度以及行文的逻辑性上，当前的AI工具有时能提供超越我个人瞬时认知边界的信息。我希望呈现给读者的，是经过交叉验证的、更高质量的内容，而不仅仅是我个人有限知识的复述。</p>
+<h4>三、最重要的是：与您一同学习</h4>
+<p>我将这里视为一个“<strong>共同学习</strong>”的实验场。我分享的不仅是技术，更是“<strong>如何学习</strong>”本身。通过明确标注“AI参与”，我希望能和各位读者一起，客观地观察、讨论甚至“测试”这些工具：</p>
+<ul>
+<li><p>它的优势在哪里？</p>
+</li>
+<li><p>它的局限又在何处？</p>
+</li>
+<li><p>我们如何辨别和修正？</p>
+</li>
+</ul>
+<p>这本质上是在探索<strong>AI的实用上限</strong>，也是我博客“学习成长”板块的核心实践。正如我的自我介绍所写，我是个“<strong>AI重度使用患者</strong>”，但我更想成为一个清醒的使用者。</p>
+<hr>
+<h4>那么，我的价值在哪里？</h4>
+<p>AI生成的，永远只是“<strong>初稿</strong>”或“<strong>知识的毛坯</strong>”。而文章中真正的灵魂——那些在项目中真实踩过的坑、独特的解决方案、以及对AI产出的<strong>批判性审视和修订</strong>——都是由我，<strong>亲手注入</strong>的。</p>
+<p>我会将自己的<strong>独家经验、延伸思考和个人观点</strong>，以“编者注”或穿插评论的形式清晰地呈现出来。<strong>这个过程，恰恰是我锻炼和证明自己写作能力、思考深度与表达能力的核心环节。</strong></p>
+<p>**我使用工具，但我不被工具定义。**​ 最终留在这里的，必须是经过我个人思维深度加工、带有“明朔”印记的东西。</p>
+<h4>最后，一点轻松的话</h4>
+<p>在AI辅助写作越来越普及的今天，坦率地把它标注出来，本身就是一种态度。再说了，现在百度贴吧里不还有个“<strong>抓虾吧</strong>”嘛，咱这也算蹭一下时代的热度了。</p>
+<p>总之，这里会继续记录我的技术思考、项目经验和学习成长。其中，有些路是我自己一步步走的，有些则是借助了新的“地图”。但最终，旅程的视角和讲述，都属于我。</p>
+<p>希望你能在这里，找到一些有用的东西，或者至少，觉得这场探索有点意思。</p>
+<p>我们下一篇博客见。</p>
+<hr>
+<pre><code>这是批注
+我觉得很好笑啊，你为什么不笑。等等，你笑了吗
+</code></pre>
+
+                </article>
+
+                <!-- 文章尾部 -->
+                <footer class="article-footer">
+                    <!-- 标签 -->
+                    <div class="article-tags">
+                        <h3>🏷️ 标签</h3>
+                        <div class="tags-list">
+                            <a href="../../tags/#tag-博客" class="tag">博客</a>
+                        </div>
+                    </div>
+                    
+                    <!-- 元信息 -->
+                    <div class="article-meta-grid">
+                        <div class="meta-card">
+                            <h4>📅 发布时间</h4>
+                            <p>2026年4月1日</p>
+                        </div>
+                        <div class="meta-card">
+                            <h4>⏱️ 阅读时长</h4>
+                            <p>1 分钟</p>
+                        </div>
+                        <div class="meta-card">
+                            <h4>📊 难度等级</h4>
+                            <p>入门</p>
+                        </div>
+                        <div class="meta-card">
+                            <h4>🏷️ 分类</h4>
+                            <p>AI写的</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 参考文献 -->
+                    
+                    <!-- 分享按钮 -->
+                    <div class="article-share">
+                        <h3>📤 分享文章</h3>
+                        <div class="share-buttons">
+                            <button class="share-btn copy-link" data-platform="copy-link" aria-label="复制链接">
+                                <i class="fas fa-link"></i>
+                                <span>复制链接</span>
+                            </button>
+                            <button class="share-btn share-twitter" data-platform="twitter" aria-label="分享到 Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </button>
+                            <button class="share-btn share-weibo" data-platform="weibo" aria-label="分享到微博">
+                                <i class="fab fa-weibo"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 导航 -->
+                    <div class="article-navigation">
+                        <a href="../../writings" class="nav-btn">
+                            <i class="fas fa-list"></i> 返回文章列表
+                        </a>
+                        <a href="/" class="nav-btn">
+                            <i class="fas fa-home"></i> 返回首页
+                        </a>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>Sunshine's Blog</h3>
+                    <p>记录技术思考、项目经验和学习成长</p>
+                    <p class="footer-copyright">© 2030 Mingshuo_S</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>探索</h4>
+                        <a href="../../writings">所有文章</a>
+                        <a href="../../projects">所有项目</a>
+                        <a href="../../about">关于我</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h4>联系</h4>
+                        <a href="mailto:Sunshine_Mings@outloook.com">发送邮件</a>
+                        <a href="https://github.com/MingShuo-S">GitHub</a>
+                        <a href="https://space.bilibili.com/361518274">Bilibili</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>最后更新于 <span id="lastUpdated">2026年4月1日</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/article.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>
+        // 初始化代码高亮
+        hljs.highlightAll();
+    </script>
+</body>
+</html>
