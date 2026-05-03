@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -7,36 +6,53 @@
     <title>分类归档 | Sunshine's Blog</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/category-archive.css">
-    <!-- RSS 订阅 -->
     <link rel="alternate" type="application/rss+xml" title="Sunshine's Blog" href="../../rss.xml">
 </head>
 <body>
     <nav class="navbar">
-        <div class="container">
-            <a href="../../" class="nav-brand">Sunshine's Blog</a>
-            <div class="nav-menu">
-                <a href="../../" class="nav-link">首页</a>
-                <a href="../writings" class="nav-link">文章</a>
-                <a href="../tags" class="nav-link">标签</a>
-                <a href="../projects" class="nav-link">项目</a>
-                <a href="../about" class="nav-link">关于</a>
-            </div>
+    <div class="container">
+        <a href="../../" class="nav-brand">
+            <span class="brand-text">Sunshine's Blog</span>
+        </a>
+        
+        <div class="nav-menu">
+            <a href="../../index.html" class="nav-link"><i class="fas fa-home"></i> 首页</a>
+            <a href="../writings" class="nav-link active"><i class="fas fa-pen"></i> 文章</a>
+            <a href="../tags" class="nav-link"><i class="fas fa-tags"></i> 标签</a>
+            <a href="../projects" class="nav-link"><i class="fas fa-rocket"></i> 项目</a>
+            <a href="../about" class="nav-link"><i class="fas fa-user"></i> 关于</a>
         </div>
-    </nav>
-    
+        
+        <div class="nav-actions">
+            <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+
     <div class="category-archive-container">
         <header class="archive-header">
             <h1><i class="fas fa-folder-tree"></i> 分类归档</h1>
             <p class="archive-description">按分类浏览所有文章，探索感兴趣的主题</p>
         </header>
-        
-        <!-- 分类统计 -->
+
         <div class="category-stats">
             
             <div class="category-stat-item">
                 <a href="#category-AI%E5%86%99%E7%9A%84" class="category-stat-link">
                     <span class="category-name">AI写的</span>
                     <span class="category-count">3</span>
+                </a>
+            </div>
+            <div class="category-stat-item">
+                <a href="#category-%E8%BD%AF%E9%99%A2%E4%B8%93%E4%B8%9A%E8%AF%BE" class="category-stat-link">
+                    <span class="category-name">软院专业课</span>
+                    <span class="category-count">1</span>
                 </a>
             </div>
             <div class="category-stat-item">
@@ -58,8 +74,7 @@
                 </a>
             </div>
         </div>
-        
-        <!-- 分类内容 -->
+
         <div class="category-content">
             
             <div class="category-group" id="category-AI%E5%86%99%E7%9A%84">
@@ -71,70 +86,86 @@
                     <span class="category-article-count">3篇文章</span>
                 </div>
                 <div class="category-articles">
-
                     <article class="category-article-card">
-                        <div class="article-card-content">
-                            <h3 class="article-card-title">
-                                <a href="../posts/obsidian写论文指南/" class="article-card-link">obsidian写论文指南</a>
-                            </h3>
-                            <p class="article-card-summary">展示怎么在obsidian里写论文，记录了相关技术栈和基本思路</p>
-                            <div class="article-card-meta">
-                                <time datetime="Wed Apr 01 2026 08:00:00 GMT+0800 (中国标准时间)" class="article-date">
-                                    <i class="far fa-calendar"></i> 2026年4月1日
-                                </time>
-                                <span class="article-read-time">
-                                    <i class="far fa-clock"></i> 2分钟阅读
-                                </span>
-                            </div>
-                            
-                            <div class="article-card-tags">
-                                <span class="tag">#科研</span><span class="tag">#持续更新</span>
-                            </div>
-                        </div>
-                    </article>
+    <div class="article-card-content">
+        <h3 class="article-card-title">
+            <a href="../posts/obsidian写论文指南/" class="article-card-link">obsidian写论文指南</a>
+        </h3>
+        <p class="article-card-summary">展示怎么在obsidian里写论文，记录了相关技术栈和基本思路</p>
+        <div class="article-card-meta">
+            <time datetime="2026-04-01T00:00:00.000Z" class="article-date">
+                <i class="far fa-calendar"></i> 2026年4月1日
+            </time>
+            <span class="article-read-time">
+                <i class="far fa-clock"></i> 2分钟阅读
+            </span>
+        </div>
+        <div class="article-card-tags"><span class="tag">#科研</span><span class="tag">#持续更新</span></div>
+    </div>
+</article>
+<article class="category-article-card">
+    <div class="article-card-content">
+        <h3 class="article-card-title">
+            <a href="../posts/为啥博客里有ai写的东西/" class="article-card-link">为啥博客里有AI写的东西</a>
+        </h3>
+        <p class="article-card-summary">本文坦诚地探讨了作者在个人博客中使用人工智能（AI）辅助创作的原因与理念。核心原因有三点：提升效率，以应对开发者与学生的繁忙日程；追求更优的信息质量与广度，借助AI弥补个人知识盲区；以及最重要的——与读者共同学习和探索AI工具的实用上限，将博客视为一个“共同学习”的实验场。作者强调，文章中真正的洞察、项目经验（如开发中的RemUp）及批判性思考均由作者亲手注入，以此锻炼并展现个人写作与表达能力。</p>
+        <div class="article-card-meta">
+            <time datetime="2026-04-01T00:00:00.000Z" class="article-date">
+                <i class="far fa-calendar"></i> 2026年4月1日
+            </time>
+            <span class="article-read-time">
+                <i class="far fa-clock"></i> 1分钟阅读
+            </span>
+        </div>
+        <div class="article-card-tags"><span class="tag">博客</span></div>
+    </div>
+</article>
+<article class="category-article-card">
+    <div class="article-card-content">
+        <h3 class="article-card-title">
+            <a href="../posts/从零搭建静态博客：现代前端工程化实践与思考/" class="article-card-link">从零搭建静态博客：现代前端工程化实践与思考</a>
+        </h3>
+        <p class="article-card-summary">记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，探索基础学习能力与 AI 工具如何协同促进快速成长。</p>
+        <div class="article-card-meta">
+            <time datetime="2026-03-15T00:00:00.000Z" class="article-date">
+                <i class="far fa-calendar"></i> 2026年3月15日
+            </time>
+            <span class="article-read-time">
+                <i class="far fa-clock"></i> 8分钟阅读
+            </span>
+        </div>
+        <div class="article-card-tags"><span class="tag">前端工程</span><span class="tag">静态站点</span><span class="tag">JavaScript</span><span class="tag">Node.js</span><span class="tag">博客搭建</span></div>
+    </div>
+</article>
+                </div>
+            </div>
 
+            <div class="category-group" id="category-%E8%BD%AF%E9%99%A2%E4%B8%93%E4%B8%9A%E8%AF%BE">
+                <div class="category-header">
+                    <h2 class="category-title">
+                        <i class="fas fa-folder-open"></i>
+                        软院专业课
+                    </h2>
+                    <span class="category-article-count">1篇文章</span>
+                </div>
+                <div class="category-articles">
                     <article class="category-article-card">
-                        <div class="article-card-content">
-                            <h3 class="article-card-title">
-                                <a href="../posts/为啥博客里有ai写的东西/" class="article-card-link">为啥博客里有AI写的东西</a>
-                            </h3>
-                            <p class="article-card-summary">本文坦诚地探讨了作者在个人博客中使用人工智能（AI）辅助创作的原因与理念。核心原因有三点：提升效率，以应对开发者与学生的繁忙日程；追求更优的信息质量与广度，借助AI弥补个人知识盲区；以及最重要的——与读者共同学习和探索AI工具的实用上限，将博客视为一个“共同学习”的实验场。作者强调，文章中真正的洞察、项目经验（如开发中的RemUp）及批判性思考均由作者亲手注入，以此锻炼并展现个人写作与表达能力。</p>
-                            <div class="article-card-meta">
-                                <time datetime="Wed Apr 01 2026 08:00:00 GMT+0800 (中国标准时间)" class="article-date">
-                                    <i class="far fa-calendar"></i> 2026年4月1日
-                                </time>
-                                <span class="article-read-time">
-                                    <i class="far fa-clock"></i> 1分钟阅读
-                                </span>
-                            </div>
-                            
-                            <div class="article-card-tags">
-                                <span class="tag">博客</span>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="category-article-card">
-                        <div class="article-card-content">
-                            <h3 class="article-card-title">
-                                <a href="../posts/从零搭建静态博客：现代前端工程化实践与思考/" class="article-card-link">从零搭建静态博客：现代前端工程化实践与思考</a>
-                            </h3>
-                            <p class="article-card-summary">记录从零开始搭建个人静态博客的技术选型、架构设计和工程化思考，探索基础学习能力与 AI 工具如何协同促进快速成长。</p>
-                            <div class="article-card-meta">
-                                <time datetime="Sun Mar 15 2026 08:00:00 GMT+0800 (中国标准时间)" class="article-date">
-                                    <i class="far fa-calendar"></i> 2026年3月15日
-                                </time>
-                                <span class="article-read-time">
-                                    <i class="far fa-clock"></i> 8分钟阅读
-                                </span>
-                            </div>
-                            
-                            <div class="article-card-tags">
-                                <span class="tag">前端工程</span><span class="tag">静态站点</span><span class="tag">JavaScript</span><span class="tag">Node.js</span><span class="tag">博客搭建</span>
-                            </div>
-                        </div>
-                    </article>
-
+    <div class="article-card-content">
+        <h3 class="article-card-title">
+            <a href="../posts/关于“软件工程与计算i”授课混乱性的解读/" class="article-card-link">关于“软件工程与计算I”授课混乱性的解读</a>
+        </h3>
+        <p class="article-card-summary">关于南京大学软件工程专业大一年级下所教授课程“软件工程与计算I”的感受</p>
+        <div class="article-card-meta">
+            <time datetime="2026-04-13T00:00:00.000Z" class="article-date">
+                <i class="far fa-calendar"></i> 2026年4月13日
+            </time>
+            <span class="article-read-time">
+                <i class="far fa-clock"></i> 1分钟阅读
+            </span>
+        </div>
+        <div class="article-card-tags"><span class="tag">南大软院</span><span class="tag">课程</span><span class="tag">持续更新</span></div>
+    </div>
+</article>
                 </div>
             </div>
 
@@ -147,28 +178,23 @@
                     <span class="category-article-count">1篇文章</span>
                 </div>
                 <div class="category-articles">
-
                     <article class="category-article-card">
-                        <div class="article-card-content">
-                            <h3 class="article-card-title">
-                                <a href="../posts/（待完善）活动产出（图片、公众号、视频）/" class="article-card-link">（待完善）活动产出（图片、公众号、视频）</a>
-                            </h3>
-                            <p class="article-card-summary">对学生活动中需要拍什么、怎么拍，如何处理，形成公众号、视频，提升活动曝光的总结与分享，持续更新</p>
-                            <div class="article-card-meta">
-                                <time datetime="Mon Mar 30 2026 08:00:00 GMT+0800 (中国标准时间)" class="article-date">
-                                    <i class="far fa-calendar"></i> 2026年3月30日
-                                </time>
-                                <span class="article-read-time">
-                                    <i class="far fa-clock"></i> 1分钟阅读
-                                </span>
-                            </div>
-                            
-                            <div class="article-card-tags">
-                                <span class="tag">#学生活动</span><span class="tag">#组织</span><span class="tag">#待完善</span>
-                            </div>
-                        </div>
-                    </article>
-
+    <div class="article-card-content">
+        <h3 class="article-card-title">
+            <a href="../posts/（待完善）活动产出（图片、公众号、视频）/" class="article-card-link">（待完善）活动产出（图片、公众号、视频）</a>
+        </h3>
+        <p class="article-card-summary">对学生活动中需要拍什么、怎么拍，如何处理，形成公众号、视频，提升活动曝光的总结与分享，持续更新</p>
+        <div class="article-card-meta">
+            <time datetime="2026-03-30T00:00:00.000Z" class="article-date">
+                <i class="far fa-calendar"></i> 2026年3月30日
+            </time>
+            <span class="article-read-time">
+                <i class="far fa-clock"></i> 1分钟阅读
+            </span>
+        </div>
+        <div class="article-card-tags"><span class="tag">#学生活动</span><span class="tag">#组织</span><span class="tag">#待完善</span></div>
+    </div>
+</article>
                 </div>
             </div>
 
@@ -181,28 +207,23 @@
                     <span class="category-article-count">1篇文章</span>
                 </div>
                 <div class="category-articles">
-
                     <article class="category-article-card">
-                        <div class="article-card-content">
-                            <h3 class="article-card-title">
-                                <a href="../posts/obsidian-写作关联/" class="article-card-link">obsidian 写作关联</a>
-                            </h3>
-                            <p class="article-card-summary">这是一篇测试文章，用于验证 Obsidian 自动化发布流程</p>
-                            <div class="article-card-meta">
-                                <time datetime="Sun Mar 29 2026 08:00:00 GMT+0800 (中国标准时间)" class="article-date">
-                                    <i class="far fa-calendar"></i> 2026年3月29日
-                                </time>
-                                <span class="article-read-time">
-                                    <i class="far fa-clock"></i> 1分钟阅读
-                                </span>
-                            </div>
-                            
-                            <div class="article-card-tags">
-                                <span class="tag">测试</span><span class="tag">自动化</span>
-                            </div>
-                        </div>
-                    </article>
-
+    <div class="article-card-content">
+        <h3 class="article-card-title">
+            <a href="../posts/obsidian-写作关联/" class="article-card-link">obsidian 写作关联</a>
+        </h3>
+        <p class="article-card-summary">这是一篇测试文章，用于验证 Obsidian 自动化发布流程</p>
+        <div class="article-card-meta">
+            <time datetime="2026-03-29T00:00:00.000Z" class="article-date">
+                <i class="far fa-calendar"></i> 2026年3月29日
+            </time>
+            <span class="article-read-time">
+                <i class="far fa-clock"></i> 1分钟阅读
+            </span>
+        </div>
+        <div class="article-card-tags"><span class="tag">测试</span><span class="tag">自动化</span></div>
+    </div>
+</article>
                 </div>
             </div>
 
@@ -215,38 +236,33 @@
                     <span class="category-article-count">1篇文章</span>
                 </div>
                 <div class="category-articles">
-
                     <article class="category-article-card">
-                        <div class="article-card-content">
-                            <h3 class="article-card-title">
-                                <a href="../posts/你好，欢迎/" class="article-card-link">你好，欢迎</a>
-                            </h3>
-                            <p class="article-card-summary">一篇对个人博客的基础介绍</p>
-                            <div class="article-card-meta">
-                                <time datetime="Wed Mar 18 2026 08:00:00 GMT+0800 (中国标准时间)" class="article-date">
-                                    <i class="far fa-calendar"></i> 2026年3月18日
-                                </time>
-                                <span class="article-read-time">
-                                    <i class="far fa-clock"></i> 1分钟阅读
-                                </span>
-                            </div>
-                            
-                            <div class="article-card-tags">
-                                <span class="tag">博客</span>
-                            </div>
-                        </div>
-                    </article>
-
+    <div class="article-card-content">
+        <h3 class="article-card-title">
+            <a href="../posts/你好，欢迎/" class="article-card-link">你好，欢迎</a>
+        </h3>
+        <p class="article-card-summary">一篇对个人博客的基础介绍</p>
+        <div class="article-card-meta">
+            <time datetime="2026-03-18T00:00:00.000Z" class="article-date">
+                <i class="far fa-calendar"></i> 2026年3月18日
+            </time>
+            <span class="article-read-time">
+                <i class="far fa-clock"></i> 1分钟阅读
+            </span>
+        </div>
+        <div class="article-card-tags"><span class="tag">博客</span></div>
+    </div>
+</article>
                 </div>
             </div>
 
         </div>
-        
+
         <div class="back-to-top">
             <a href="#" class="back-btn"><i class="fas fa-arrow-up"></i> 返回顶部</a>
         </div>
     </div>
-    
+
     <script src="../assets/js/category-archive.js"></script>
 </body>
 </html>

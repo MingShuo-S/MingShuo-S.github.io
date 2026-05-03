@@ -32,42 +32,31 @@
     <link rel="alternate" type="application/rss+xml" title="Sunshine's Blog" href="../../rss.xml">
 </head>
 <body>
-    <!-- 导航栏 -->
-     <!-- 导航栏 -->
-     <nav class="navbar">
-        <div class="container">
-            <a href="../../index.html" class="nav-brand">
-                <span class="brand-text">Sunshine's Blog</span>
-            </a>
-            
-            <div class="nav-menu">
-                <a href="../../index.html" class="nav-link">
-                    <i class="fas fa-home"></i> 首页
-                </a>
-                <a href="../writings" class="nav-link">
-                    <i class="fas fa-pen"></i> 文章
-                </a>
-                <a href="../tags" class="nav-link">
-                    <i class="fas fa-tags"></i> 标签
-                </a>
-                <a href="../projects" class="nav-link">
-                    <i class="fas fa-rocket"></i> 项目
-                </a>
-                <a href="../about" class="nav-link">
-                    <i class="fas fa-user"></i> 关于
-                </a>
-            </div>
-            
-            <div class="nav-actions">
-                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button class="menu-toggle" id="menuToggle" aria-label="菜单">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
+    <nav class="navbar">
+    <div class="container">
+        <a href="../../" class="nav-brand">
+            <span class="brand-text">Sunshine's Blog</span>
+        </a>
+        
+        <div class="nav-menu">
+            <a href="../../index.html" class="nav-link"><i class="fas fa-home"></i> 首页</a>
+            <a href="../writings" class="nav-link"><i class="fas fa-pen"></i> 文章</a>
+            <a href="../tags" class="nav-link active"><i class="fas fa-tags"></i> 标签</a>
+            <a href="../projects" class="nav-link"><i class="fas fa-rocket"></i> 项目</a>
+            <a href="../about" class="nav-link"><i class="fas fa-user"></i> 关于</a>
         </div>
-    </nav>
+        
+        <div class="nav-actions">
+            <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
 
     <!-- 主内容 -->
     <main class="main-content">
@@ -80,11 +69,11 @@
                 <!-- 统计数据 -->
                 <div class="projects-stats" style="margin-top: 2rem;">
                     <div class="stat-card">
-                        <div class="stat-number" id="totalTags">19</div>
+                        <div class="stat-number" id="totalTags">22</div>
                         <div class="stat-label">标签总数</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="totalArticlesWithTag">8</div>
+                        <div class="stat-number" id="totalArticlesWithTag">9</div>
                         <div class="stat-label">有标签内容数</div>
                     </div>
                     <div class="stat-card">
@@ -99,6 +88,9 @@
                 <button class="filter-btn active" data-filter="all">全部</button>
                 <button class="filter-btn" data-filter="博客">博客</button>
 <button class="filter-btn" data-filter="静态站点">静态站点</button>
+<button class="filter-btn" data-filter="南大软院">南大软院</button>
+<button class="filter-btn" data-filter="课程">课程</button>
+<button class="filter-btn" data-filter="持续更新">持续更新</button>
 <button class="filter-btn" data-filter="#科研">#科研</button>
 <button class="filter-btn" data-filter="#持续更新">#持续更新</button>
 <button class="filter-btn" data-filter="#学生活动">#学生活动</button>
@@ -120,6 +112,22 @@
             
             <!-- 内容列表 -->
             <div class="articles-grid" id="articlesGrid">
+                
+                    <article class="article-card" data-tags="南大软院,课程,持续更新" data-type="article">
+                        <div class="card-header">
+                            <div class="card-category">软院专业课</div>
+                            <h3 class="card-title">
+                                <a href="../posts/关于“软件工程与计算i”授课混乱性的解读/">关于“软件工程与计算I”授课混乱性的解读</a>
+                            </h3>
+                            <p class="card-excerpt">关于南京大学软件工程专业大一年级下所教授课程“软件工程与计算I”的感受</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-date">2026年4月13日</div>
+                            <div class="card-tags">
+                                <a href="#tag-南大软院" class="tag-link">南大软院</a><a href="#tag-课程" class="tag-link">课程</a><a href="#tag-持续更新" class="tag-link">持续更新</a>
+                            </div>
+                        </div>
+                    </article>
                 
                     <article class="article-card" data-tags="#科研,#持续更新" data-type="article">
                         <div class="card-header">
@@ -269,48 +277,45 @@
         </div>
     </main>
 
-    <!-- 页脚 -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-info">
-                    <h3>Sunshine's Blog</h3>
-                    <p>记录技术思考、项目经验和学习成长</p>
-                    <p class="footer-copyright">© 2030 Mingshuo_S. 保留所有权利。</p>
-                </div>
-                
-                <div class="footer-links">
-                    <div class="link-group">
-                        <h4>探索</h4>
-                        <a href="../writings">所有文章</a>
-                        <a href="../projects">所有项目</a>
-                        <a href="../tags">标签分类</a>
-                        <a href="../archive">文章归档</a>
-                    </div>
-                    
-                    <div class="link-group">
-                        <h4>链接</h4>
-                        <a href="../about">关于我</a>
-                        <a href="../friends">友情链接</a>
-                        <a href="../rss.xml">RSS订阅</a>
-                        <a href="../sitemap.xml">站点地图</a>
-                    </div>
-                    
-                    <div class="link-group">
-                        <h4>联系</h4>
-                        <a href="mailto:Sunshine_Mings@outloook.com">发送邮件</a>
-                        <a href="MingShuo-S">GitHub</a>
-                        <a href="https://space.bilibili.com/361518274">Bilibili</a>
-                    </div>
-                </div>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>Sunshine's Blog</h3>
+                <p>记录技术思考、项目经验和学习成长</p>
+                <p class="footer-copyright">© 2030 Mingshuo_S. 保留所有权利。</p>
             </div>
             
-            <div class="footer-bottom">
-                <p>本博客由 <a href="https://github.com/MingShuo-S/MingShuo-S.github.io" target="_blank" rel="noopener">MingShuo-S.github.io</a> 驱动</p>
-                <p>最后更新于 <span id="lastUpdated">今天</span></p>
+            <div class="footer-links">
+                <div class="link-group">
+                        <h4>探索</h4>
+                        <a href="../writings">所有文章</a>
+<a href="../projects">所有项目</a>
+<a href="../tags">标签分类</a>
+<a href="../archive">文章归档</a>
+                    </div>
+                <div class="link-group">
+                        <h4>链接</h4>
+                        <a href="../about">关于我</a>
+<a href="../friends">友情链接</a>
+<a href="../rss.xml">RSS订阅</a>
+<a href="../sitemap.xml">站点地图</a>
+                    </div>
+                <div class="link-group">
+                        <h4>联系</h4>
+                        <a href="mailto:Sunshine_Mings@outloook.com">发送邮件</a>
+<a href="https://github.com/MingShuo-S" target="_blank" rel="noopener">GitHub</a>
+<a href="https://space.bilibili.com/361518274" target="_blank" rel="noopener">Bilibili</a>
+                    </div>
             </div>
         </div>
-    </footer>
+        
+        <div class="footer-bottom">
+            <p>本博客由 <a href="https://github.com/MingShuo-S/MingShuo-S.github.io" target="_blank" rel="noopener">MingShuo-S.github.io</a> 驱动</p><p>最后更新于 <span id="lastUpdated">今天</span></p>
+        </div>
+    </div>
+</footer>
+
 
     <!-- JavaScript -->
     <script src="../assets/js/main.js"></script>

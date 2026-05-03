@@ -33,41 +33,31 @@
     <link rel="alternate" type="application/rss+xml" title="Sunshine's Blog" href="https://mingshuo-s.github.io/rss.xml">
 </head>
 <body>
-    <!-- 导航栏 -->
     <nav class="navbar">
-        <div class="container">
-            <a href="/" class="nav-brand">
-                <span class="brand-text">Sunshine's Blog</span>
-            </a>
-            
-            <div class="nav-menu">
-                <a href="/" class="nav-link active">
-                    <i class="fas fa-home"></i> 首页
-                </a>
-                <a href="/public/writings" class="nav-link">
-                    <i class="fas fa-pen"></i> 文章
-                </a>
-                <a href="/public/tags" class="nav-link">
-                    <i class="fas fa-tags"></i> 标签
-                </a>
-                <a href="/public/projects" class="nav-link">
-                    <i class="fas fa-rocket"></i> 项目
-                </a>
-                <a href="/public/about" class="nav-link">
-                    <i class="fas fa-user"></i> 关于
-                </a>
-            </div>
-            
-            <div class="nav-actions">
-                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button class="menu-toggle" id="menuToggle" aria-label="菜单">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
+    <div class="container">
+        <a href="/" class="nav-brand">
+            <span class="brand-text">Sunshine's Blog</span>
+        </a>
+        
+        <div class="nav-menu">
+            <a href="/" class="nav-link active"><i class="fas fa-home"></i> 首页</a>
+            <a href="/public/writings" class="nav-link"><i class="fas fa-pen"></i> 文章</a>
+            <a href="/public/tags" class="nav-link"><i class="fas fa-tags"></i> 标签</a>
+            <a href="/public/projects" class="nav-link"><i class="fas fa-rocket"></i> 项目</a>
+            <a href="/public/about" class="nav-link"><i class="fas fa-user"></i> 关于</a>
         </div>
-    </nav>
+        
+        <div class="nav-actions">
+            <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
 
     <!-- 主内容 -->
     <main class="main-content">
@@ -135,57 +125,51 @@
                 </div>
                 
                 <div class="articles-grid" id="articlesGrid">
-
-                <article class="article-card">
-                    <div class="card-header">
-                        <div class="card-category">AI写的</div>
-                        <h3 class="card-title">
-                            <a href="/public/posts/obsidian写论文指南/">obsidian写论文指南</a>
-                        </h3>
-                        <p class="card-excerpt">展示怎么在obsidian里写论文，记录了相关技术栈和基本思路</p>
-                    </div>
-                    <div class="card-footer">
-                        <div class="card-date">2026年4月1日</div>
-                        <div class="card-tags">
-                            <span class="tag">#科研</span><span class="tag">#持续更新</span>
-                        </div>
-                    </div>
-                </article>
-            
-
-                <article class="article-card">
-                    <div class="card-header">
-                        <div class="card-category">AI写的</div>
-                        <h3 class="card-title">
-                            <a href="/public/posts/为啥博客里有ai写的东西/">为啥博客里有AI写的东西</a>
-                        </h3>
-                        <p class="card-excerpt">本文坦诚地探讨了作者在个人博客中使用人工智能（AI）辅助创作的原因与理念。核心原因有三点：提升效率，以应对开发者与学生的繁忙日程；追求更优的信息质量与广度，借助AI弥补个人知识盲区；以及最重要的——与读者共同学习和探索AI工具的实用上限，将博客视为一个“共同学习”的实验场。作者强调，文章中真正的洞察、项目经验（如开发中的RemUp）及批判性思考均由作者亲手注入，以此锻炼并展现个人写作与表达能力。</p>
-                    </div>
-                    <div class="card-footer">
-                        <div class="card-date">2026年4月1日</div>
-                        <div class="card-tags">
-                            <span class="tag">博客</span>
-                        </div>
-                    </div>
-                </article>
-            
-
-                <article class="article-card">
-                    <div class="card-header">
-                        <div class="card-category">学生活动</div>
-                        <h3 class="card-title">
-                            <a href="/public/posts/（待完善）活动产出（图片、公众号、视频）/">（待完善）活动产出（图片、公众号、视频）</a>
-                        </h3>
-                        <p class="card-excerpt">对学生活动中需要拍什么、怎么拍，如何处理，形成公众号、视频，提升活动曝光的总结与分享，持续更新</p>
-                    </div>
-                    <div class="card-footer">
-                        <div class="card-date">2026年3月30日</div>
-                        <div class="card-tags">
-                            <span class="tag">#学生活动</span><span class="tag">#组织</span><span class="tag">#待完善</span>
-                        </div>
-                    </div>
-                </article>
-            
+<article class="article-card">
+    <div class="card-header">
+        <div class="card-category">软院专业课</div>
+        <h3 class="card-title">
+            <a href="/public/posts/关于“软件工程与计算i”授课混乱性的解读/">关于“软件工程与计算I”授课混乱性的解读</a>
+        </h3>
+        <p class="card-excerpt">关于南京大学软件工程专业大一年级下所教授课程“软件工程与计算I”的感受</p>
+    </div>
+    <div class="card-footer">
+        <div class="card-date">2026年4月13日</div>
+        <div class="card-tags">
+            <span class="tag">南大软院</span><span class="tag">课程</span><span class="tag">持续更新</span>
+        </div>
+    </div>
+</article>
+<article class="article-card">
+    <div class="card-header">
+        <div class="card-category">AI写的</div>
+        <h3 class="card-title">
+            <a href="/public/posts/obsidian写论文指南/">obsidian写论文指南</a>
+        </h3>
+        <p class="card-excerpt">展示怎么在obsidian里写论文，记录了相关技术栈和基本思路</p>
+    </div>
+    <div class="card-footer">
+        <div class="card-date">2026年4月1日</div>
+        <div class="card-tags">
+            <span class="tag">#科研</span><span class="tag">#持续更新</span>
+        </div>
+    </div>
+</article>
+<article class="article-card">
+    <div class="card-header">
+        <div class="card-category">AI写的</div>
+        <h3 class="card-title">
+            <a href="/public/posts/为啥博客里有ai写的东西/">为啥博客里有AI写的东西</a>
+        </h3>
+        <p class="card-excerpt">本文坦诚地探讨了作者在个人博客中使用人工智能（AI）辅助创作的原因与理念。核心原因有三点：提升效率，以应对开发者与学生的繁忙日程；追求更优的信息质量与广度，借助AI弥补个人知识盲区；以及最重要的——与读者共同学习和探索AI工具的实用上限，将博客视为一个“共同学习”的实验场。作者强调，文章中真正的洞察、项目经验（如开发中的RemUp）及批判性思考均由作者亲手注入，以此锻炼并展现个人写作与表达能力。</p>
+    </div>
+    <div class="card-footer">
+        <div class="card-date">2026年4月1日</div>
+        <div class="card-tags">
+            <span class="tag">博客</span>
+        </div>
+    </div>
+</article>
 </div>
             </div>
         </section>
@@ -199,60 +183,52 @@
                 </div>
                 
                 <div class="projects-grid" id="projectsGrid">
+<article class="project-card featured" data-category="open-source">
+    <div class="project-icon">📝</div>
+    <h2 class="project-title">RemUp</h2>
 
-                <article class="project-card featured" data-category="open-source">
-                    <div class="project-icon">📝</div>
-                    <h2 class="project-title">RemUp</h2>
-                    
-                    <span class="project-status status-developing">
-                        🔵 开发中
-                    </span>
-                    
-                    <p class="project-description">一款创新的笔记语言工具，致力于提升知识管理和学习效率。支持结构化笔记、双向链接和智能标签系统。(PS: 点击 访问项目 有惊喜哦)</p>
-                    
-                    <div class="project-tags">
-                        <span class="tag">笔记工具</span><span class="tag">简易编译器</span><span class="tag">vscode插件</span>
-                    </div>
-                    
-                    <div class="project-footer">
-                        <div class="project-links">
-                            <a href="/public../../remup" target="_blank" rel="noopener" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> 访问项目
-                            </a>
-                            <a href="https://github.com/MingShuo-S/RemUp" target="_blank" rel="noopener" class="btn btn-secondary">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                        </div>
-                    </div>
-                </article>
-                
+    <span class="project-status status-developing">
+        🔵 开发中
+    </span>
 
-                <article class="project-card featured" data-category="open-source">
-                    <div class="project-icon">🌐</div>
-                    <h2 class="project-title">MingShuo-S.github.io</h2>
-                    
-                    <span class="project-status status-active">
-                        🟢 进行中
-                    </span>
-                    
-                    <p class="project-description">基于 GitHub Pages 的静态个人博客系统，采用模块化设计和自动化构建流程，支持 Markdown 渲染和多主题切换。</p>
-                    
-                    <div class="project-tags">
-                        <span class="tag">博客</span><span class="tag">静态站点</span><span class="tag">GitHub Pages</span>
-                    </div>
-                    
-                    <div class="project-footer">
-                        <div class="project-links">
-                            <a href="https://mingshuo-s.github.io" target="_blank" rel="noopener" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> 访问项目
-                            </a>
-                            <a href="https://github.com/MingShuo-S/MingShuo-S.github.io" target="_blank" rel="noopener" class="btn btn-secondary">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                        </div>
-                    </div>
-                </article>
-                
+    <p class="project-description">一款创新的笔记语言工具，致力于提升知识管理和学习效率。支持结构化笔记、双向链接和智能标签系统。(PS: 点击 访问项目 有惊喜哦)</p>
+
+    <div class="project-tags">
+        <span class="tag">笔记工具</span><span class="tag">简易编译器</span><span class="tag">vscode插件</span>
+    </div>
+
+    <div class="project-footer">
+        <div class="project-links">
+            <a href="/public../../remup" target="_blank" rel="noopener" class="btn btn-primary">
+                <i class="fas fa-external-link-alt"></i> 访问项目
+            </a>
+            <a href="https://github.com/MingShuo-S/RemUp" target="_blank" rel="noopener" class="btn btn-secondary"><i class="fab fa-github"></i> GitHub</a>
+        </div>
+    </div>
+</article>
+<article class="project-card featured" data-category="open-source">
+    <div class="project-icon">🌐</div>
+    <h2 class="project-title">MingShuo-S.github.io</h2>
+
+    <span class="project-status status-active">
+        🟢 进行中
+    </span>
+
+    <p class="project-description">基于 GitHub Pages 的静态个人博客系统，采用模块化设计和自动化构建流程，支持 Markdown 渲染和多主题切换。</p>
+
+    <div class="project-tags">
+        <span class="tag">博客</span><span class="tag">静态站点</span><span class="tag">GitHub Pages</span>
+    </div>
+
+    <div class="project-footer">
+        <div class="project-links">
+            <a href="https://mingshuo-s.github.io" target="_blank" rel="noopener" class="btn btn-primary">
+                <i class="fas fa-external-link-alt"></i> 访问项目
+            </a>
+            <a href="https://github.com/MingShuo-S/MingShuo-S.github.io" target="_blank" rel="noopener" class="btn btn-secondary"><i class="fab fa-github"></i> GitHub</a>
+        </div>
+    </div>
+</article>
 </div>
                 </div>
             </div>
@@ -300,7 +276,7 @@
                 <h2 class="section-title">博客数据</h2>
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-number" id="totalArticles">6</div>
+                        <div class="stat-number" id="totalArticles">7</div>
                         <div class="stat-label">文章总数</div>
                     </div>
                     <div class="stat-card">
@@ -308,11 +284,11 @@
                         <div class="stat-label">项目总数</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="totalWords">1912</div>
+                        <div class="stat-number" id="totalWords">1969</div>
                         <div class="stat-label">累计字数</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number" id="siteDays">456</div>
+                        <div class="stat-number" id="siteDays">488</div>
                         <div class="stat-label">运行天数</div>
                     </div>
                     <div class="stat-card site-stat-card">
@@ -330,46 +306,44 @@
 
     <!-- 页脚 -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-info">
-                    <h3>Sunshine's Blog</h3>
-                    <p>记录技术思考、项目经验和学习成长</p>
-                    <p class="footer-copyright">© 2030 Mingshuo_S. 保留所有权利。</p>
-                </div>
-                
-                <div class="footer-links">
-                    <div class="link-group">
-                        <h4>探索</h4>
-                        <a href="/public/writings">所有文章</a>
-                        <a href="/public/projects">所有项目</a>
-                        <a href="/public/tags">标签分类</a>
-                        <a href="/public/archive">文章归档</a>
-                    </div>
-                    
-                    <div class="link-group">
-                        <h4>链接</h4>
-                        <a href="/public/about">关于我</a>
-                        <a href="#friends">友情链接</a>
-                        <a href="/public/rss.xml">RSS订阅</a>
-                        <a href="/public/sitemap.xml">站点地图</a>
-                    </div>
-                    
-                    <div class="link-group">
-                        <h4>联系</h4>
-                        <a href="mailto:Sunshine_Mings@outloook.com">发送邮件</a>
-                        <a href="https://github.com/MingShuo-S">GitHub</a>
-                        <a href="https://space.bilibili.com/361518274">Bilibili</a>
-                    </div>
-                </div>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>Sunshine's Blog</h3>
+                <p>记录技术思考、项目经验和学习成长</p>
+                <p class="footer-copyright">© 2030 Mingshuo_S. 保留所有权利。</p>
             </div>
             
-            <div class="footer-bottom">
-                <p>本博客由 <a href="https://github.com/MingShuo-S/MingShuo-S.github.io" target="_blank" rel="noopener">MingShuo-S.github.io</a> 驱动</p>
-                <p>最后更新于 <span id="lastUpdated">今天</span></p>
+            <div class="footer-links">
+                <div class="link-group">
+                        <h4>探索</h4>
+                        <a href="/public/writings">所有文章</a>
+<a href="/public/projects">所有项目</a>
+<a href="/public/tags">标签分类</a>
+<a href="/public/archive">文章归档</a>
+                    </div>
+                <div class="link-group">
+                        <h4>链接</h4>
+                        <a href="/public/about">关于我</a>
+<a href="#friends">友情链接</a>
+<a href="/public/rss.xml">RSS订阅</a>
+<a href="/public/sitemap.xml">站点地图</a>
+                    </div>
+                <div class="link-group">
+                        <h4>联系</h4>
+                        <a href="mailto:Sunshine_Mings@outloook.com">发送邮件</a>
+<a href="https://github.com/MingShuo-S" target="_blank" rel="noopener">GitHub</a>
+<a href="https://space.bilibili.com/361518274" target="_blank" rel="noopener">Bilibili</a>
+                    </div>
             </div>
         </div>
-    </footer>
+        
+        <div class="footer-bottom">
+            <p>最后更新于 <span id="lastUpdated">今天</span></p>
+        </div>
+    </div>
+</footer>
+
 
     <!-- JavaScript -->
     <script src="/public/assets/js/main.js"></script>

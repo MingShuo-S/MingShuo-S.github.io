@@ -2,28 +2,34 @@ const fs = require('fs-extra');
 const path = require('path');
 const marked = require('marked');
 const matter = require('gray-matter');
+const builderConfig = require('./builder.config.js');
 
 class SafeSiteBuilder {
     constructor() {
+        this.config = builderConfig;
+        this.projectRoot = path.join(__dirname, '..');
+
         // 源码目录
-        this.sourceDir = path.join(__dirname, '..', 'src');
+        this.sourceDir = this.config.directories?.source || path.join(this.projectRoot, 'src');
         // 最终输出目录（用于文章页面、资源等）
-        this.finalOutputDir = path.join(__dirname, '..', 'public');
+        this.finalOutputDir = this.config.directories?.finalOutput || path.join(this.projectRoot, 'public');
         // 临时构建目录
-        this.tempOutputDir = path.join(__dirname, '..', '.temp_public');
+        this.tempOutputDir = this.config.directories?.tempOutput || path.join(this.projectRoot, '.temp_public');
         // 当前使用的输出目录
         this.outputDir = this.tempOutputDir;
         // 主页输出目录（项目根目录）
-        this.rootOutputDir = path.join(__dirname, '..');
+        this.rootOutputDir = this.config.directories?.root || this.projectRoot;
 
-        this.templateDir = path.join(this.sourceDir, 'templates');
-        this.dataDir = path.join(this.sourceDir, 'data');
-        this.assetsDir = path.join(this.sourceDir, 'assets');
+        this.templateDir = this.config.directories?.templates || path.join(this.sourceDir, 'templates');
+        this.dataDir = this.config.directories?.data || path.join(this.sourceDir, 'data');
+        this.assetsDir = this.config.directories?.assets || path.join(this.sourceDir, 'assets');
+        this.dataFiles = this.config.dataFiles || {};
+        this.templateCache = new Map();
         
         // Obsidian 仓库配置
-        this.obsidianDir = 'C:\\Users\\29548\\Documents\\Sunshine\\ANOTES';
+        this.obsidianDir = this.config.obsidian?.repositoryPath || 'C:\\Users\\29548\\Documents\\Sunshine\\ANOTES';
         // 是否启用 Obsidian 模式（直接从 Obsidian 仓库读取）
-        this.useObsidianMode = true;
+        this.useObsidianMode = this.config.obsidian?.enabled ?? true;
     }
 
     async build() {
@@ -54,10 +60,9 @@ class SafeSiteBuilder {
 
             // 7. 生成标签分类页
             await this.generateTagsPage(articles, siteConfig);
-
             // 8. 生成归档页面
             await this.generateArchivePage(articles, siteConfig);
-            
+
             // 8.1 生成分类归档页面
             await this.generateCategoryArchivePage(articles, siteConfig);
 
@@ -102,12 +107,12 @@ class SafeSiteBuilder {
         // 保存根目录的 index.html（如果存在）
         const rootIndexPath = path.join(this.rootOutputDir, 'index.html');
         let savedRootIndex = null;
-        
+
         if (await fs.pathExists(rootIndexPath)) {
             savedRootIndex = await fs.readFile(rootIndexPath, 'utf-8');
             console.log('💾 已保存根目录的 index.html');
         }
-        
+
         if (await fs.pathExists(this.finalOutputDir)) {
             try {
                 await fs.remove(this.finalOutputDir);
@@ -122,7 +127,7 @@ class SafeSiteBuilder {
 
         await fs.move(this.tempOutputDir, this.finalOutputDir);
         console.log('🔄 已更新最终输出目录');
-        
+
         // 恢复根目录的 index.html
         if (savedRootIndex !== null) {
             await fs.writeFile(rootIndexPath, savedRootIndex, 'utf-8');
@@ -137,20 +142,98 @@ class SafeSiteBuilder {
     }
 
     async readConfig() {
-        const configFile = path.join(this.dataDir, 'config.json');
+        const configFile = this.getDataFilePath('siteConfig', path.join(this.dataDir, 'config.json'));
 
         if (!await fs.pathExists(configFile)) {
             throw new Error(`配置文件不存在: ${configFile}`);
         }
 
-        const config = await fs.readJson(configFile);
+        const config = this.normalizeSiteConfig(await this.readJsonFile(configFile, {}));
         console.log('📄 已读取配置文件');
         return config;
     }
 
+    resolveProjectPath(filePath) {
+        if (!filePath) {
+            return null;
+        }
+
+        return path.isAbsolute(filePath) ? filePath : path.join(this.projectRoot, filePath);
+    }
+
+    getDataFilePath(key, fallbackPath) {
+        const configuredPath = this.getNestedValue(this.dataFiles, key) || fallbackPath;
+        return this.resolveProjectPath(configuredPath);
+    }
+
+    async readJsonFile(filePath, fallbackValue = null) {
+        if (!filePath || !await fs.pathExists(filePath)) {
+            return fallbackValue;
+        }
+
+        return fs.readJson(filePath);
+    }
+
+    normalizeSiteConfig(rawConfig = {}) {
+        const site = rawConfig.site || {};
+        const social = rawConfig.social || {};
+        const features = rawConfig.features || {};
+        const projects = rawConfig.projects || {};
+        const projectStats = projects.stats || {};
+
+        return {
+            site: {
+                title: 'Sunshine\'s Blog',
+                description: '记录技术思考、项目经验和学习成长',
+                author: 'Mingshuo_S',
+                year: new Date().getFullYear(),
+                keywords: '',
+                url: '',
+                ...site
+            },
+            social: {
+                github: '',
+                bilibili: '',
+                email: '',
+                ...social
+            },
+            features: {
+                themeToggle: true,
+                search: false,
+                comments: false,
+                analytics: false,
+                ...features
+            },
+            projects: {
+                intro: '',
+                categories: [],
+                stats: {
+                    total_projects: 0,
+                    total_stars: 0,
+                    languages_count: 0,
+                    most_used_language: 'JavaScript',
+                    ...projectStats
+                },
+                ...projects,
+                stats: {
+                    total_projects: 0,
+                    total_stars: 0,
+                    languages_count: 0,
+                    most_used_language: 'JavaScript',
+                    ...projectStats
+                }
+            },
+            page: rawConfig.page || {},
+            about: rawConfig.about || {},
+            footer: rawConfig.footer || {}
+        };
+    }
+
     async processArticles() {
         // 根据模式确定文章目录
-        const articlesDir = this.useObsidianMode ? this.obsidianDir : path.join(this.dataDir, 'articles');
+        const articlesDir = this.useObsidianMode
+            ? this.obsidianDir
+            : this.getDataFilePath('articlesDir', path.join(this.dataDir, 'articles'));
 
         if (!await fs.pathExists(articlesDir)) {
             console.log('📝 未找到文章目录，跳过文章处理');
@@ -389,6 +472,11 @@ class SafeSiteBuilder {
         // 替换其他变量
         html = this.replaceVariables(html, replacements);
 
+        const articleChrome = await this.buildSharedChrome('article', siteConfig, {
+            footerBottomHtml: `<p>最后更新于 <span id="lastUpdated">${article.formattedDate}</span></p>`
+        });
+        html = this.injectSharedChrome(html, articleChrome);
+
         // 最后替换实际的文章内容
         html = html.replace(contentPlaceholder, article.content || '');
         
@@ -473,88 +561,64 @@ class SafeSiteBuilder {
         let html = await fs.readFile(templateFile, 'utf-8');
 
         // 读取项目数据
-        const projectsFile = path.join(this.dataDir, 'projects.json');
+        const projectsFile = this.getDataFilePath('projects', path.join(this.dataDir, 'projects.json'));
         let projects = [];
         if (await fs.pathExists(projectsFile)) {
-            const projectsData = await fs.readJson(projectsFile);
+            const projectsData = await this.readJsonFile(projectsFile, {});
             projects = projectsData.projects || [];
         }
 
+        const homeConfig = this.getNestedValue(this.config, 'pages.home') || {};
+        const latestArticlesCount = homeConfig.latestArticlesCount || 3;
+        const featuredProjectsCount = homeConfig.featuredProjectsCount || 2;
+        const includeFriendsSection = homeConfig.includeFriendsSection !== false;
+
         // 生成实际的文章列表 HTML
-        const latestArticles = articles.slice(0, 3);
+        const latestArticles = articles.slice(0, latestArticlesCount);
         let articlesHtml = '';
         
         if (latestArticles.length > 0) {
-            articlesHtml = latestArticles.map(article => `
-                <article class="article-card">
-                    <div class="card-header">
-                        <div class="card-category">${article.category || '未分类'}</div>
-                        <h3 class="card-title">
-                            <a href="/posts/${article.slug}/">${article.title}</a>
-                        </h3>
-                        <p class="card-excerpt">${article.summary || '暂无摘要'}</p>
-                    </div>
-                    <div class="card-footer">
-                        <div class="card-date">${article.formattedDate}</div>
-                        <div class="card-tags">
-                            ${(article.tags || []).slice(0, 3).map(tag => `<span class="tag">${tag}</span>`).join('')}
-                        </div>
-                    </div>
-                </article>
-            `).join('\n');
+            const articleCards = latestArticles.map(article => ({
+                category: article.category || '未分类',
+                postUrl: `/posts/${article.slug}/`,
+                title: article.title,
+                summary: article.summary || '暂无摘要',
+                formattedDate: article.formattedDate,
+                tagsHtml: (article.tags || []).slice(0, 3).map(tag => `<span class="tag">${tag}</span>`).join('')
+            }));
+            articlesHtml = await this.renderCollection('partials/article-card.html', articleCards);
         } else {
             articlesHtml = '<p class="no-articles">暂无文章，欢迎关注后续更新。</p>';
         }
 
         // 生成精选项目列表 HTML（只显示 featured 项目，最多 2 个）
         let projectsHtml = '';
-        const featuredProjects = projects.filter(p => p.featured).slice(0, 2);
+        const featuredProjects = projects.filter(p => p.featured).slice(0, featuredProjectsCount);
         
         if (featuredProjects.length > 0) {
-            projectsHtml = featuredProjects.map(project => {
-                const statusText = this.getStatusText(project.status);
-                const tagsHtml = (project.tags || []).slice(0, 3).map(tag => `<span class="tag">${tag}</span>`).join('');
-                const githubLink = project.github ? 
-                    `<a href="https://github.com/${project.github}" target="_blank" rel="noopener" class="btn btn-secondary">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>` : '';
-                
-                return `
-                <article class="project-card${project.featured ? ' featured' : ''}" data-category="${project.category}">
-                    <div class="project-icon">${project.icon || '🚀'}</div>
-                    <h2 class="project-title">${project.title}</h2>
-                    
-                    <span class="project-status status-${project.status}">
-                        ${statusText}
-                    </span>
-                    
-                    <p class="project-description">${project.description}</p>
-                    
-                    <div class="project-tags">
-                        ${tagsHtml}
-                    </div>
-                    
-                    <div class="project-footer">
-                        <div class="project-links">
-                            <a href="${project.url || '#'}" target="_blank" rel="noopener" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> 访问项目
-                            </a>
-                            ${githubLink}
-                        </div>
-                    </div>
-                </article>
-                `;
-            }).join('\n');
+            const projectCards = featuredProjects.map(project => ({
+                featuredClass: project.featured ? ' featured' : '',
+                category: project.category || 'open-source',
+                icon: project.icon || '🚀',
+                title: project.title,
+                statusClass: `status-${project.status}`,
+                statusText: this.getStatusText(project.status),
+                description: project.description,
+                tagsHtml: (project.tags || []).slice(0, 3).map(tag => `<span class="tag">${tag}</span>`).join(''),
+                projectUrl: project.url || '#',
+                githubLink: project.github ? `<a href="https://github.com/${project.github}" target="_blank" rel="noopener" class="btn btn-secondary"><i class="fab fa-github"></i> GitHub</a>` : ''
+            }));
+            projectsHtml = await this.renderCollection('partials/project-card.html', projectCards);
         } else {
             projectsHtml = '<p class="no-projects">暂无项目，敬请期待！</p>';
         }
 
         // 生成友情链接 HTML
-        const friendsFile = path.join(this.dataDir, 'friends.json');
+        const friendsFile = this.getDataFilePath('friends', path.join(this.dataDir, 'friends.json'));
         let friendsHtml = '';
         
-        if (await fs.pathExists(friendsFile)) {
-            const friendsData = await fs.readJson(friendsFile);
+        if (includeFriendsSection && await fs.pathExists(friendsFile)) {
+            const friendsData = await this.readJsonFile(friendsFile, {});
             const links = friendsData.links || [];
             
             friendsHtml = links.map(link => {
@@ -593,7 +657,7 @@ class SafeSiteBuilder {
 
         // 计算统计信息
         const totalWords = articles.reduce((sum, article) => sum + (article.wordCount || 0), 0);
-        const siteDays = this.calculateSiteDays('2025-01-01');
+        const siteDays = this.calculateSiteDays(this.getNestedValue(this.config, 'dates.siteStartDate') || '2025-01-01');
         const totalStars = projects.reduce((sum, p) => sum + (p.stars || 0), 0);
         const languages = [...new Set(projects.map(p => p.language).filter(Boolean))];
         const languagesCount = languages.length;
@@ -610,6 +674,9 @@ class SafeSiteBuilder {
             '{{site.social.github}}': siteConfig.social?.github || '',
             '{{site.social.bilibili}}': siteConfig.social?.bilibili || ''
         });
+
+        const homeChrome = await this.buildSharedChrome('home', siteConfig);
+        html = this.injectSharedChrome(html, homeChrome);
 
         // 替换文章列表
         const articlesGridStart = html.indexOf('<div class="articles-grid" id="articlesGrid">');
@@ -670,131 +737,34 @@ class SafeSiteBuilder {
         // 生成文章列表的 HTML
         let articlesListHtml = '';
         if (articles.length > 0) {
-            articlesListHtml = articles.map(article => `
-                <article class="article-card">
-                    <div class="card-header">
-                        <div class="card-category">${article.category || '未分类'}</div>
-                        <h3 class="card-title">
-                            <a href="../posts/${article.slug}/">${article.title}</a>
-                        </h3>
-                        <p class="card-excerpt">${article.summary || '暂无摘要'}</p>
-                    </div>
-                    <div class="card-footer">
-                        <div class="card-date">${article.formattedDate}</div>
-                        <div class="card-tags">
-                            ${(article.tags || []).slice(0, 3).map(tag => `<span class="tag">${tag}</span>`).join('')}
-                        </div>
-                    </div>
-                </article>
-            `).join('\n');
+            const articleCards = articles.map(article => ({
+                category: article.category || '未分类',
+                postUrl: `../posts/${article.slug}/`,
+                title: article.title,
+                summary: article.summary || '暂无摘要',
+                formattedDate: article.formattedDate,
+                tagsHtml: (article.tags || []).slice(0, 3).map(tag => `<span class="tag">${tag}</span>`).join('')
+            }));
+            articlesListHtml = await this.renderCollection('partials/article-card.html', articleCards);
         } else {
             articlesListHtml = '<p class="no-articles">暂无文章。</p>';
         }
 
-        // 生成完整的文章列表页
-        const html = `
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>所有文章 | Sunshine's Blog</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <!-- RSS 订阅 -->
-    <link rel="alternate" type="application/rss+xml" title="Sunshine's Blog" href="../../rss.xml">
-    <style>
-        .articles-list-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-        .articles-header { margin-bottom: 3rem; }
-        .articles-count { color: #666; font-size: 1.1rem; }
-        .no-articles { text-align: center; padding: 3rem; color: #888; }
-        
-        /* 归档跳转按钮 */
-        .archive-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            justify-content: flex-end;
-        }
-        
-        .archive-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            box-shadow: 0 4px 6px rgba(74, 108, 247, 0.2);
-            transition: all 0.3s ease;
-            position: static;
-        }
-        
-        .archive-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(74, 108, 247, 0.3);
-        }
-        
-        .archive-btn i {
-            font-size: 1.1rem;
-        }
-        
-        @media (max-width: 768px) {
-            .archive-buttons {
-                flex-direction: column;
-                justify-content: center;
-            }
-            
-            .archive-btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <div class="container">
-            <a href="../../" class="nav-brand">Sunshine's Blog</a>
-            <div class="nav-menu">
-                <a href="../../" class="nav-link">首页</a>
-                <a href="../writings" class="nav-link active">文章</a>
-                <a href="../tags" class="nav-link">标签</a>
-                <a href="../projects" class="nav-link">项目</a>
-                <a href="../about" class="nav-link">关于</a>
-            </div>
-        </div>
-    </nav>
-    
-    <div class="articles-list-container">
-        <header class="articles-header">
-            <h1>所有文章</h1>
-            <p class="articles-count">共 ${articles.length} 篇文章</p>
-        </header>
-        
-        <!-- 归档跳转按钮 -->
-        <div class="archive-buttons">
-            <a href="../archive/" class="archive-btn" title="按时间线查看归档">
-                <i class="fas fa-box-archive"></i>
-                <span>时间线归档</span>
-            </a>
-            <a href="../categories/" class="archive-btn" title="按分类查看归档">
-                <i class="fas fa-folder-tree"></i>
-                <span>分类归档</span>
-            </a>
-        </div>
-        
-        <div class="articles-grid">
-            ${articlesListHtml}
-        </div>
-        <div style="margin-top: 3rem; text-align: center;">
-            <a href="../../" class="btn">返回首页</a>
-        </div>
-    </div>
-</body>
-</html>`;
+        let html = await this.renderTemplate('writings.html', {
+            page: {
+                title: '所有文章',
+                description: '浏览博客中发布的所有文章'
+            },
+            site: {
+                ...siteConfig.site,
+                social: siteConfig.social || {}
+            },
+            articlesCount: articles.length,
+            articlesHtml: articlesListHtml
+        });
+
+        const writingsChrome = await this.buildSharedChrome('writings', siteConfig);
+        html = this.injectSharedChrome(html, writingsChrome);
 
         await fs.writeFile(path.join(articlesDir, 'index.html'), html);
         console.log('📚 已生成文章列表页 /writings/');
@@ -809,12 +779,16 @@ class SafeSiteBuilder {
         }
 
         // 读取项目数据
-        const projectsFile = path.join(this.dataDir, 'projects.json');
+        const projectsFile = this.getDataFilePath('projects', path.join(this.dataDir, 'projects.json'));
         let projects = [];
         if (await fs.pathExists(projectsFile)) {
-            const projectsData = await fs.readJson(projectsFile);
+            const projectsData = await this.readJsonFile(projectsFile, {});
             projects = projectsData.projects || [];
         }
+
+        const tagsConfig = this.getNestedValue(this.config, 'pages.tags') || {};
+        const sortBy = tagsConfig.sortBy || 'count';
+        const sortDescending = tagsConfig.sortDescending !== false;
 
         // 统计文章标签
         const articleTagMap = new Map();
@@ -852,7 +826,13 @@ class SafeSiteBuilder {
                 articles: data.articles.sort((a, b) => new Date(b.rawDate) - new Date(a.rawDate)),
                 projects: data.projects
             }))
-            .sort((a, b) => b.totalCount - a.totalCount); // 按总数量降序排列
+            .sort((a, b) => {
+                if (sortBy === 'name') {
+                    return sortDescending ? b.name.localeCompare(a.name) : a.name.localeCompare(b.name);
+                }
+
+                return sortDescending ? b.totalCount - a.totalCount : a.totalCount - b.totalCount;
+            });
 
         // 生成标签云 HTML
         const tagsCloudHtml = tags.map(tag => 
@@ -1002,6 +982,8 @@ class SafeSiteBuilder {
         };
 
         html = this.replaceVariables(html, replacements);
+        const tagsChrome = await this.buildSharedChrome('tags', siteConfig);
+        html = this.injectSharedChrome(html, tagsChrome);
 
         // 更新统计数据
         html = html.replace(/id="totalTags">[^<]*</, `id="totalTags">${tags.length}<`);
@@ -1028,7 +1010,7 @@ class SafeSiteBuilder {
 
     async generateProjectsPage(siteConfig) {
         const templateFile = path.join(this.templateDir, 'projects.html');
-        const dataFile = path.join(this.dataDir, 'projects.json');
+        const dataFile = this.getDataFilePath('projects', path.join(this.dataDir, 'projects.json'));
 
         if (!await fs.pathExists(templateFile)) {
             console.log('⚠️  未找到 projects 模板，跳过 projects 页面生成');
@@ -1042,7 +1024,7 @@ class SafeSiteBuilder {
 
         // 读取模板和数据
         let html = await fs.readFile(templateFile, 'utf-8');
-        const projectsData = await fs.readJson(dataFile);
+        const projectsData = await this.readJsonFile(dataFile, {});
 
         // 合并数据
         const data = {
@@ -1063,41 +1045,18 @@ class SafeSiteBuilder {
 
         // 处理项目列表 - 使用占位符替换
         if (data.projects.items && Array.isArray(data.projects.items)) {
-            const projectsHtml = data.projects.items.map(project => {
-                const featuredClass = project.featured ? 'featured' : '';
-                const statusText = this.getStatusText(project.status);
-                const tagsHtml = (project.tags || []).map(tag => `<span class="tag">${tag}</span>`).join('');
-                const githubLink = project.github ? 
-                    `<a href="https://github.com/${project.github}" target="_blank" rel="noopener" class="btn btn-secondary">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>` : '';
-                
-                return `
-                <article class="project-card ${featuredClass}" data-category="${project.category}">
-                    <div class="project-icon">${project.icon || '🚀'}</div>
-                    <h2 class="project-title">${project.title}</h2>
-                    
-                    <span class="project-status status-${project.status}">
-                        ${statusText}
-                    </span>
-                    
-                    <p class="project-description">${project.description}</p>
-                    
-                    <div class="project-tags">
-                        ${tagsHtml}
-                    </div>
-                    
-                    <div class="project-footer">
-                        <div class="project-links">
-                            <a href="${project.url || '#'}" target="_blank" rel="noopener" class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i> 访问项目
-                            </a>
-                            ${githubLink}
-                        </div>
-                    </div>
-                </article>
-                `;
-            }).join('\n');
+            const projectsHtml = await this.renderCollection('partials/project-card.html', data.projects.items.map(project => ({
+                featuredClass: project.featured ? ' featured' : '',
+                category: project.category,
+                icon: project.icon || '🚀',
+                title: project.title,
+                statusClass: `status-${project.status}`,
+                statusText: this.getStatusText(project.status),
+                description: project.description,
+                tagsHtml: (project.tags || []).map(tag => `<span class="tag">${tag}</span>`).join(''),
+                projectUrl: project.url || '#',
+                githubLink: project.github ? `<a href="https://github.com/${project.github}" target="_blank" rel="noopener" class="btn btn-secondary"><i class="fab fa-github"></i> GitHub</a>` : ''
+            })));
             
             // 使用占位符替换项目列表
             html = html.replace('___PROJECTS_HTML_PLACEHOLDER___', projectsHtml);
@@ -1140,6 +1099,9 @@ class SafeSiteBuilder {
             '{{site.social.bilibili}}': siteConfig.social?.bilibili || ''
         });
 
+        const projectsChrome = await this.buildSharedChrome('projects', siteConfig);
+        html = this.injectSharedChrome(html, projectsChrome);
+
         // 更新统计数据
         const totalProjects = data.projects.items.length;
         const totalStars = data.projects.items.reduce((sum, p) => sum + (p.stars || 0), 0);
@@ -1176,7 +1138,7 @@ class SafeSiteBuilder {
 
     async generateAboutPage(siteConfig) {
         const templateFile = path.join(this.templateDir, 'about.html');
-        const dataFile = path.join(this.dataDir, 'about.json');
+        const dataFile = this.getDataFilePath('about', path.join(this.dataDir, 'about.json'));
 
         if (!await fs.pathExists(templateFile)) {
             console.log('⚠️  未找到 about 模板，跳过 about 页面生成');
@@ -1190,7 +1152,7 @@ class SafeSiteBuilder {
 
         // 读取模板和数据
         let html = await fs.readFile(templateFile, 'utf-8');
-        const aboutData = await fs.readJson(dataFile);
+        const aboutData = await this.readJsonFile(dataFile, {});
 
         // 合并数据
         const data = {
@@ -1201,6 +1163,9 @@ class SafeSiteBuilder {
 
         // 替换变量
         html = this.replaceTemplateVariables(html, data);
+
+        const aboutChrome = await this.buildSharedChrome('about', siteConfig);
+        html = this.injectSharedChrome(html, aboutChrome);
         
         // 额外确保 site 相关变量被正确替换（处理可能的嵌套对象问题）
         html = html.replace(/\{\{site\.year\}\}/g, siteConfig.site.year.toString());
@@ -1227,12 +1192,13 @@ class SafeSiteBuilder {
 
     replaceTemplateVariables(html, data) {
         let result = html;
+        const formatValue = value => value instanceof Date ? value.toISOString() : String(value);
         
         // 处理简单变量 {{variable}}
         for (const [key, value] of Object.entries(data)) {
-            if (typeof value === 'string') {
-                const regex = new RegExp(`\\{\\{${key}\\}\\}`, 'g');
-                result = result.replace(regex, value);
+            if (value !== null && value !== undefined && (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || value instanceof Date)) {
+                const regex = new RegExp(`\{\{${key}\}\}`, 'g');
+                result = result.replace(regex, formatValue(value));
             }
         }
         
@@ -1241,9 +1207,9 @@ class SafeSiteBuilder {
         function processNested(obj, prefix = '') {
             for (const [key, value] of Object.entries(obj)) {
                 const fullKey = prefix ? `${prefix}.${key}` : key;
-                if (typeof value === 'string') {
-                    const regex = new RegExp(`\\{\\{${fullKey}\\}\\}`, 'g');
-                    result = result.replace(regex, value);
+                if (value !== null && value !== undefined && (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || value instanceof Date)) {
+                    const regex = new RegExp(`\{\{${fullKey}\}\}`, 'g');
+                    result = result.replace(regex, formatValue(value));
                 } else if (typeof value === 'object' && !Array.isArray(value)) {
                     processNested(value, fullKey);
                 }
@@ -1277,6 +1243,207 @@ class SafeSiteBuilder {
         return result;
     }
 
+    async getTemplate(templateName) {
+        if (this.templateCache.has(templateName)) {
+            return this.templateCache.get(templateName);
+        }
+
+        const templatePath = path.join(this.templateDir, templateName);
+        const template = await fs.readFile(templatePath, 'utf-8');
+        this.templateCache.set(templateName, template);
+        return template;
+    }
+
+    async renderTemplate(templateName, data) {
+        const template = await this.getTemplate(templateName);
+        return this.replaceTemplateVariables(template, data);
+    }
+
+    async renderCollection(templateName, items) {
+        const template = await this.getTemplate(templateName);
+        return items.map(item => this.replaceTemplateVariables(template, item)).join('\n');
+    }
+
+    async buildSharedChrome(pageKey, siteConfig, pageContext = {}) {
+        const chromeConfig = this.getChromeConfig(pageKey, siteConfig);
+
+        const navbarHtml = await this.renderTemplate('partials/navbar.html', {
+            siteTitle: siteConfig.site.title,
+            brandHref: chromeConfig.nav.brandHref,
+            navItemsHtml: chromeConfig.nav.items.map(item => {
+                const activeClass = item.active ? ' active' : '';
+                return `<a href="${item.href}" class="nav-link${activeClass}"><i class="${item.icon}"></i> ${item.label}</a>`;
+            }).join('\n            ')
+        });
+
+        const footerHtml = await this.renderTemplate('partials/footer.html', {
+            siteTitle: siteConfig.site.title,
+            siteDescription: siteConfig.site.description,
+            siteYear: siteConfig.site.year,
+            siteAuthor: siteConfig.site.author,
+            footerCopyrightSuffix: chromeConfig.footer.copyrightSuffix,
+            footerGroupsHtml: chromeConfig.footer.groups.map(group => {
+                const linksHtml = group.links.map(link => {
+                    const attrs = [];
+                    if (link.target) attrs.push(`target="${link.target}"`);
+                    if (link.rel) attrs.push(`rel="${link.rel}"`);
+                    return `<a href="${link.href}"${attrs.length > 0 ? ' ' + attrs.join(' ') : ''}>${link.label}</a>`;
+                }).join('\n');
+
+                return `<div class="link-group">\n                        <h4>${group.title}</h4>\n                        ${linksHtml}\n                    </div>`;
+            }).join('\n                '),
+            footerBottomHtml: pageContext.footerBottomHtml || chromeConfig.footer.bottomHtml
+        });
+
+        return { navbarHtml, footerHtml };
+    }
+
+    getChromeConfig(pageKey, siteConfig) {
+        const rootNavItems = [
+            { href: '/', icon: 'fas fa-home', label: '首页', active: pageKey === 'home' },
+            { href: '/writings', icon: 'fas fa-pen', label: '文章', active: pageKey === 'writings' || pageKey === 'article' || pageKey === 'archive' || pageKey === 'categories' },
+            { href: '/tags', icon: 'fas fa-tags', label: '标签', active: pageKey === 'tags' },
+            { href: '/projects', icon: 'fas fa-rocket', label: '项目', active: pageKey === 'projects' },
+            { href: '/about', icon: 'fas fa-user', label: '关于', active: pageKey === 'about' }
+        ];
+
+        const publicNavItems = [
+            { href: '../../index.html', icon: 'fas fa-home', label: '首页', active: pageKey === 'home' },
+            { href: '../writings', icon: 'fas fa-pen', label: '文章', active: pageKey === 'writings' || pageKey === 'article' || pageKey === 'archive' || pageKey === 'categories' },
+            { href: '../tags', icon: 'fas fa-tags', label: '标签', active: pageKey === 'tags' },
+            { href: '../projects', icon: 'fas fa-rocket', label: '项目', active: pageKey === 'projects' },
+            { href: '../about', icon: 'fas fa-user', label: '关于', active: pageKey === 'about' }
+        ];
+
+        const articleNavItems = [
+            { href: '../../../index.html', icon: 'fas fa-home', label: '首页', active: false },
+            { href: '../../writings', icon: 'fas fa-pen', label: '文章', active: pageKey === 'article' },
+            { href: '../../tags', icon: 'fas fa-tags', label: '标签', active: pageKey === 'tags' },
+            { href: '../../projects', icon: 'fas fa-rocket', label: '项目', active: false },
+            { href: '../../about', icon: 'fas fa-user', label: '关于', active: false }
+        ];
+
+        const rootFooter = {
+            copyrightSuffix: '保留所有权利。',
+            groups: [
+                {
+                    title: '探索',
+                    links: [
+                        { href: '/writings', label: '所有文章' },
+                        { href: '/projects', label: '所有项目' },
+                        { href: '/tags', label: '标签分类' },
+                        { href: '/archive', label: '文章归档' }
+                    ]
+                },
+                {
+                    title: '链接',
+                    links: [
+                        { href: '/about', label: '关于我' },
+                        { href: '#friends', label: '友情链接' },
+                        { href: '/rss.xml', label: 'RSS订阅' },
+                        { href: '/sitemap.xml', label: '站点地图' }
+                    ]
+                },
+                {
+                    title: '联系',
+                    links: [
+                        { href: `mailto:${siteConfig.social?.email || ''}`, label: '发送邮件' },
+                        { href: `https://github.com/${siteConfig.social?.github || ''}`, label: 'GitHub', target: '_blank', rel: 'noopener' },
+                        { href: siteConfig.social?.bilibili || '#', label: 'Bilibili', target: '_blank', rel: 'noopener' }
+                    ]
+                }
+            ],
+            bottomHtml: `<p>最后更新于 <span id="lastUpdated">今天</span></p>`
+        };
+
+        const publicFooter = {
+            copyrightSuffix: '保留所有权利。',
+            groups: [
+                {
+                    title: '探索',
+                    links: [
+                        { href: '../writings', label: '所有文章' },
+                        { href: '../projects', label: '所有项目' },
+                        { href: '../tags', label: '标签分类' },
+                        { href: '../archive', label: '文章归档' }
+                    ]
+                },
+                {
+                    title: '链接',
+                    links: [
+                        { href: '../about', label: '关于我' },
+                        { href: '../friends', label: '友情链接' },
+                        { href: '../rss.xml', label: 'RSS订阅' },
+                        { href: '../sitemap.xml', label: '站点地图' }
+                    ]
+                },
+                {
+                    title: '联系',
+                    links: [
+                        { href: `mailto:${siteConfig.social?.email || ''}`, label: '发送邮件' },
+                        { href: `https://github.com/${siteConfig.social?.github || ''}`, label: 'GitHub', target: '_blank', rel: 'noopener' },
+                        { href: siteConfig.social?.bilibili || '#', label: 'Bilibili', target: '_blank', rel: 'noopener' }
+                    ]
+                }
+            ],
+            bottomHtml: `<p>本博客由 <a href="https://github.com/MingShuo-S/MingShuo-S.github.io" target="_blank" rel="noopener">MingShuo-S.github.io</a> 驱动</p><p>最后更新于 <span id="lastUpdated">今天</span></p>`
+        };
+
+        const articleFooter = {
+            copyrightSuffix: '',
+            groups: [
+                {
+                    title: '探索',
+                    links: [
+                        { href: '../../writings', label: '所有文章' },
+                        { href: '../../projects', label: '所有项目' },
+                        { href: '../../about', label: '关于我' }
+                    ]
+                },
+                {
+                    title: '联系',
+                    links: [
+                        { href: `mailto:${siteConfig.social?.email || ''}`, label: '发送邮件' },
+                        { href: `https://github.com/${siteConfig.social?.github || ''}`, label: 'GitHub' },
+                        { href: siteConfig.social?.bilibili || '#', label: 'Bilibili' }
+                    ]
+                }
+            ],
+            bottomHtml: `<p>最后更新于 <span id="lastUpdated">{{formattedDate}}</span></p>`
+        };
+
+        const chromeMap = {
+            home: { nav: { brandHref: '/', items: rootNavItems }, footer: rootFooter },
+            root: { nav: { brandHref: '/', items: rootNavItems }, footer: rootFooter },
+            article: { nav: { brandHref: '../../../index.html', items: articleNavItems }, footer: articleFooter },
+            writings: { nav: { brandHref: '../../', items: publicNavItems }, footer: publicFooter },
+            tags: { nav: { brandHref: '../../', items: publicNavItems }, footer: publicFooter },
+            projects: { nav: { brandHref: '../../index.html', items: publicNavItems }, footer: publicFooter },
+            about: { nav: { brandHref: '../../index.html', items: publicNavItems }, footer: publicFooter },
+            archive: { nav: { brandHref: '../../', items: publicNavItems }, footer: publicFooter },
+            categories: { nav: { brandHref: '../../', items: publicNavItems }, footer: publicFooter }
+        };
+
+        return chromeMap[pageKey] || chromeMap.writings;
+    }
+
+    injectSharedChrome(html, chrome) {
+        let result = html;
+        if (result.includes('{{navbarHtml}}')) {
+            result = result.replace(/\{\{navbarHtml\}\}/g, chrome.navbarHtml);
+        } else {
+            result = result.replace(/<nav class="navbar">[\s\S]*?<\/nav>/, chrome.navbarHtml);
+        }
+
+        if (result.includes('{{footerHtml}}')) {
+            result = result.replace(/\{\{footerHtml\}\}/g, chrome.footerHtml);
+        } else {
+            result = result.replace(/<footer class="footer">[\s\S]*?<\/footer>/, chrome.footerHtml);
+        }
+
+        return result;
+    }
+
     async copyAssets() {
         if (await fs.pathExists(this.assetsDir)) {
             const destAssetsDir = path.join(this.outputDir, 'assets');
@@ -1291,32 +1458,18 @@ class SafeSiteBuilder {
         const baseUrl = siteConfig.site.url || 'https://mingshuo-s.github.io';
         const currentDate = new Date().toISOString().split('T')[0];
 
-        let sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <url>
-        <loc>${baseUrl}</loc>
-        <lastmod>${currentDate}</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
-    </url>
-    <url>
-        <loc>${baseUrl}/writings/</loc>
-        <lastmod>${currentDate}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>`;
+        const urlEntries = await Promise.all(articles.map(article => this.renderTemplate('partials/sitemap-url.xml', {
+            loc: `${baseUrl}/posts/${article.slug}/`,
+            lastmod: article.rawDate,
+            changefreq: 'monthly',
+            priority: '0.6'
+        })));
 
-        for (const article of articles) {
-            sitemapXml += `
-    <url>
-        <loc>${baseUrl}/posts/${article.slug}/</loc>
-        <lastmod>${article.rawDate}</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-    </url>`;
-        }
-
-        sitemapXml += '\n</urlset>';
+        const sitemapXml = await this.renderTemplate('sitemap.xml', {
+            baseUrl,
+            currentDate,
+            urlEntries: urlEntries.join('\n')
+        });
 
         await fs.writeFile(path.join(this.outputDir, 'sitemap.xml'), sitemapXml);
         console.log('🗺️  已生成站点地图 sitemap.xml');
@@ -1465,8 +1618,11 @@ class SafeSiteBuilder {
         const siteDescription = siteConfig.site.description || '个人博客';
         const siteAuthor = siteConfig.site.author || 'Mingshuo_S';
         
-        // 只取最新的 20 篇文章
-        const latestArticles = articles.slice(0, 20);
+        const rssConfig = this.getNestedValue(this.config, 'pages.rss') || {};
+        const maxItems = Number.isFinite(rssConfig.maxItems) ? rssConfig.maxItems : 0;
+
+        // 0 表示不限制
+        const latestArticles = maxItems > 0 ? articles.slice(0, maxItems) : articles;
         
         // 生成当前时间的 RFC 822 格式
         const buildDate = new Date().toUTCString();
@@ -1586,13 +1742,15 @@ class SafeSiteBuilder {
         // 生成 HTML
         let timelineHtml = '';
         const years = Object.keys(archiveData).sort((a, b) => b - a);
-        
-        years.forEach((year, yearIndex) => {
+        const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月',
+            '七月', '八月', '九月', '十月', '十一月', '十二月'];
+
+        for (const year of years) {
             const yearArticles = [];
             Object.values(archiveData[year]).forEach(monthArticles => {
                 yearArticles.push(...monthArticles);
             });
-            
+
             timelineHtml += `
             <div class="timeline-year">
                 <div class="year-header">
@@ -1602,96 +1760,48 @@ class SafeSiteBuilder {
                 <div class="timeline-line"></div>
                 <div class="months-grid">
 `;
-            
-            Object.entries(archiveData[year]).forEach(([month, monthArticles]) => {
-                const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', 
-                                   '七月', '八月', '九月', '十月', '十一月', '十二月'];
-                
+
+            for (const [month, monthArticles] of Object.entries(archiveData[year])) {
+                const monthTimeline = await Promise.all(monthArticles.map(async article => {
+                    const day = new Date(article.rawDate || article.date).getDate();
+                    const tagsHtml = (article.tags || []).slice(0, 3).map(tag => `<span class="tag">${tag}</span>`).join('');
+
+                    return this.renderTemplate('partials/archive-item.html', {
+                        day: String(day),
+                        postUrl: `../posts/${article.slug}/`,
+                        title: article.title,
+                        summary: article.summary || '',
+                        tagsHtml
+                    });
+                }));
+
                 timelineHtml += `
                     <div class="month-group">
                         <h3 class="month-title">${monthNames[parseInt(month) - 1]}</h3>
                         <div class="articles-timeline">
-`;
-                        
-                        monthArticles.forEach(article => {
-                            const day = new Date(article.rawDate || article.date).getDate();
-                            timelineHtml += `
-                            <div class="timeline-item">
-                                <div class="timeline-marker">
-                                    <span class="day">${day}</span>
-                                </div>
-                                <div class="timeline-content">
-                                    <a href="../posts/${article.slug}/" class="article-link">
-                                        <h4 class="article-title">${article.title}</h4>
-                                    </a>
-                                    <p class="article-excerpt">${article.summary || ''}</p>
-                                    <div class="article-meta">
-                                        ${(article.tags || []).slice(0, 3).map(tag => 
-                                            `<span class="tag">${tag}</span>`
-                                        ).join('')}
-                                    </div>
-                                </div>
-                            </div>
-`;
-                        });
-                        
-                        timelineHtml += `
+                            ${monthTimeline.join('\n')}
                         </div>
                     </div>
 `;
-            });
-            
+            }
+
             timelineHtml += `
                 </div>
             </div>
 `;
+        }
+
+        let html = await this.renderTemplate('archive.html', {
+            page: {
+                title: '时间线归档',
+                description: '按时间顺序浏览所有文章，记录成长的足迹'
+            },
+            site: siteConfig.site,
+            timelineHtml
         });
-        
-        // 生成完整的归档页面
-        const html = `
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>时间线归档 | Sunshine's Blog</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/archive.css">
-    <!-- RSS 订阅 -->
-    <link rel="alternate" type="application/rss+xml" title="Sunshine's Blog" href="../../rss.xml">
-</head>
-<body>
-    <nav class="navbar">
-        <div class="container">
-            <a href="../../" class="nav-brand">Sunshine's Blog</a>
-            <div class="nav-menu">
-                <a href="../../" class="nav-link">首页</a>
-                <a href="../writings" class="nav-link">文章</a>
-                <a href="../tags" class="nav-link">标签</a>
-                <a href="../projects" class="nav-link">项目</a>
-                <a href="../about" class="nav-link">关于</a>
-            </div>
-        </div>
-    </nav>
-    
-    <div class="archive-container">
-        <header class="archive-header">
-            <h1><i class="fas fa-box-archive"></i> 时间线归档</h1>
-            <p class="archive-description">按时间顺序浏览所有文章，记录成长的足迹</p>
-        </header>
-        
-        <div class="timeline-wrapper">
-            ${timelineHtml}
-        </div>
-        
-        <div class="back-to-top">
-            <a href="#" class="back-btn"><i class="fas fa-arrow-up"></i> 返回顶部</a>
-        </div>
-    </div>
-    
-    <script src="../assets/js/archive.js"></script>
-</body>
-</html>`;
+
+        const archiveChrome = await this.buildSharedChrome('archive', siteConfig);
+        html = this.injectSharedChrome(html, archiveChrome);
 
         // 写入文件
         const archiveDir = path.join(this.outputDir, 'archive');
@@ -1726,7 +1836,7 @@ class SafeSiteBuilder {
         
         // 生成分类统计信息
         let categoryStats = '';
-        sortedCategories.forEach(([category, categoryArticles]) => {
+        for (const [category, categoryArticles] of sortedCategories) {
             categoryStats += `
             <div class="category-stat-item">
                 <a href="#category-${encodeURIComponent(category)}" class="category-stat-link">
@@ -1734,14 +1844,29 @@ class SafeSiteBuilder {
                     <span class="category-count">${categoryArticles.length}</span>
                 </a>
             </div>`;
-        });
-        
+        }
+
         // 生成分类内容
         let categoryHtml = '';
-        sortedCategories.forEach(([category, categoryArticles]) => {
-            // 每个分类的文章按日期倒序排列
+        for (const [category, categoryArticles] of sortedCategories) {
             categoryArticles.sort((a, b) => new Date(b.rawDate || b.date) - new Date(a.rawDate || a.date));
-            
+
+            const cards = await Promise.all(categoryArticles.map(article => {
+                const tagsBlock = (article.tags || []).length > 0
+                    ? `<div class="article-card-tags">${(article.tags || []).slice(0, 5).map(tag => `<span class="tag">${tag}</span>`).join('')}</div>`
+                    : '';
+
+                return this.renderTemplate('partials/category-article-card.html', {
+                    postUrl: `../posts/${article.slug}/`,
+                    title: article.title,
+                    summary: article.summary || '',
+                    rawDate: article.rawDate,
+                    formattedDate: article.formattedDate,
+                    readTime: String(article.read_time),
+                    tagsBlock
+                });
+            }));
+
             categoryHtml += `
             <div class="category-group" id="category-${encodeURIComponent(category)}">
                 <div class="category-header">
@@ -1752,92 +1877,24 @@ class SafeSiteBuilder {
                     <span class="category-article-count">${categoryArticles.length}篇文章</span>
                 </div>
                 <div class="category-articles">
-`;
-            
-            categoryArticles.forEach(article => {
-                categoryHtml += `
-                    <article class="category-article-card">
-                        <div class="article-card-content">
-                            <h3 class="article-card-title">
-                                <a href="../posts/${article.slug}/" class="article-card-link">${article.title}</a>
-                            </h3>
-                            <p class="article-card-summary">${article.summary || ''}</p>
-                            <div class="article-card-meta">
-                                <time datetime="${article.rawDate}" class="article-date">
-                                    <i class="far fa-calendar"></i> ${article.formattedDate.split('年')[0]}年${article.formattedDate.split('年')[1]}
-                                </time>
-                                <span class="article-read-time">
-                                    <i class="far fa-clock"></i> ${article.read_time}分钟阅读
-                                </span>
-                            </div>
-                            ${(article.tags || []).length > 0 ? `
-                            <div class="article-card-tags">
-                                ${(article.tags || []).slice(0, 5).map(tag => 
-                                    `<span class="tag">${tag}</span>`
-                                ).join('')}
-                            </div>` : ''}
-                        </div>
-                    </article>
-`;
-            });
-            
-            categoryHtml += `
+                    ${cards.join('\n')}
                 </div>
             </div>
 `;
+        }
+
+        let html = await this.renderTemplate('category-archive.html', {
+            page: {
+                title: '分类归档',
+                description: '按分类浏览所有文章，探索感兴趣的主题'
+            },
+            site: siteConfig.site,
+            categoryStatsHtml: categoryStats,
+            categoryHtml
         });
-        
-        // 生成完整的分类归档页面
-        const html = `
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>分类归档 | Sunshine's Blog</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/category-archive.css">
-    <!-- RSS 订阅 -->
-    <link rel="alternate" type="application/rss+xml" title="Sunshine's Blog" href="../../rss.xml">
-</head>
-<body>
-    <nav class="navbar">
-        <div class="container">
-            <a href="../../" class="nav-brand">Sunshine's Blog</a>
-            <div class="nav-menu">
-                <a href="../../" class="nav-link">首页</a>
-                <a href="../writings" class="nav-link">文章</a>
-                <a href="../tags" class="nav-link">标签</a>
-                <a href="../projects" class="nav-link">项目</a>
-                <a href="../about" class="nav-link">关于</a>
-            </div>
-        </div>
-    </nav>
-    
-    <div class="category-archive-container">
-        <header class="archive-header">
-            <h1><i class="fas fa-folder-tree"></i> 分类归档</h1>
-            <p class="archive-description">按分类浏览所有文章，探索感兴趣的主题</p>
-        </header>
-        
-        <!-- 分类统计 -->
-        <div class="category-stats">
-            ${categoryStats}
-        </div>
-        
-        <!-- 分类内容 -->
-        <div class="category-content">
-            ${categoryHtml}
-        </div>
-        
-        <div class="back-to-top">
-            <a href="#" class="back-btn"><i class="fas fa-arrow-up"></i> 返回顶部</a>
-        </div>
-    </div>
-    
-    <script src="../assets/js/category-archive.js"></script>
-</body>
-</html>`;
+
+        const categoryChrome = await this.buildSharedChrome('categories', siteConfig);
+        html = this.injectSharedChrome(html, categoryChrome);
 
         // 写入文件
         const categoryArchiveDir = path.join(this.outputDir, 'categories');

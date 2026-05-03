@@ -5,11 +5,22 @@
     <link>https://mingshuo-s.github.io</link>
     <description>记录技术思考、项目经验和学习成长</description>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 01 Apr 2026 11:53:42 GMT</lastBuildDate>
-    <pubDate>Wed, 01 Apr 2026 11:53:42 GMT</pubDate>
+    <lastBuildDate>Sun, 03 May 2026 06:31:36 GMT</lastBuildDate>
+    <pubDate>Sun, 03 May 2026 06:31:36 GMT</pubDate>
     <ttl>60</ttl>
     <atom:link href="https://mingshuo-s.github.io/rss.xml" rel="self" type="application/rss+xml"/>
 
+    <item>
+      <title>关于“软件工程与计算I”授课混乱性的解读</title>
+      <link>https://mingshuo-s.github.io/public/posts/关于“软件工程与计算i”授课混乱性的解读/</link>
+      <guid isPermaLink="true">https://mingshuo-s.github.io/public/posts/关于“软件工程与计算i”授课混乱性的解读/</guid>
+      <pubDate>Mon, 13 Apr 2026 00:00:00 GMT</pubDate>
+      <description>关于南京大学软件工程专业大一年级下所教授课程“软件工程与计算I”的感受</description>
+      <author>Mingshuo_S</author>
+      <category>南大软院</category>
+      <category>课程</category>
+      <category>持续更新</category>
+    </item>
     <item>
       <title>obsidian写论文指南</title>
       <link>https://mingshuo-s.github.io/public/posts/obsidian写论文指南/</link>

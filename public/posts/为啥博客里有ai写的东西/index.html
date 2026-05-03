@@ -30,41 +30,31 @@
     <link rel="alternate" type="application/rss+xml" title="Sunshine's Blog" href="https://mingshuo-s.github.io/rss.xml">
 </head>
 <body>
-    <!-- 导航栏 -->
     <nav class="navbar">
-        <div class="container">
-            <a href="../../../index.html" class="nav-brand">
-                <span class="brand-text">Sunshine's Blog</span>
-            </a>
-            
-            <div class="nav-menu">
-                <a href="../../../index.html" class="nav-link">
-                    <i class="fas fa-home"></i> 首页
-                </a>
-                <a href="../../writings" class="nav-link">
-                    <i class="fas fa-pen"></i> 文章
-                </a>
-                <a href="../../tags" class="nav-link">
-                    <i class="fas fa-tags"></i> 标签
-                </a>
-                <a href="../../projects" class="nav-link">
-                    <i class="fas fa-rocket"></i> 项目
-                </a>
-                <a href="../../about" class="nav-link">
-                    <i class="fas fa-user"></i> 关于
-                </a>
-            </div>
-            
-            <div class="nav-actions">
-                <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button class="menu-toggle" id="menuToggle" aria-label="菜单">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
+    <div class="container">
+        <a href="../../../index.html" class="nav-brand">
+            <span class="brand-text">Sunshine's Blog</span>
+        </a>
+        
+        <div class="nav-menu">
+            <a href="../../../index.html" class="nav-link"><i class="fas fa-home"></i> 首页</a>
+            <a href="../../writings" class="nav-link active"><i class="fas fa-pen"></i> 文章</a>
+            <a href="../../tags" class="nav-link"><i class="fas fa-tags"></i> 标签</a>
+            <a href="../../projects" class="nav-link"><i class="fas fa-rocket"></i> 项目</a>
+            <a href="../../about" class="nav-link"><i class="fas fa-user"></i> 关于</a>
         </div>
-    </nav>
+        
+        <div class="nav-actions">
+            <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
 
     <!-- 文章容器 -->
     <main class="article-container">
@@ -123,7 +113,7 @@
 <p>如果你浏览过<a href="%5Bhttps://mingshuo.org/%5D(https://mingshuo.org/public/writings/)">文章列表</a>，可能会注意到一个标签：<strong>“AI写的”</strong>。是的，我的一些文章，特别是部分技术长文，是在人工智能的辅助下完成初稿的。我并没有隐瞒这一点，反而给它打上了明确的标签。</p>
 <p>这么做，有几个很直接的原因。</p>
 <h4>一、效率是第一生产力</h4>
-<p>作为一个<strong>软件工程专业</strong>的学生，同时也是几个独立项目（比如正在开发的效率工具 <strong><a href="https://mingshuo.org/projects">RemUp</a></strong>）的维护者，我的时间被切得很碎。当需要写一篇系统性的技术文章时，AI能帮我快速搭好骨架，理清脉络。这让我能把最宝贵的时间，投入到更深度的思考与项目本身，而不是纠结于表达的细节。这很符合我对“<strong>测试自动化</strong>”这类效率追求的实践。</p>
+<p>作为一个<strong>软件工程专业</strong>的学生，同时也是几个独立项目（比如正在开发的效率工具 <strong><a href="https://mingshuo.org/public/projects">RemUp</a></strong>）的维护者，我的时间被切得很碎。当需要写一篇系统性的技术文章时，AI能帮我快速搭好骨架，理清脉络。这让我能把最宝贵的时间，投入到更深度的思考与项目本身，而不是纠结于表达的细节。这很符合我对“<strong>测试自动化</strong>”这类效率追求的实践。</p>
 <h4>二、追求更优的信息质量与广度</h4>
 <p>坦诚地说，在技术概念的严谨性、知识面的广度以及行文的逻辑性上，当前的AI工具有时能提供超越我个人瞬时认知边界的信息。我希望呈现给读者的，是经过交叉验证的、更高质量的内容，而不仅仅是我个人有限知识的复述。</p>
 <h4>三、最重要的是：与您一同学习</h4>
@@ -217,38 +207,37 @@
         </div>
     </main>
 
-    <!-- 页脚 -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-info">
-                    <h3>Sunshine's Blog</h3>
-                    <p>记录技术思考、项目经验和学习成长</p>
-                    <p class="footer-copyright">© 2030 Mingshuo_S</p>
-                </div>
-                
-                <div class="footer-links">
-                    <div class="link-group">
-                        <h4>探索</h4>
-                        <a href="../../writings">所有文章</a>
-                        <a href="../../projects">所有项目</a>
-                        <a href="../../about">关于我</a>
-                    </div>
-                    
-                    <div class="link-group">
-                        <h4>联系</h4>
-                        <a href="mailto:Sunshine_Mings@outloook.com">发送邮件</a>
-                        <a href="https://github.com/MingShuo-S">GitHub</a>
-                        <a href="https://space.bilibili.com/361518274">Bilibili</a>
-                    </div>
-                </div>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>Sunshine's Blog</h3>
+                <p>记录技术思考、项目经验和学习成长</p>
+                <p class="footer-copyright">© 2030 Mingshuo_S. </p>
             </div>
             
-            <div class="footer-bottom">
-                <p>最后更新于 <span id="lastUpdated">2026年4月1日</span></p>
+            <div class="footer-links">
+                <div class="link-group">
+                        <h4>探索</h4>
+                        <a href="../../writings">所有文章</a>
+<a href="../../projects">所有项目</a>
+<a href="../../about">关于我</a>
+                    </div>
+                <div class="link-group">
+                        <h4>联系</h4>
+                        <a href="mailto:Sunshine_Mings@outloook.com">发送邮件</a>
+<a href="https://github.com/MingShuo-S">GitHub</a>
+<a href="https://space.bilibili.com/361518274">Bilibili</a>
+                    </div>
             </div>
         </div>
-    </footer>
+        
+        <div class="footer-bottom">
+            <p>最后更新于 <span id="lastUpdated">2026年4月1日</span></p>
+        </div>
+    </div>
+</footer>
+
 
     <!-- JavaScript -->
     <script src="../../assets/js/main.js"></script>
